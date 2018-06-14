@@ -8,5 +8,6 @@ namespace AzureEngine
 {
     public class AzureEngine
     {
+        //This file will contain the engine configurations for communicating with Azure
     }
 }
