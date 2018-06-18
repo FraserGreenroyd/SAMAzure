@@ -11,6 +11,7 @@ namespace AzureEngine
 {
     public class AzureEngine
     {
+        //This file will contain the engine configurations for communicating with Azure
         private CloudStorageAccount storageAccount = null;
 
         public void InitStorage(String connectionString = null)
