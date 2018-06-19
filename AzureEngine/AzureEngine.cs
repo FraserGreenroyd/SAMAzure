@@ -33,7 +33,7 @@ namespace AzureEngine
             }
         }
 
-        public async Task SendFile()
+        public async Task SendFile(String filePath, String fileName)
         {
             if (storageAccount == null) return;
 
@@ -52,8 +52,6 @@ namespace AzureEngine
                 BlobContainerPermissions blobPermissions = new BlobContainerPermissions { PublicAccess = BlobContainerPublicAccessType.Blob };
                 await blobContainer.SetPermissionsAsync(blobPermissions);
 
-                String filePath = @"C:\Users\fgreenro\Documents\Repo Code\Test Files & Scripts\";
-                String fileName = "AzureTest2.txt";
                 String fullFile = filePath + fileName;
 
                 Console.WriteLine("Uploading file... Started at " + DateTime.Now);
