@@ -13,6 +13,7 @@ namespace AzureEngine
     {
         //This file will contain the engine configurations for communicating with Azure
         private CloudStorageAccount storageAccount = null;
+        private CloudBlobContainer blobContainer = null;
 
         public void InitStorage(String connectionString = null)
         {
@@ -30,6 +31,48 @@ namespace AzureEngine
                 Console.WriteLine("Please ensure the connection string is correct.");
                 Console.WriteLine("Attempted to use connection string: " + connectionString);
             }
+        }
+
+        public async Task SendFile(String filePath, String fileName)
+        {
+            if (storageAccount == null) return;
+
+            try
+            {
+                Console.WriteLine("Creating Blob Client...");
+                CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+
+                Console.WriteLine("Creating Blob Container...");
+                blobContainer = blobClient.GetContainerReference("enginetestblob" + Guid.NewGuid().ToString());
+                await blobContainer.CreateAsync();
+                Console.WriteLine("Blob Container " + blobContainer.Name + " created");
+                Console.WriteLine();
+
+                Console.WriteLine("Setting Blob Permissions...");
+                BlobContainerPermissions blobPermissions = new BlobContainerPermissions { PublicAccess = BlobContainerPublicAccessType.Blob };
+                await blobContainer.SetPermissionsAsync(blobPermissions);
+
+                String fullFile = filePath + fileName;
+
+                Console.WriteLine("Uploading file... Started at " + DateTime.Now);
+                CloudBlockBlob blobBlock = blobContainer.GetBlockBlobReference(fileName);
+                await blobBlock.UploadFromFileAsync(fullFile);
+                Console.WriteLine("File uploaded. Finished at " + DateTime.Now);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("An error occurred. Details are below");
+                Console.WriteLine(e.ToString());
+            }
+        }
+
+        public async Task DeleteBlob()
+        {
+            if (blobContainer == null) return;
+
+            Console.WriteLine("Deleting the blob container...");
+            await blobContainer.DeleteIfExistsAsync();
+            Console.WriteLine("Blob container deleted");
         }
     }
 }
