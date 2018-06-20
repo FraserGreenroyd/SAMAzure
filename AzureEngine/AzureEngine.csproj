@@ -64,6 +64,7 @@
     <Compile Include="AzureEngine.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SystemMessage.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
