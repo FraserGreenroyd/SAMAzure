@@ -66,6 +66,25 @@ namespace AzureEngine
             }
         }
 
+        public async Task DownloadFile(String filePath, String fileName, String downloadFile)
+        {
+            String fullFile = filePath + fileName;
+
+            try
+            {
+                CloudBlockBlob blobBlock = blobContainer.GetBlockBlobReference(downloadFile);
+
+                Console.WriteLine("Downloading blob file to " + fullFile + ". Started at " + DateTime.Now);
+                await blobBlock.DownloadToFileAsync(fullFile, System.IO.FileMode.Create);
+                Console.WriteLine("File downloaded. Finished at " + DateTime.Now);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("An error occurred. Details are below");
+                Console.WriteLine(e.ToString());
+            }
+        }
+
         public async Task DeleteBlob()
         {
             if (blobContainer == null) return;
