@@ -14,22 +14,36 @@ namespace AzureEngine
             p.Run();
         }
 
+        SystemMessageContainer systemMessages;
+
         public async void Run()
         {
-            AzureEngine ae = new AzureEngine();
+            systemMessages = new SystemMessageContainer();
+            systemMessages.MessagesUpdated += SystemMessages_MessagesUpdated;
+            AzureEngine ae = new AzureEngine(systemMessages);
             ae.InitStorage();
             Console.WriteLine("Press any key to upload the test file");
             Console.ReadLine();
             ae.SendFile(@"C:\Users\fgreenro\Documents\Repo Code\Test Files & Scripts\", "AzureTest.txt").GetAwaiter().GetResult();
-            Console.WriteLine("Press any key to download the test file");
-            Console.ReadLine();
-            ae.DownloadFile(@"C:\Users\fgreenro\Documents\Repo Code\Test Files & Scripts\", "AzureDownload.txt", "AzureTest.txt").GetAwaiter().GetResult();
+            Console.WriteLine("Press the D key to download the test file. Press any other key to skip");
+            if(Console.ReadLine().ToUpper() == "D")
+                ae.DownloadFile(@"C:\Users\fgreenro\Documents\Repo Code\Test Files & Scripts\", "AzureDownload.txt", "AzureTest.txt").GetAwaiter().GetResult();
             Console.WriteLine("Press any key to delete the blob");
             Console.ReadLine();
             ae.DeleteBlob().GetAwaiter().GetResult();
 
             Console.WriteLine("Press any key to exit...");
             Console.ReadLine();
+        }
+
+        private void SystemMessages_MessagesUpdated(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            SystemMessage sm = systemMessages.GetLatestMessage();
+            Console.WriteLine(sm.TimeStamp + ": " + sm.GetType() + sm.Message);
+            if (sm.Type == SystemMessage.MessageType.Error)
+                Console.WriteLine(sm.ErrorDetails);
+
+            Console.WriteLine();
         }
     }
 }

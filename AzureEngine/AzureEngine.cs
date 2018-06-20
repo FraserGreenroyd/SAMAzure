@@ -14,6 +14,17 @@ namespace AzureEngine
         //This file will contain the engine configurations for communicating with Azure
         private CloudStorageAccount storageAccount = null;
         private CloudBlobContainer blobContainer = null;
+        private SystemMessageContainer messageContainer;
+
+        public AzureEngine()
+        {
+            messageContainer = new SystemMessageContainer();
+        }
+
+        public AzureEngine(SystemMessageContainer container)
+        {
+            messageContainer = container;
+        }
 
         public void InitStorage(String connectionString = null)
         {
@@ -21,16 +32,9 @@ namespace AzureEngine
                 connectionString = Environment.GetEnvironmentVariable("azureStorageConnectionString");
 
             if(CloudStorageAccount.TryParse(connectionString, out storageAccount))
-            {
-                Console.WriteLine("Successfully connected to storage account");
-            }
-            else
-            {
-                //Failure - alert user in a friendly manner
-                Console.WriteLine("An error occurred in connecting to the storage account");
-                Console.WriteLine("Please ensure the connection string is correct.");
-                Console.WriteLine("Attempted to use connection string: " + connectionString);
-            }
+                messageContainer.AddInformationMessage("Successfully connected to storage account");
+            else //Failure - alert user in a friendly manner
+                messageContainer.AddErrorMessage("An error occurred in connecting to the storage account", "Attempted to use connection string: " + connectionString);
         }
 
         public async Task SendFile(String filePath, String fileName)
@@ -39,30 +43,28 @@ namespace AzureEngine
 
             try
             {
-                Console.WriteLine("Creating Blob Client...");
+                messageContainer.AddInformationMessage("Creating Blob Client...");
                 CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
 
-                Console.WriteLine("Creating Blob Container...");
+                messageContainer.AddInformationMessage("Creating Blob Container...");
                 blobContainer = blobClient.GetContainerReference("enginetestblob" + Guid.NewGuid().ToString());
                 await blobContainer.CreateAsync();
-                Console.WriteLine("Blob Container " + blobContainer.Name + " created");
-                Console.WriteLine();
+                messageContainer.AddInformationMessage("Blob Container " + blobContainer.Name + " created");
 
-                Console.WriteLine("Setting Blob Permissions...");
+                messageContainer.AddInformationMessage("Setting Blob Permissions...");
                 BlobContainerPermissions blobPermissions = new BlobContainerPermissions { PublicAccess = BlobContainerPublicAccessType.Blob };
                 await blobContainer.SetPermissionsAsync(blobPermissions);
 
                 String fullFile = filePath + fileName;
 
-                Console.WriteLine("Uploading file... Started at " + DateTime.Now);
+                messageContainer.AddInformationMessage("Uploading file...");
                 CloudBlockBlob blobBlock = blobContainer.GetBlockBlobReference(fileName);
                 await blobBlock.UploadFromFileAsync(fullFile);
-                Console.WriteLine("File uploaded. Finished at " + DateTime.Now);
+                messageContainer.AddInformationMessage("File uploaded...");
             }
             catch (Exception e)
             {
-                Console.WriteLine("An error occurred. Details are below");
-                Console.WriteLine(e.ToString());
+                messageContainer.AddErrorMessage("An error occurred. Details are below", e.ToString());
             }
         }
 
@@ -74,14 +76,13 @@ namespace AzureEngine
             {
                 CloudBlockBlob blobBlock = blobContainer.GetBlockBlobReference(downloadFile);
 
-                Console.WriteLine("Downloading blob file to " + fullFile + ". Started at " + DateTime.Now);
+                messageContainer.AddInformationMessage("Downloading blob file to " + fullFile);
                 await blobBlock.DownloadToFileAsync(fullFile, System.IO.FileMode.Create);
-                Console.WriteLine("File downloaded. Finished at " + DateTime.Now);
+                messageContainer.AddInformationMessage("File downloaded...");
             }
             catch (Exception e)
             {
-                Console.WriteLine("An error occurred. Details are below");
-                Console.WriteLine(e.ToString());
+                messageContainer.AddErrorMessage("An error occurred. Details are below", e.ToString());
             }
         }
 
@@ -89,9 +90,9 @@ namespace AzureEngine
         {
             if (blobContainer == null) return;
 
-            Console.WriteLine("Deleting the blob container...");
+            messageContainer.AddInformationMessage("Deleting the blob container...");
             await blobContainer.DeleteIfExistsAsync();
-            Console.WriteLine("Blob container deleted");
+            messageContainer.AddInformationMessage("Blob container deleted");
         }
     }
 }

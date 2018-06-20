@@ -26,22 +26,27 @@ namespace AzureEngine
         #endregion
 
         #region Functions
-        public void AddMessage(String message)
+        private void AddMessage(String message)
         {
             messages.Add(new SystemMessage(message));
             NotifyMessagesChanged();
         }
 
-        public void AddMessage(String message, SystemMessage.MessageType type)
+        private void AddMessage(String message, SystemMessage.MessageType type)
         {
             messages.Add(new SystemMessage(message, type));
             NotifyMessagesChanged();
         }
 
-        public void AddMessage(String message, SystemMessage.MessageType type, String errorDetails)
+        private void AddMessage(String message, SystemMessage.MessageType type, String errorDetails)
         {
             messages.Add(new SystemMessage(message, type, errorDetails));
             NotifyMessagesChanged();
+        }
+
+        public void AddStatusMessage(String message)
+        {
+            AddMessage(message, SystemMessage.MessageType.Status);
         }
 
         public void AddInformationMessage(String message)
@@ -62,6 +67,11 @@ namespace AzureEngine
         public void AddErrorMessage(String message, String errorDetails)
         {
             AddMessage(message, SystemMessage.MessageType.Error, errorDetails);
+        }
+
+        public SystemMessage GetLatestMessage()
+        {
+            return messages.Last();
         }
         #endregion
 

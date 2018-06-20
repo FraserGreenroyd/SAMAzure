@@ -99,5 +99,26 @@ namespace AzureEngine
             set { errorDetails = value; }
         }
         #endregion
+
+        #region Functions
+        public String GetType()
+        {
+            switch(messageType)
+            {
+                case MessageType.Unknown:
+                    return "";
+                case MessageType.Status:
+                    return "Status - ";
+                case MessageType.Information:
+                    return "Information - ";
+                case MessageType.Warning:
+                    return "WARNING - ";
+                case MessageType.Error:
+                    return "ERROR - ";
+                default:
+                    return "";
+            }
+        }
+        #endregion
     }
 }
