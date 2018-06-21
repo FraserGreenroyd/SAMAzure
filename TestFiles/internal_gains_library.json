@@ -5,7 +5,8 @@
         "heating_setback": 16,
         "cooling_setpoint": 24,
         "cooling_setback": 100,
-        "air_supply_litres_per_second_per_person": 15,
+        "ventilation_litres_per_second_per_person": 15,
+        "infiltration_m3_per_second_m2": 0.08333333333,
         "design_illuminance_lux": 300,
         "lighting_gain_watts_per_m2": 6,
         "equipment_gain_watts_per_m2": 12,
@@ -272,7 +273,7 @@
             "Hour_23": 0,
             "Hour_24": 0
         },
-        "air_supply_profile_weekday": {
+        "ventilation_profile_weekday": {
             "Hour_1": 0,
             "Hour_2": 0,
             "Hour_3": 0,
@@ -298,7 +299,7 @@
             "Hour_23": 0,
             "Hour_24": 0
         },
-        "air_supply_profile_weekend": {
+        "ventilation_profile_weekend": {
             "Hour_1": 0,
             "Hour_2": 0,
             "Hour_3": 0,
@@ -330,7 +331,8 @@
         "heating_setback": 16,
         "cooling_setpoint": 24,
         "cooling_setback": 100,
-        "air_supply_litres_per_second_per_person": 15,
+        "ventilation_litres_per_second_per_person": 15,
+        "infiltration_m3_per_second_m2": 0.08333333333,
         "design_illuminance_lux": 300,
         "lighting_gain_watts_per_m2": 6,
         "equipment_gain_watts_per_m2": 12,
@@ -597,7 +599,7 @@
             "Hour_23": 0,
             "Hour_24": 0
         },
-        "air_supply_profile_weekday": {
+        "ventilation_profile_weekday": {
             "Hour_1": 0,
             "Hour_2": 0,
             "Hour_3": 0,
@@ -623,7 +625,7 @@
             "Hour_23": 0,
             "Hour_24": 0
         },
-        "air_supply_profile_weekend": {
+        "ventilation_profile_weekend": {
             "Hour_1": 0,
             "Hour_2": 0,
             "Hour_3": 0,
@@ -655,7 +657,8 @@
         "heating_setback": 16,
         "cooling_setpoint": 24,
         "cooling_setback": 100,
-        "air_supply_litres_per_second_per_person": 15,
+        "ventilation_litres_per_second_per_person": 15,
+        "infiltration_m3_per_second_m2": 0.08333333333,
         "design_illuminance_lux": 300,
         "lighting_gain_watts_per_m2": 6,
         "equipment_gain_watts_per_m2": 42,
@@ -922,7 +925,7 @@
             "Hour_23": 0,
             "Hour_24": 0
         },
-        "air_supply_profile_weekday": {
+        "ventilation_profile_weekday": {
             "Hour_1": 0,
             "Hour_2": 0,
             "Hour_3": 0,
@@ -948,7 +951,7 @@
             "Hour_23": 0,
             "Hour_24": 0
         },
-        "air_supply_profile_weekend": {
+        "ventilation_profile_weekend": {
             "Hour_1": 0,
             "Hour_2": 0,
             "Hour_3": 0,
@@ -980,7 +983,8 @@
         "heating_setback": 16,
         "cooling_setpoint": 24,
         "cooling_setback": 100,
-        "air_supply_litres_per_second_per_person": 15,
+        "ventilation_litres_per_second_per_person": 15,
+        "infiltration_m3_per_second_m2": 0.08333333333,
         "design_illuminance_lux": 300,
         "lighting_gain_watts_per_m2": 6,
         "equipment_gain_watts_per_m2": 20,
@@ -1222,7 +1226,7 @@
             "Hour_23": 0,
             "Hour_24": 0
         },
-        "air_supply_profile_weekday": {
+        "ventilation_profile_weekday": {
             "Hour_1": 0,
             "Hour_2": 0,
             "Hour_3": 0,
@@ -1248,7 +1252,7 @@
             "Hour_23": 0,
             "Hour_24": 0
         },
-        "air_supply_profile_weekend": {
+        "ventilation_profile_weekend": {
             "Hour_1": 0,
             "Hour_2": 0,
             "Hour_3": 0,
@@ -1280,7 +1284,8 @@
         "heating_setback": 16,
         "cooling_setpoint": 24,
         "cooling_setback": 100,
-        "air_supply_litres_per_second_per_person": 15,
+        "ventilation_litres_per_second_per_person": 15,
+        "infiltration_m3_per_second_m2": 0.08333333333,
         "design_illuminance_lux": 300,
         "lighting_gain_watts_per_m2": 6,
         "equipment_gain_watts_per_m2": 15,
@@ -1522,7 +1527,7 @@
             "Hour_23": 0,
             "Hour_24": 0
         },
-        "air_supply_profile_weekday": {
+        "ventilation_profile_weekday": {
             "Hour_1": 0,
             "Hour_2": 0,
             "Hour_3": 0,
@@ -1548,7 +1553,7 @@
             "Hour_23": 0,
             "Hour_24": 0
         },
-        "air_supply_profile_weekend": {
+        "ventilation_profile_weekend": {
             "Hour_1": 0,
             "Hour_2": 0,
             "Hour_3": 0,
@@ -1580,7 +1585,8 @@
         "heating_setback": 16,
         "cooling_setpoint": 24,
         "cooling_setback": 100,
-        "air_supply_litres_per_second_per_person": 15,
+        "ventilation_litres_per_second_per_person": 15,
+        "infiltration_m3_per_second_m2": 0.08333333333,
         "design_illuminance_lux": 300,
         "lighting_gain_watts_per_m2": 6,
         "equipment_gain_watts_per_m2": 12,
@@ -1822,7 +1828,7 @@
             "Hour_23": 0,
             "Hour_24": 0
         },
-        "air_supply_profile_weekday": {
+        "ventilation_profile_weekday": {
             "Hour_1": 0,
             "Hour_2": 0,
             "Hour_3": 0,
@@ -1848,7 +1854,7 @@
             "Hour_23": 0,
             "Hour_24": 0
         },
-        "air_supply_profile_weekend": {
+        "ventilation_profile_weekend": {
             "Hour_1": 0,
             "Hour_2": 0,
             "Hour_3": 0,
@@ -1880,7 +1886,8 @@
         "heating_setback": 16,
         "cooling_setpoint": 24,
         "cooling_setback": 100,
-        "air_supply_litres_per_second_per_person": 15,
+        "ventilation_litres_per_second_per_person": 15,
+        "infiltration_m3_per_second_m2": 0.08333333333,
         "design_illuminance_lux": 300,
         "lighting_gain_watts_per_m2": 6,
         "equipment_gain_watts_per_m2": 20,
@@ -2122,7 +2129,7 @@
             "Hour_23": 0,
             "Hour_24": 0
         },
-        "air_supply_profile_weekday": {
+        "ventilation_profile_weekday": {
             "Hour_1": 0,
             "Hour_2": 0,
             "Hour_3": 0,
@@ -2148,7 +2155,7 @@
             "Hour_23": 0,
             "Hour_24": 0
         },
-        "air_supply_profile_weekend": {
+        "ventilation_profile_weekend": {
             "Hour_1": 0,
             "Hour_2": 0,
             "Hour_3": 0,
@@ -2180,7 +2187,8 @@
         "heating_setback": 16,
         "cooling_setpoint": 24,
         "cooling_setback": 100,
-        "air_supply_litres_per_second_per_person": 15,
+        "ventilation_litres_per_second_per_person": 15,
+        "infiltration_m3_per_second_m2": 0.08333333333,
         "design_illuminance_lux": 500,
         "lighting_gain_watts_per_m2": 10,
         "equipment_gain_watts_per_m2": 20,
@@ -2422,7 +2430,7 @@
             "Hour_23": 0,
             "Hour_24": 0
         },
-        "air_supply_profile_weekday": {
+        "ventilation_profile_weekday": {
             "Hour_1": 0,
             "Hour_2": 0,
             "Hour_3": 0,
@@ -2448,7 +2456,7 @@
             "Hour_23": 0,
             "Hour_24": 0
         },
-        "air_supply_profile_weekend": {
+        "ventilation_profile_weekend": {
             "Hour_1": 0,
             "Hour_2": 0,
             "Hour_3": 0,
