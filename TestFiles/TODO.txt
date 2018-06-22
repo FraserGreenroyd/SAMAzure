@@ -1,0 +1,16 @@
+Finish the IDF processing to Radaince via Honeybee method 
+    - Remap triangulated surfaces to 3d coordinates
+    - Create HBsurfaces with corresponding properties for Radiance plot
+    - Generate test grid within zone (perhaps via honeybee method after defining the floor (grid from surface maybe?))
+    - Generate recipe and send to Radiance (for annual and DF)
+    - Define psot processing
+
+Create basic docker instance/container for ubuntu Linux to run Radiance and Energyplus (on Mac!)
+
+Send job to the container on buuil - or map ddirectory to sthat files can be passded and tested
+
+Docker file and commands for instaling Radiance and Energyplsu and Python/Honeybee very important
+
+Or maybe how to run Radiance code from input files geenrated using Honeybee??
+
+

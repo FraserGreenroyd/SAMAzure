@@ -23,30 +23,30 @@ Sizing:Parameters,
 	1.15;     !- Cooling Sizing Factor
 
 Site:Location,
-	LONDON/GATWICK	GBR,
-	51.15,    !Latitude
-	-0.18,   !Longitude
-	0.0, !Time Zone
-	62.0;   !Elevation
+	CARDIFF	GBR,
+	51.48,    !Latitude
+	3.18,   !Longitude
+	0, !Time Zone
+	10;   !Elevation
 
 SizingPeriod:DesignDay,
 	Ann Htg 99.6% Condns DB,     !- Name
 	2,      !- Month
 	21,      !- Day of Month
 	WinterDesignDay,!- Day Type
-	-4.4,      !- Maximum Dry-Bulb Temperature {C}
+	-1.1,      !- Maximum Dry-Bulb Temperature {C}
 	0,      !- Daily Dry-Bulb Temperature Range {C}
 	DefaultMultipliers, !- Dry-Bulb Temperature Range Modifier Type
 	,      !- Dry-Bulb Temperature Range Modifier Schedule Name
 	Wetbulb,      !- Humidity Condition Type
-	-4.4,      !- Wetbulb or Dewpoint at Maximum Dry-Bulb {C}
+	-1.1,      !- Wetbulb or Dewpoint at Maximum Dry-Bulb {C}
 	,      !- Humidity Indicating Day Schedule Name
 	,      !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
 	,      !- Enthalpy at Maximum Dry-Bulb {J/kg}
 	,      !- Daily Wet-Bulb Temperature Range {deltaC}
-	100818,      !- Barometric Pressure {Pa}
-	2.6,      !- Wind Speed {m/s} design conditions vs. traditional 6.71 m/s (15 mph)
-	125,      !- Wind Direction {Degrees; N=0, S=180}
+	101552,      !- Barometric Pressure {Pa}
+	5.7,      !- Wind Speed {m/s} design conditions vs. traditional 6.71 m/s (15 mph)
+	139,      !- Wind Direction {Degrees; N=0, S=180}
 	No,      !- Rain {Yes/No}
 	No,      !- Snow on ground {Yes/No}
 	No,      !- Daylight Savings Time Indicator
@@ -62,19 +62,19 @@ SizingPeriod:DesignDay,
 	2,      !- Month
 	21,      !- Day of Month
 	WinterDesignDay,!- Day Type
-	0.3,      !- Maximum Dry-Bulb Temperature {C}
+	-1.8,      !- Maximum Dry-Bulb Temperature {C}
 	0,      !- Daily Dry-Bulb Temperature Range {C}
 	DefaultMultipliers, !- Dry-Bulb Temperature Range Modifier Type
 	,      !- Dry-Bulb Temperature Range Modifier Schedule Name
 	Dewpoint,      !- Humidity Condition Type
-	-6.7,      !- Wetbulb or Dewpoint at Maximum Dry-Bulb {C}
+	-4.1,      !- Wetbulb or Dewpoint at Maximum Dry-Bulb {C}
 	,      !- Humidity Indicating Day Schedule Name
 	,      !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
 	,      !- Enthalpy at Maximum Dry-Bulb {J/kg}
 	,      !- Daily Wet-Bulb Temperature Range {deltaC}
-	100818,      !- Barometric Pressure {Pa}
-	2.6,      !- Wind Speed {m/s} design conditions vs. traditional 6.71 m/s (15 mph)
-	125,      !- Wind Direction {Degrees; N=0, S=180}
+	101552,      !- Barometric Pressure {Pa}
+	5.7,      !- Wind Speed {m/s} design conditions vs. traditional 6.71 m/s (15 mph)
+	139,      !- Wind Direction {Degrees; N=0, S=180}
 	No,      !- Rain {Yes/No}
 	No,      !- Snow on ground {Yes/No}
 	No,      !- Daylight Savings Time Indicator
@@ -90,19 +90,19 @@ SizingPeriod:DesignDay,
 	2,      !- Month
 	21,      !- Day of Month
 	WinterDesignDay,!- Day Type
-	4.2,      !- Maximum Dry-Bulb Temperature {C}
+	5.5,      !- Maximum Dry-Bulb Temperature {C}
 	0,      !- Daily Dry-Bulb Temperature Range {C}
 	DefaultMultipliers, !- Dry-Bulb Temperature Range Modifier Type
 	,      !- Dry-Bulb Temperature Range Modifier Schedule Name
 	Wetbulb,      !- Humidity Condition Type
-	4.2,      !- Wetbulb or Dewpoint at Maximum Dry-Bulb {C}
+	5.5,      !- Wetbulb or Dewpoint at Maximum Dry-Bulb {C}
 	,      !- Humidity Indicating Day Schedule Name
 	,      !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
 	,      !- Enthalpy at Maximum Dry-Bulb {J/kg}
 	,      !- Daily Wet-Bulb Temperature Range {deltaC}
-	100818,      !- Barometric Pressure {Pa}
-	8.7,      !- Wind Speed {m/s} design conditions vs. traditional 6.71 m/s (15 mph)
-	125,      !- Wind Direction {Degrees; N=0, S=180}
+	101552,      !- Barometric Pressure {Pa}
+	12.4,      !- Wind Speed {m/s} design conditions vs. traditional 6.71 m/s (15 mph)
+	139,      !- Wind Direction {Degrees; N=0, S=180}
 	No,      !- Rain {Yes/No}
 	No,      !- Snow on ground {Yes/No}
 	No,      !- Daylight Savings Time Indicator
@@ -115,22 +115,22 @@ SizingPeriod:DesignDay,
 
 SizingPeriod:DesignDay,
 	Ann Clg .4% Condns DB=>MWB,     !- Name
-	7,      !- Month
+	8,      !- Month
 	21,      !- Day of Month
 	SummerDesignDay,!- Day Type
-	26.4,      !- Maximum Dry-Bulb Temperature {C}
-	10.13,      !- Daily Dry-Bulb Temperature Range {C}
+	23.9,      !- Maximum Dry-Bulb Temperature {C}
+	7.62,      !- Daily Dry-Bulb Temperature Range {C}
 	DefaultMultipliers, !- Dry-Bulb Temperature Range Modifier Type
 	,      !- Dry-Bulb Temperature Range Modifier Schedule Name
 	Wetbulb,      !- Humidity Condition Type
-	13.41,      !- Wetbulb or Dewpoint at Maximum Dry-Bulb {C}
+	15.531,      !- Wetbulb or Dewpoint at Maximum Dry-Bulb {C}
 	,      !- Humidity Indicating Day Schedule Name
 	,      !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
 	,      !- Enthalpy at Maximum Dry-Bulb {J/kg}
 	,      !- Daily Wet-Bulb Temperature Range {deltaC}
-	100818,      !- Barometric Pressure {Pa}
-	4.1,      !- Wind Speed {m/s} design conditions vs. traditional 6.71 m/s (15 mph)
-	177,      !- Wind Direction {Degrees; N=0, S=180}
+	101552,      !- Barometric Pressure {Pa}
+	5.7,      !- Wind Speed {m/s} design conditions vs. traditional 6.71 m/s (15 mph)
+	186,      !- Wind Direction {Degrees; N=0, S=180}
 	No,      !- Rain {Yes/No}
 	No,      !- Snow on ground {Yes/No}
 	No,      !- Daylight Savings Time Indicator
@@ -143,22 +143,22 @@ SizingPeriod:DesignDay,
 
 SizingPeriod:DesignDay,
 	Ann Clg .4% Condns WB=>MDB,     !- Name
-	7,      !- Month
+	8,      !- Month
 	21,      !- Day of Month
 	SummerDesignDay,!- Day Type
-	23.6,      !- Maximum Dry-Bulb Temperature {C}
-	10.13,      !- Daily Dry-Bulb Temperature Range {C}
+	21.4,      !- Maximum Dry-Bulb Temperature {C}
+	7.62,      !- Daily Dry-Bulb Temperature Range {C}
 	DefaultMultipliers, !- Dry-Bulb Temperature Range Modifier Type
 	,      !- Dry-Bulb Temperature Range Modifier Schedule Name
 	Wetbulb,      !- Humidity Condition Type
-	18.631,      !- Wetbulb or Dewpoint at Maximum Dry-Bulb {C}
+	18.423,      !- Wetbulb or Dewpoint at Maximum Dry-Bulb {C}
 	,      !- Humidity Indicating Day Schedule Name
 	,      !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
 	,      !- Enthalpy at Maximum Dry-Bulb {J/kg}
 	,      !- Daily Wet-Bulb Temperature Range {deltaC}
-	100818,      !- Barometric Pressure {Pa}
-	4.1,      !- Wind Speed {m/s} design conditions vs. traditional 6.71 m/s (15 mph)
-	177,      !- Wind Direction {Degrees; N=0, S=180}
+	101552,      !- Barometric Pressure {Pa}
+	5.7,      !- Wind Speed {m/s} design conditions vs. traditional 6.71 m/s (15 mph)
+	186,      !- Wind Direction {Degrees; N=0, S=180}
 	No,      !- Rain {Yes/No}
 	No,      !- Snow on ground {Yes/No}
 	No,      !- Daylight Savings Time Indicator
@@ -171,22 +171,22 @@ SizingPeriod:DesignDay,
 
 SizingPeriod:DesignDay,
 	Ann Clg .4% Condns DP=>MDB,     !- Name
-	7,      !- Month
+	8,      !- Month
 	21,      !- Day of Month
 	SummerDesignDay,!- Day Type
-	19.4,      !- Maximum Dry-Bulb Temperature {C}
-	10.13,      !- Daily Dry-Bulb Temperature Range {C}
+	19.8,      !- Maximum Dry-Bulb Temperature {C}
+	7.62,      !- Daily Dry-Bulb Temperature Range {C}
 	DefaultMultipliers, !- Dry-Bulb Temperature Range Modifier Type
 	,      !- Dry-Bulb Temperature Range Modifier Schedule Name
 	Dewpoint,      !- Humidity Condition Type
-	16.4,      !- Wetbulb or Dewpoint at Maximum Dry-Bulb {C}
+	16.9,      !- Wetbulb or Dewpoint at Maximum Dry-Bulb {C}
 	,      !- Humidity Indicating Day Schedule Name
 	,      !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
 	,      !- Enthalpy at Maximum Dry-Bulb {J/kg}
 	,      !- Daily Wet-Bulb Temperature Range {deltaC}
-	100818,      !- Barometric Pressure {Pa}
-	4.1,      !- Wind Speed {m/s} design conditions vs. traditional 6.71 m/s (15 mph)
-	177,      !- Wind Direction {Degrees; N=0, S=180}
+	101552,      !- Barometric Pressure {Pa}
+	5.7,      !- Wind Speed {m/s} design conditions vs. traditional 6.71 m/s (15 mph)
+	186,      !- Wind Direction {Degrees; N=0, S=180}
 	No,      !- Rain {Yes/No}
 	No,      !- Snow on ground {Yes/No}
 	No,      !- Daylight Savings Time Indicator
@@ -199,22 +199,22 @@ SizingPeriod:DesignDay,
 
 SizingPeriod:DesignDay,
 	Ann Clg .4% Condns Enth=>MDB,     !- Name
-	7,      !- Month
+	8,      !- Month
 	21,      !- Day of Month
 	SummerDesignDay,!- Day Type
-	26.3,      !- Maximum Dry-Bulb Temperature {C}
-	10.13,      !- Daily Dry-Bulb Temperature Range {C}
+	21.4,      !- Maximum Dry-Bulb Temperature {C}
+	7.62,      !- Daily Dry-Bulb Temperature Range {C}
 	DefaultMultipliers, !- Dry-Bulb Temperature Range Modifier Type
 	,      !- Dry-Bulb Temperature Range Modifier Schedule Name
 	Enthalpy,      !- Humidity Condition Type
 	,      !- Wetbulb or Dewpoint at Maximum Dry-Bulb {C}
 	,      !- Humidity Indicating Day Schedule Name
 	,      !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
-	52301,      !- Enthalpy at Maximum Dry-Bulb {J/kg}
+	51314,      !- Enthalpy at Maximum Dry-Bulb {J/kg}
 	,      !- Daily Wet-Bulb Temperature Range {deltaC}
-	100818,      !- Barometric Pressure {Pa}
-	4.1,      !- Wind Speed {m/s} design conditions vs. traditional 6.71 m/s (15 mph)
-	177,      !- Wind Direction {Degrees; N=0, S=180}
+	101552,      !- Barometric Pressure {Pa}
+	5.7,      !- Wind Speed {m/s} design conditions vs. traditional 6.71 m/s (15 mph)
+	186,      !- Wind Direction {Degrees; N=0, S=180}
 	No,      !- Rain {Yes/No}
 	No,      !- Snow on ground {Yes/No}
 	No,      !- Daylight Savings Time Indicator
@@ -277,14 +277,14 @@ ScheduleTypeLimits,
   temperature;   !- 
 
 ScheduleTypeLimits,
-  TEMPERATURE 9,   !- name
+  TEMPERATURE 60,   !- name
   ,   !- - Lower Limit Value {BasedOnField A3}
   ,   !- - Upper Limit Value {BasedOnField A3}
   Continuous,   !- - Numeric Type
   temperature;   !- 
 
 ScheduleTypeLimits,
-  TEMPERATURE 60,   !- name
+  TEMPERATURE 9,   !- name
   ,   !- - Lower Limit Value {BasedOnField A3}
   ,   !- - Upper Limit Value {BasedOnField A3}
   Continuous,   !- - Numeric Type
@@ -306,20 +306,6 @@ ScheduleTypeLimits,
 
 ScheduleTypeLimits,
   TEMPERATURE 39,   !- name
-  ,   !- - Lower Limit Value {BasedOnField A3}
-  ,   !- - Upper Limit Value {BasedOnField A3}
-  Continuous,   !- - Numeric Type
-  temperature;   !- 
-
-ScheduleTypeLimits,
-  TEMPERATURE 49,   !- name
-  ,   !- - Lower Limit Value {BasedOnField A3}
-  ,   !- - Upper Limit Value {BasedOnField A3}
-  Continuous,   !- - Numeric Type
-  temperature;   !- 
-
-ScheduleTypeLimits,
-  TEMPERATURE 59,   !- name
   ,   !- - Lower Limit Value {BasedOnField A3}
   ,   !- - Upper Limit Value {BasedOnField A3}
   Continuous,   !- - Numeric Type
@@ -354,12 +340,6 @@ ScheduleTypeLimits,
   temperature;   !- 
 
 ScheduleTypeLimits,
-  CONTROL TYPE,   !- name
-  0,   !- - Lower Limit Value {BasedOnField A3}
-  4,   !- - Upper Limit Value {BasedOnField A3}
-  DISCRETE;   !- 
-
-ScheduleTypeLimits,
   TEMPERATURE 5,   !- name
   ,   !- - Lower Limit Value {BasedOnField A3}
   ,   !- - Upper Limit Value {BasedOnField A3}
@@ -374,7 +354,27 @@ ScheduleTypeLimits,
   temperature;   !- 
 
 ScheduleTypeLimits,
+  CONTROL TYPE,   !- name
+  0,   !- - Lower Limit Value {BasedOnField A3}
+  4,   !- - Upper Limit Value {BasedOnField A3}
+  DISCRETE;   !- 
+
+ScheduleTypeLimits,
   TEMPERATURE 7,   !- name
+  ,   !- - Lower Limit Value {BasedOnField A3}
+  ,   !- - Upper Limit Value {BasedOnField A3}
+  Continuous,   !- - Numeric Type
+  temperature;   !- 
+
+ScheduleTypeLimits,
+  TEMPERATURE 49,   !- name
+  ,   !- - Lower Limit Value {BasedOnField A3}
+  ,   !- - Upper Limit Value {BasedOnField A3}
+  Continuous,   !- - Numeric Type
+  temperature;   !- 
+
+ScheduleTypeLimits,
+  TEMPERATURE 59,   !- name
   ,   !- - Lower Limit Value {BasedOnField A3}
   ,   !- - Upper Limit Value {BasedOnField A3}
   Continuous,   !- - Numeric Type
@@ -716,6 +716,12 @@ ScheduleTypeLimits,
   temperature;   !- 
 
 ScheduleTypeLimits,
+  ON/OFF,   !- name
+  0,   !- - Lower Limit Value {BasedOnField A3}
+  1,   !- - Upper Limit Value {BasedOnField A3}
+  DISCRETE;   !- 
+
+ScheduleTypeLimits,
   ACTIVITYLEVEL 4,   !- name
   0,   !- - Lower Limit Value {BasedOnField A3}
   ,   !- - Upper Limit Value {BasedOnField A3}
@@ -730,14 +736,14 @@ ScheduleTypeLimits,
   activitylevel;   !- 
 
 ScheduleTypeLimits,
-  ACTIVITYLEVEL 6,   !- name
+  ACTIVITYLEVEL 13,   !- name
   0,   !- - Lower Limit Value {BasedOnField A3}
   ,   !- - Upper Limit Value {BasedOnField A3}
   Continuous,   !- - Numeric Type
   activitylevel;   !- 
 
 ScheduleTypeLimits,
-  ACTIVITYLEVEL 13,   !- name
+  ACTIVITYLEVEL 6,   !- name
   0,   !- - Lower Limit Value {BasedOnField A3}
   ,   !- - Upper Limit Value {BasedOnField A3}
   Continuous,   !- - Numeric Type
@@ -749,12 +755,6 @@ ScheduleTypeLimits,
   ,   !- - Upper Limit Value {BasedOnField A3}
   Continuous,   !- - Numeric Type
   activitylevel;   !- 
-
-ScheduleTypeLimits,
-  FRACTIONAL,   !- name
-  0,   !- - Lower Limit Value {BasedOnField A3}
-  1,   !- - Upper Limit Value {BasedOnField A3}
-  Continuous;   !- 
 
 ScheduleTypeLimits,
   ACTIVITYLEVEL 1,   !- name
@@ -792,10 +792,10 @@ ScheduleTypeLimits,
   activitylevel;   !- 
 
 ScheduleTypeLimits,
-  ON/OFF,   !- name
+  FRACTIONAL,   !- name
   0,   !- - Lower Limit Value {BasedOnField A3}
   1,   !- - Upper Limit Value {BasedOnField A3}
-  DISCRETE;   !- 
+  Continuous;   !- 
 
 ScheduleTypeLimits,
   TEMPERATURE,   !- name
@@ -833,7 +833,7 @@ GlobalGeometryRules,
 	Relative;                !- Rectangular Surface Coordinate System
 
 Shading:Building:Detailed,
-	shdSrf_0_0_8ec8f336-032f-49f5-bb75-f1b91103e022_0,	!- Name
+	shdSrf_0_0_02b29337-c9d2-4837-a6bb-744269fcfd8a_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	38.777423858642578,
@@ -851,7 +851,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_1_0_7ca1beb1-a8ba-4dd9-927f-d201b54086ff_0,	!- Name
+	shdSrf_1_0_4c1c433b-d9b9-4bd9-89c4-abdc27e9fb56_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	38.777423858642578,
@@ -869,7 +869,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_2_0_aeb3c5a6-2d4c-4763-8f07-b906c7be1d55_0,	!- Name
+	shdSrf_2_0_298c6dda-05f8-48c1-8cda-d5d3deab4abf_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	95.724761962890625,
@@ -887,7 +887,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_3_0_58985eff-8780-48cd-a184-b40fde629c1f_0,	!- Name
+	shdSrf_3_0_091522af-3a7a-4933-86e0-9a07efdd9758_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	95.724761962890625,
@@ -905,7 +905,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_4_0_71b7efc2-e9b2-4a34-ae24-0cb355ff6c63_0,	!- Name
+	shdSrf_4_0_9b35e499-e466-451c-a63f-fa071daec4b2_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	36.286026000976562,
@@ -923,7 +923,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_4_1_ed1bedd2-21d9-4199-8ff7-19b3cfb81103_0,	!- Name
+	shdSrf_4_1_2cbe9c18-eef4-46f6-a3f2-868722b12fbc_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	40.316951751708984,
@@ -941,7 +941,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_4_2_af2ca25e-e334-4c36-bcdb-00cee196889e_0,	!- Name
+	shdSrf_4_2_705a3f1d-f4b3-495c-84b2-38fb74cccf99_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	0.76151943206787109,
@@ -959,7 +959,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_4_3_0b0e8719-2455-49a2-9d2d-19ac15363793_0,	!- Name
+	shdSrf_4_3_157ec627-785e-4f7f-bf80-0dd45726e9d3_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	1.787937045097351,
@@ -977,7 +977,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_4_4_358dd33f-726e-4f9c-9e13-7e7f20f2620f_0,	!- Name
+	shdSrf_4_4_ce66fbd9-f963-4ab8-a6e0-8bf567f56d29_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	1.787937045097351,
@@ -995,7 +995,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_4_5_220dde5c-5a87-439b-8822-ba2078ab6b8d_0,	!- Name
+	shdSrf_4_5_6d00ff32-ac57-4efa-a79e-56cf3885c860_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	1.787937045097351,
@@ -1013,7 +1013,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_5_0_098bf3ed-1628-467d-a6d2-2b3398150edd_0,	!- Name
+	shdSrf_5_0_30923bd7-8376-4c3f-9162-ffbad7a93027_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	40.613498687744141,
@@ -1031,7 +1031,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_6_0_07e4a4c2-2a8a-4294-ab71-c3bd754f81c7_0,	!- Name
+	shdSrf_6_0_57017043-2a10-4fa1-bab9-3331fdb9d017_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	40.613498687744141,
@@ -1049,7 +1049,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_7_0_941090cb-8c76-40d1-b3a5-da8e2150ee7f_0,	!- Name
+	shdSrf_7_0_e5120606-59a1-4161-8987-32a3c0c593e0_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	97.407829284667969,
@@ -1067,7 +1067,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_8_0_2dde31fa-c688-4d1b-8dce-872748b27e5f_0,	!- Name
+	shdSrf_8_0_d353a198-24c1-46fc-82bb-6bf95c40e71f_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	97.407829284667969,
@@ -1085,7 +1085,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_9_0_626ad73d-495a-4bd3-8428-3e105a2c60f7_0,	!- Name
+	shdSrf_9_0_008eb77d-8c05-45c2-9944-a3b8c9a3201e_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	42.449569702148438,
@@ -1103,7 +1103,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_10_0_7e739828-64ec-4a8e-bd7c-3cda47111c0d_0,	!- Name
+	shdSrf_10_0_233c2490-512e-425d-b96c-ebf17a9847bc_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	42.449569702148438,
@@ -1121,7 +1121,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_11_0_1fa563f8-c90a-43de-bfb6-437976fcd0e2_0,	!- Name
+	shdSrf_11_0_eacb4c16-b532-4446-bdb2-f2a00e382a83_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	99.090896606445313,
@@ -1139,7 +1139,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_12_0_6d94e976-23e9-47b0-819f-3807939e6f7f_0,	!- Name
+	shdSrf_12_0_7ae264d5-dc37-4a12-a404-65da8fa4587c_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	99.090896606445313,
@@ -1157,7 +1157,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_13_0_e0b115dc-6ce8-4898-b410-91625f0501a5_0,	!- Name
+	shdSrf_13_0_13c262f3-3a7e-408e-a622-3b01e0d84b71_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	44.28564453125,
@@ -1175,7 +1175,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_14_0_03393bdd-51e0-44f4-b052-b8051cae4f15_0,	!- Name
+	shdSrf_14_0_bcaa3363-b9d1-4d34-a2de-589488a46e06_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	44.28564453125,
@@ -1193,7 +1193,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_15_0_7ec17eec-feb4-42a4-866a-97a6a68cd31e_0,	!- Name
+	shdSrf_15_0_6f608478-77de-48c9-88ab-2674b413cb8e_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	100.77396392822266,
@@ -1211,7 +1211,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_16_0_7b457051-c75b-4aaf-985a-1fb21e3bebb0_0,	!- Name
+	shdSrf_16_0_6690e896-7eef-4d89-bad3-2a7a22dc3a53_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	100.77396392822266,
@@ -1229,7 +1229,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_17_0_ef346b8f-efc3-42ee-a318-da9537f276fa_0,	!- Name
+	shdSrf_17_0_5d1ed515-80f5-4a74-8980-64fa649190d5_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	46.121719360351563,
@@ -1247,7 +1247,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_18_0_487faecc-4598-4082-b456-43323921dfd7_0,	!- Name
+	shdSrf_18_0_a35c09ec-669d-4fc2-bd44-aabb2066d95c_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	46.121719360351563,
@@ -1265,7 +1265,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_19_0_a2f62af2-9ab1-47a3-9c34-e150682c7f6b_0,	!- Name
+	shdSrf_19_0_75cd7978-da5e-485f-ab40-bf6e93290815_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	102.45703125,
@@ -1283,7 +1283,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_20_0_3616c7be-d2c6-48b4-8880-82fafc6da279_0,	!- Name
+	shdSrf_20_0_05ff2ce1-2c93-45a6-b65a-89324aa3b212_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	102.45703125,
@@ -1301,7 +1301,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_21_0_01a6275f-b1e1-4797-9a83-4f6feb0e6de9_0,	!- Name
+	shdSrf_21_0_0f26d298-e4ac-4c38-8a72-624d7700bf96_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	47.957790374755859,
@@ -1319,7 +1319,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_22_0_b50c48c3-a73b-4f27-b70e-d4a68dc413d5_0,	!- Name
+	shdSrf_22_0_c0d49ce4-77c6-4e48-9ba3-344cc93df926_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	47.957790374755859,
@@ -1337,7 +1337,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_23_0_4f320f98-51b7-498b-be19-dc19b3e1650c_0,	!- Name
+	shdSrf_23_0_6b97c296-748a-48b3-8f39-821ac1b49582_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	104.14009857177734,
@@ -1355,7 +1355,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_24_0_7b0b3cd0-edde-4c94-9f7e-8dac00a85de1_0,	!- Name
+	shdSrf_24_0_47860a8d-8157-4b73-9a75-46a7492a0379_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	104.14009857177734,
@@ -1373,7 +1373,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_25_0_03e278e5-7f30-4269-8737-d551cc08523d_0,	!- Name
+	shdSrf_25_0_0048d7a3-5d18-4ab8-b284-13d1c9b666f8_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	74.833633422851563,
@@ -1391,7 +1391,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_26_0_275944fe-8a0c-401d-8cbb-f8eb9e173144_0,	!- Name
+	shdSrf_26_0_d0795c6a-8d94-4c62-9008-b9e0cd398751_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	74.833633422851563,
@@ -1409,7 +1409,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_27_0_e9bc6dc6-2e47-4924-86c4-fdf85de9df99_0,	!- Name
+	shdSrf_27_0_1277a5ef-de0b-49f1-9602-dc4ac285dfb1_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	89.707672119140625,
@@ -1427,7 +1427,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_28_0_c6f142af-9964-44b2-a741-6c744402ed82_0,	!- Name
+	shdSrf_28_0_0c2daed4-2b6e-4cf6-8116-9a9c53b0d041_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	89.707672119140625,
@@ -1445,7 +1445,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_29_0_9fbc30ee-1944-4ba7-a786-737068fa5652_0,	!- Name
+	shdSrf_29_0_ce7412a9-1c07-4ced-a017-329e0d624bce_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	75.4430160522461,
@@ -1463,7 +1463,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_30_0_4cc2e974-36f2-4ee1-b7f8-4738c60844fc_0,	!- Name
+	shdSrf_30_0_eb4dd01b-f82c-4291-b49a-adf04e5087b6_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	75.4430160522461,
@@ -1481,7 +1481,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_31_0_b3aed6ff-e0e5-4e05-ad6a-773381a76355_0,	!- Name
+	shdSrf_31_0_9674c877-002f-443e-8e41-3f8a6ff60e7e_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	88.024604797363281,
@@ -1499,7 +1499,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_32_0_42cb59ae-b99b-4bd5-baff-90df7f3f3782_0,	!- Name
+	shdSrf_32_0_9b647400-fdbf-4cab-9dd0-789207aab63f_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	88.024604797363281,
@@ -1517,7 +1517,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_33_0_f06539a3-c151-46ee-b872-201a4f2ce03a_0,	!- Name
+	shdSrf_33_0_c91d0969-3c7d-460e-90bc-17905af310e1_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	76.052398681640625,
@@ -1535,7 +1535,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_34_0_cbb41c38-0021-49ac-885e-aa542eae05b8_0,	!- Name
+	shdSrf_34_0_66e13344-d7c1-4b48-a4e9-dac1596d7aaa_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	76.052398681640625,
@@ -1553,7 +1553,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_35_0_70f909da-2106-48bd-92e5-156f4aefb965_0,	!- Name
+	shdSrf_35_0_70bdc44f-9fcf-4b7e-bb04-c2d430b46500_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	86.341537475585938,
@@ -1571,7 +1571,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_36_0_df570f8f-db1b-4df0-bb3d-86d68707d49f_0,	!- Name
+	shdSrf_36_0_db9496ad-ce2c-497e-b8ce-841f3fcfbd48_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	86.341537475585938,
@@ -1589,7 +1589,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_37_0_035c40c4-a465-425a-b908-fa3d87f14db7_0,	!- Name
+	shdSrf_37_0_f9174e4b-dbcb-4652-ad81-d08874362f40_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	76.661781311035156,
@@ -1607,7 +1607,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_38_0_6f364878-0474-4805-b23c-3d2019a82c9c_0,	!- Name
+	shdSrf_38_0_88de6f7a-b9d6-42ea-b91b-caf036e53d6d_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	76.661781311035156,
@@ -1625,7 +1625,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_39_0_2ee25890-11ec-423b-8a70-088427216406_0,	!- Name
+	shdSrf_39_0_d3a8be8a-77da-4049-b8e4-810c0cce3660_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	84.6584701538086,
@@ -1643,7 +1643,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_40_0_422f0164-8049-43cc-9cec-037cbe96af98_0,	!- Name
+	shdSrf_40_0_7f78fbd4-10c8-4959-9d37-3d6454827136_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	84.6584701538086,
@@ -1661,7 +1661,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_41_0_9cbe0273-c3ba-4dbb-b739-98b74830a8a1_0,	!- Name
+	shdSrf_41_0_cb4961cf-fe0c-444c-a0bd-0cd53971c05e_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	77.271163940429688,
@@ -1679,7 +1679,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_42_0_9458951c-4f2b-41e2-86a2-bd223e150721_0,	!- Name
+	shdSrf_42_0_9d4b6b63-273e-432e-8d82-9bcb8205519f_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	77.271163940429688,
@@ -1697,7 +1697,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_43_0_084ec068-8b47-4b35-84b1-71e340422aa2_0,	!- Name
+	shdSrf_43_0_70bf121e-dc84-407c-9ae5-359527ec7550_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	82.97540283203125,
@@ -1715,7 +1715,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_44_0_4e3631b4-3688-43f0-b2b3-179ba728753e_0,	!- Name
+	shdSrf_44_0_f5e15e8c-8ca5-4e21-af6a-ca458eb9668b_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	82.97540283203125,
@@ -1733,7 +1733,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_45_0_8c8a2b0b-80fb-4e5b-941e-865c0fc587f2_0,	!- Name
+	shdSrf_45_0_c7707eaf-8ada-4438-bb0c-692d9ee572e7_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	77.880546569824219,
@@ -1751,7 +1751,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_46_0_e9f56d61-89b2-45e7-a5c4-72b18e035e92_0,	!- Name
+	shdSrf_46_0_9a3fe57e-0538-4c32-9db1-e00f94410925_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	77.880546569824219,
@@ -1769,7 +1769,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_47_0_29c661c4-4145-4a50-828d-04900ed12fd2_0,	!- Name
+	shdSrf_47_0_d5619d81-cacb-4993-8ea8-ec1f58221fb3_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	81.2923355102539,
@@ -1787,7 +1787,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_48_0_4f800b31-b829-483f-b4f4-33c3f7f37a5b_0,	!- Name
+	shdSrf_48_0_2aa9d03e-89c8-449b-87ff-1c7ba5aa69aa_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	81.2923355102539,
@@ -1805,7 +1805,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_49_0_583b8026-bd06-4182-bde6-6527a0053370_0,	!- Name
+	shdSrf_49_0_e3379824-e6e1-415a-afe6-faba0292020f_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	68.904983520507812,
@@ -1823,7 +1823,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_50_0_f86db466-46e8-4a15-b22b-f905ecd8d134_0,	!- Name
+	shdSrf_50_0_afda71bf-465c-438c-b082-bcd231742dd1_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	68.904983520507812,
@@ -1841,7 +1841,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_51_0_1a3c5a81-5965-4d4f-b700-609dcedfb0b1_0,	!- Name
+	shdSrf_51_0_5fa6f87d-f77b-4eda-b0da-fc0a9a9334b2_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	109.58727264404297,
@@ -1859,7 +1859,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_52_0_d9add7fb-9494-4f3d-90a2-9bf2086f4050_0,	!- Name
+	shdSrf_52_0_c737b61a-de5b-47ab-8513-0bf311cebd0d_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	109.58727264404297,
@@ -1877,7 +1877,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_53_0_86dc0d6d-4713-42f5-929f-c6b81bd6c001_0,	!- Name
+	shdSrf_53_0_6d072fd8-07df-4842-9975-992f5316dd67_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	67.06890869140625,
@@ -1895,7 +1895,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_54_0_cc2c4328-d572-41bf-924f-09a06d14f7f5_0,	!- Name
+	shdSrf_54_0_c0a5819b-344c-435f-8182-7867c7a055ef_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	67.06890869140625,
@@ -1913,7 +1913,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_55_0_b99120f3-660c-4fa1-8316-8bb8c4db3365_0,	!- Name
+	shdSrf_55_0_2673d87e-7ac5-4ca7-be1f-193781fd1386_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	108.622314453125,
@@ -1931,7 +1931,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_56_0_6545867e-984e-4642-85cc-64f1477ba594_0,	!- Name
+	shdSrf_56_0_e7f9a79c-aebb-4a7b-be80-f3cfe8c9f864_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	108.622314453125,
@@ -1949,7 +1949,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_57_0_facb7bc2-4ec6-4b6e-b760-89ec9476134a_0,	!- Name
+	shdSrf_57_0_89e770a8-d713-440e-8df8-35742e921138_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	65.232833862304688,
@@ -1967,7 +1967,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_58_0_de3f9892-ebf3-4e0b-99d7-c5ecbff8136b_0,	!- Name
+	shdSrf_58_0_da3023ab-ad61-4f75-b540-b21e184a18c8_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	65.232833862304688,
@@ -1985,7 +1985,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_59_0_79bd89b9-e577-469e-ad27-897b90368782_0,	!- Name
+	shdSrf_59_0_b7bfeff4-197d-4248-bd6f-b44cfad2d594_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	107.6573486328125,
@@ -2003,7 +2003,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_60_0_3856c4e7-06c5-4f1d-9203-f9ad4e8d2ba3_0,	!- Name
+	shdSrf_60_0_21e10e5c-c7df-4c85-b36f-7bab57c7e0dd_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	107.6573486328125,
@@ -2021,7 +2021,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_61_0_1a84b41d-a552-492f-969d-c8c50289ce78_0,	!- Name
+	shdSrf_61_0_dfd23eef-dfb7-43b8-8a41-ba581741f368_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	63.396759033203125,
@@ -2039,7 +2039,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_62_0_9d730064-b053-4322-8703-9d78c14498d2_0,	!- Name
+	shdSrf_62_0_cf0284a5-fa2b-495c-8fe7-59d377cb2524_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	63.396759033203125,
@@ -2057,7 +2057,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_63_0_7cc542bf-6687-4317-8a0a-44bd46446ef8_0,	!- Name
+	shdSrf_63_0_3f127d95-5a18-4997-a085-28baab89f687_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	106.6923828125,
@@ -2075,7 +2075,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_64_0_416fbd11-955c-45b8-bb28-c96936366ffb_0,	!- Name
+	shdSrf_64_0_d2003943-dabc-4d2d-9c3c-9ba3aaf95310_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	106.6923828125,
@@ -2093,7 +2093,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_65_0_5e1981bd-1699-45b3-9dff-059cb2f0f557_0,	!- Name
+	shdSrf_65_0_0bdb954e-37a2-4115-ac29-e748b2332d90_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	61.560688018798828,
@@ -2111,7 +2111,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_66_0_96011052-7995-495e-b59c-cc64754634d5_0,	!- Name
+	shdSrf_66_0_3588dff4-e6ee-48e1-aef6-6260491941e4_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	61.560688018798828,
@@ -2129,7 +2129,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_67_0_8ca275f1-aa78-44b2-84de-cb467288b2b3_0,	!- Name
+	shdSrf_67_0_d2bfebfb-dcdd-4dce-ab6d-ac3210e3e7f0_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	105.7274169921875,
@@ -2147,7 +2147,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_68_0_5a6ccec2-d6d5-4851-b84a-fcd37f3311b5_0,	!- Name
+	shdSrf_68_0_747d448d-539f-4fb6-8ddf-efbf018d572f_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	105.7274169921875,
@@ -2165,7 +2165,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_69_0_44c2e9c2-78f5-4efc-a0ef-99aef48549ec_0,	!- Name
+	shdSrf_69_0_62f496eb-7c66-4954-8ad3-3b68756004c4_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	59.724613189697266,
@@ -2183,7 +2183,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_70_0_5ce8fd9f-587e-427f-b678-c8ecbf527381_0,	!- Name
+	shdSrf_70_0_8a7e1fe9-dd94-4362-aedc-9ca53ada1825_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	59.724613189697266,
@@ -2201,7 +2201,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_71_0_0687ae2f-3210-430b-b8fd-39194bbc71ab_0,	!- Name
+	shdSrf_71_0_1272b734-28bd-4613-80c9-9801386c86c4_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	104.762451171875,
@@ -2219,7 +2219,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_72_0_a1269da5-dcab-4221-9ff5-bfceccc2fc7e_0,	!- Name
+	shdSrf_72_0_54beb99e-d7b3-42b1-aaad-3cf09359c886_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	104.762451171875,
@@ -2237,7 +2237,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_73_0_4db455de-fb8d-43c1-b0c2-85a6594e389d_0,	!- Name
+	shdSrf_73_0_582ef89b-2705-461b-8de2-0faca0329891_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	14.475925445556641,
@@ -2255,7 +2255,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_74_0_c93cacac-da67-449b-926c-1171a4856d6a_0,	!- Name
+	shdSrf_74_0_a69e1650-f420-4e7a-ba9f-cacf3c968661_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	14.475925445556641,
@@ -2273,7 +2273,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_75_0_d80490fb-a1f5-4fdc-8bde-a2ff918d9bbb_0,	!- Name
+	shdSrf_75_0_2d5316ba-03dd-43a5-982a-16ef769158ee_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	78.680122375488281,
@@ -2291,7 +2291,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_76_0_91362849-7c03-42b7-9def-bc4b76216e94_0,	!- Name
+	shdSrf_76_0_14054a4d-685b-44be-9ee4-5414320afaaf_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	78.680122375488281,
@@ -2309,7 +2309,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_77_0_391099de-ac41-4d7f-8930-bf13b71e4b4b_0,	!- Name
+	shdSrf_77_0_2c1fdcf5-a3ec-4fa0-a0ee-90cfc8586400_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	12.797647476196289,
@@ -2327,7 +2327,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_78_0_e918778f-5a19-4ace-98a8-efa306fc6a61_0,	!- Name
+	shdSrf_78_0_8f06acb9-a30d-4f80-8e0b-17317bbba514_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	12.797647476196289,
@@ -2345,7 +2345,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_79_0_3b885088-b424-431f-a49c-ec9ffa39eec1_0,	!- Name
+	shdSrf_79_0_57c072f0-62f5-4029-9f52-b3346a16f5ed_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	79.1689682006836,
@@ -2363,7 +2363,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_80_0_823f4942-95b9-415d-bd08-98742f000495_0,	!- Name
+	shdSrf_80_0_f2bc0e15-d722-44c2-8a2c-25f71a054818_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	79.1689682006836,
@@ -2381,7 +2381,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_81_0_f42a64c1-908e-4ec1-878d-4a3b3a1a4f89_0,	!- Name
+	shdSrf_81_0_ee53085b-a98b-49d1-9b8f-a237112872f4_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	11.119368553161621,
@@ -2399,7 +2399,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_82_0_eff8d704-d4ce-4e2f-a5e3-9518c5446002_0,	!- Name
+	shdSrf_82_0_0dab62f3-8cd2-407f-802c-c0e7c64f7464_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	11.119368553161621,
@@ -2417,7 +2417,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_83_0_f73319d4-edc9-48ed-a15f-5372099053d6_0,	!- Name
+	shdSrf_83_0_c42c6fb7-a391-4148-a6f7-61c7aed260d1_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	79.657821655273438,
@@ -2435,7 +2435,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_84_0_a98c897a-aee9-4b11-9be9-8710d0c8e0f5_0,	!- Name
+	shdSrf_84_0_6b185d04-a519-40a2-a92b-e91e4fab18b0_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	79.657821655273438,
@@ -2453,7 +2453,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_85_0_aa12238c-315e-473e-8b2c-3e61fbab2520_0,	!- Name
+	shdSrf_85_0_0db14347-82d2-45ed-b40d-214f181fd4a5_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	9.44109058380127,
@@ -2471,7 +2471,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_86_0_9e4e5216-37a0-4c68-87fd-c732fc7052d6_0,	!- Name
+	shdSrf_86_0_c6d29b11-874a-4d12-8619-9b5b4a3f087d_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	9.44109058380127,
@@ -2489,7 +2489,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_87_0_525e9f4e-e4c6-4ba2-b791-d64ac8886804_0,	!- Name
+	shdSrf_87_0_91a6c88d-a9d0-44ba-be53-679cc0d34db2_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	80.14666748046875,
@@ -2507,7 +2507,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_88_0_07697fe7-9013-4d28-ad58-9456d2455fa5_0,	!- Name
+	shdSrf_88_0_65fe1e1c-9378-4659-878f-fabac9a5dbd7_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	80.14666748046875,
@@ -2525,7 +2525,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_89_0_df210d63-13d6-4a98-815e-9dbad09d1d77_0,	!- Name
+	shdSrf_89_0_156199f6-0173-40fe-95b8-b7a5fac8582f_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	7.762812614440918,
@@ -2543,7 +2543,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_90_0_0ccf96c1-1757-4ee4-8cee-1392ae962a0e_0,	!- Name
+	shdSrf_90_0_2ac0ce18-86a2-453b-b40c-21a1e2326fe1_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	7.762812614440918,
@@ -2561,7 +2561,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_91_0_53ac9422-4d9d-43e6-b47b-040a25952ce0_0,	!- Name
+	shdSrf_91_0_8055dffa-9369-4894-87a0-eaf1221fc011_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	80.6355209350586,
@@ -2579,7 +2579,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_92_0_655a25f3-4d23-4329-9010-8984965b753d_0,	!- Name
+	shdSrf_92_0_2243e8bd-81f5-4d10-aced-29fbb1bbd992_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	80.6355209350586,
@@ -2597,7 +2597,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_93_0_cec7a753-7f25-4162-90a5-fdb236737096_0,	!- Name
+	shdSrf_93_0_5e8318b4-aca2-475e-9b84-7b873e96fa02_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	6.084534168243408,
@@ -2615,7 +2615,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_94_0_5996f013-e5d0-4866-b1e7-1b7796374d15_0,	!- Name
+	shdSrf_94_0_16e81011-224a-42d9-8e8a-98396837d862_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	6.084534168243408,
@@ -2633,7 +2633,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_95_0_715a30ca-6e32-493b-b66e-34c751f98532_0,	!- Name
+	shdSrf_95_0_883f4339-0026-47fd-89b0-6138f0b1c34a_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	81.124374389648438,
@@ -2651,7 +2651,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_96_0_b7d658ce-2004-4f1c-bf60-32f06d9868e4_0,	!- Name
+	shdSrf_96_0_85967fe0-ffd8-4b93-9aec-14ac40a05121_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	81.124374389648438,
@@ -2669,7 +2669,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_97_0_10e9b54d-f873-4877-8a44-b9dfe61c6f9c_0,	!- Name
+	shdSrf_97_0_99bf047f-52fc-4d3d-87c9-4164aff009df_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	13.584745407104492,
@@ -2687,7 +2687,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_98_0_308877af-968c-49e3-9976-a6c14c5a0071_0,	!- Name
+	shdSrf_98_0_60430648-6233-4637-b010-bf51f738f36b_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	13.584745407104492,
@@ -2705,7 +2705,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_99_0_ea2a6c91-e41b-4b9b-a848-bfb0c010b342_0,	!- Name
+	shdSrf_99_0_372b7c49-8453-4711-bec5-0efee84ad602_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	14.367057800292969,
@@ -2723,7 +2723,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_100_0_91b829f9-7457-44a1-896b-e5112190b8c1_0,	!- Name
+	shdSrf_100_0_d5550770-4c87-4f4a-a89e-86dd24399913_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	14.367057800292969,
@@ -2741,7 +2741,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_101_0_f0f0cd0f-c059-4b07-9413-1abcac6e8be0_0,	!- Name
+	shdSrf_101_0_d4d67257-9344-4d18-875f-35c19f2cf04a_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	15.149370193481445,
@@ -2759,7 +2759,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_102_0_27cb8357-7ddd-4c80-81f6-326e1dbf0526_0,	!- Name
+	shdSrf_102_0_ad75eac9-16ee-458d-8d5a-90adc75a9aa8_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	15.149370193481445,
@@ -2777,7 +2777,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_103_0_f836fc07-8f53-4a90-b261-59e46a6d4484_0,	!- Name
+	shdSrf_103_0_b33b77d6-4043-41a6-b352-b7935b124a11_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	15.931682586669922,
@@ -2795,7 +2795,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_104_0_d85beca5-2730-40a5-b5fd-8c01a5153a67_0,	!- Name
+	shdSrf_104_0_dd3f37a1-2c59-466d-b705-fb094a9a1c50_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	15.931682586669922,
@@ -2813,7 +2813,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_105_0_79e1cc4d-3ccc-4d6f-9666-6fdaa0a2f59a_0,	!- Name
+	shdSrf_105_0_b0ec2dc1-2d41-45e3-b9fb-7892b40093d5_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	16.7139949798584,
@@ -2831,7 +2831,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_106_0_ffef9a75-1660-4231-8b4a-c262c348c2fc_0,	!- Name
+	shdSrf_106_0_911d012f-3e65-4ae0-8a5b-7b1dd47f3d82_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	16.7139949798584,
@@ -2849,7 +2849,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_107_0_fb180d61-c129-453c-b6d4-94805e626f15_0,	!- Name
+	shdSrf_107_0_9aac0e0a-b9a8-4574-86db-ba555b7134b0_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	17.496307373046875,
@@ -2867,7 +2867,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_108_0_58447854-bc71-479f-b170-9d2f71c76dcb_0,	!- Name
+	shdSrf_108_0_1a4aa4fb-49fc-4c2b-98ea-94fca674cbb9_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	17.496307373046875,
@@ -2885,7 +2885,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_109_0_ad160777-f3bb-4b0d-b4e0-ac466a6306e8_0,	!- Name
+	shdSrf_109_0_2ce8967e-f26f-4d94-9cf3-8dafa0214b58_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	18.278619766235352,
@@ -2903,7 +2903,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_110_0_a19a7928-4843-4941-ad1e-4a552ade7107_0,	!- Name
+	shdSrf_110_0_6d9fb8b3-bf45-4c0b-a414-5088835d2fd8_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	18.278619766235352,
@@ -2921,7 +2921,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_111_0_0f72fc5b-894b-406c-89b6-fa0fce70d5f2_0,	!- Name
+	shdSrf_111_0_190b001e-d236-4199-a1cd-9b6de284e04f_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	19.060932159423828,
@@ -2939,7 +2939,7 @@ Shading:Building:Detailed,
 
 
 Shading:Building:Detailed,
-	shdSrf_112_0_4db8ca4e-facc-4d3a-96e7-9fdad91d708f_0,	!- Name
+	shdSrf_112_0_7d49f62f-6d63-48a9-aee8-7b3ef292ace7_0,	!- Name
 	,	!- Transmittance Schedule Name
 	4,	!- Number of Vertices
 	19.060932159423828,
@@ -3070,7 +3070,7 @@ BuildingSurface:Detailed,
 	Interior Floor,	!- Construction Name
 	CM2_Adj_00,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	0033e2735f2f4ce28469,	!- Outside Boundary Condition Object
+	7f44439e545b47379e6e,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -3253,7 +3253,7 @@ BuildingSurface:Detailed,
 	Interior Ceiling,	!- Construction Name
 	CM2_Adj_01,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	0a615bfa5c89477f8f6e,	!- Outside Boundary Condition Object
+	9e2287687b7d49a5a631,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -3384,7 +3384,7 @@ BuildingSurface:Detailed,
 	Interior Wall,	!- Construction Name
 	CM2_Adj_02,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	7b4fdaaa182d4e2988d8,	!- Outside Boundary Condition Object
+	e0a8c71590d348f2a931,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -3409,7 +3409,7 @@ BuildingSurface:Detailed,
 	Interior Wall,	!- Construction Name
 	CM2_Adj_02,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	3e946fc5e2384be8b1a3,	!- Outside Boundary Condition Object
+	a4a70308e65c49c18fa4,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -3434,7 +3434,7 @@ BuildingSurface:Detailed,
 	Interior Wall,	!- Construction Name
 	CM2_Adj_02,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	0b61cea0e4d748a0a538,	!- Outside Boundary Condition Object
+	82e5f3c35a7442c187e0,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -3509,7 +3509,7 @@ BuildingSurface:Detailed,
 	Interior Wall,	!- Construction Name
 	CM2_Adj_02,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	669d1f64416049168c79,	!- Outside Boundary Condition Object
+	b4135136579949909824,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -3534,7 +3534,7 @@ BuildingSurface:Detailed,
 	Interior Wall,	!- Construction Name
 	CM2_Adj_02,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	ff5920d460bf457fb179,	!- Outside Boundary Condition Object
+	45353820d561461099d0,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -3559,7 +3559,7 @@ BuildingSurface:Detailed,
 	Interior Wall,	!- Construction Name
 	CM2_Adj_02,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	17ec877c5d324b74a63b,	!- Outside Boundary Condition Object
+	5e7c702f0083408ea317,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -3634,7 +3634,7 @@ BuildingSurface:Detailed,
 	Interior Wall,	!- Construction Name
 	CM2_Adj_02,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	cebca89ad1a141d1b68a,	!- Outside Boundary Condition Object
+	23db74afc3714febbbb2,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -3659,7 +3659,7 @@ BuildingSurface:Detailed,
 	Interior Wall,	!- Construction Name
 	CM2_Adj_02,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	c599c62e313348a29181,	!- Outside Boundary Condition Object
+	1bd64053c79a4e8fba9e,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -3684,7 +3684,7 @@ BuildingSurface:Detailed,
 	Interior Wall,	!- Construction Name
 	CM2_Adj_02,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	a1731bf117ef4f81abfa,	!- Outside Boundary Condition Object
+	49172c87e38b41848711,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -3759,7 +3759,7 @@ BuildingSurface:Detailed,
 	Interior Wall,	!- Construction Name
 	CM2_Adj_02,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	fdab389498e245358774,	!- Outside Boundary Condition Object
+	5d1bd1146b1e4ff59883,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -3784,7 +3784,7 @@ BuildingSurface:Detailed,
 	Interior Wall,	!- Construction Name
 	CM2_Adj_02,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	6fb6acdc287a44a7a5f6,	!- Outside Boundary Condition Object
+	9237cdf4f33d4eac938d,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -3809,7 +3809,7 @@ BuildingSurface:Detailed,
 	Interior Wall,	!- Construction Name
 	CM2_Adj_02,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	ab55a794137b4efcaa0c,	!- Outside Boundary Condition Object
+	48366661f23148a0a19c,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -3935,7 +3935,7 @@ Zone,
 	1;	!- Type
 
 BuildingSurface:Detailed,
-	be13fae22bc343ecbce5,	!- Name
+	f2b42ccb21c547eabe12,	!- Name
 	WALL,	!- Surface Type
 	Exterior Wall,	!- Construction Name
 	CM2_S_Outer,	!- Zone Name
@@ -3960,10 +3960,10 @@ BuildingSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	be13fae22bc343ecbce5_glz_0,	!- Name
+	f2b42ccb21c547eabe12_glz_0,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	be13fae22bc343ecbce5,	!- Surface Name
+	f2b42ccb21c547eabe12,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -3985,10 +3985,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	be13fae22bc343ecbce5_glz_1,	!- Name
+	f2b42ccb21c547eabe12_glz_1,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	be13fae22bc343ecbce5,	!- Surface Name
+	f2b42ccb21c547eabe12,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -4010,10 +4010,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	be13fae22bc343ecbce5_glz_2,	!- Name
+	f2b42ccb21c547eabe12_glz_2,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	be13fae22bc343ecbce5,	!- Surface Name
+	f2b42ccb21c547eabe12,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -4035,10 +4035,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	be13fae22bc343ecbce5_glz_3,	!- Name
+	f2b42ccb21c547eabe12_glz_3,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	be13fae22bc343ecbce5,	!- Surface Name
+	f2b42ccb21c547eabe12,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -4060,10 +4060,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	be13fae22bc343ecbce5_glz_4,	!- Name
+	f2b42ccb21c547eabe12_glz_4,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	be13fae22bc343ecbce5,	!- Surface Name
+	f2b42ccb21c547eabe12,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -4085,10 +4085,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	be13fae22bc343ecbce5_glz_5,	!- Name
+	f2b42ccb21c547eabe12_glz_5,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	be13fae22bc343ecbce5,	!- Surface Name
+	f2b42ccb21c547eabe12,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -4110,7 +4110,7 @@ FenestrationSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	d58de92826ef48da8315,	!- Name
+	6be1e6f1a613484ba235,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM2_S_Outer,	!- Zone Name
@@ -4135,7 +4135,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	f1f8f7b253ee4407b025,	!- Name
+	936c74fd8b0d412cb370,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM2_S_Outer,	!- Zone Name
@@ -4160,12 +4160,12 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	6999ac96a6b0411eb320,	!- Name
+	72ff5022f02e452c8210,	!- Name
 	WALL,	!- Surface Type
 	Air Wall,	!- Construction Name
 	CM2_S_Outer,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	7c1d6b8ae11f4addb98e,	!- Outside Boundary Condition Object
+	12796c7a0b4e4b2ba6da,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -4185,7 +4185,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	5ae4de80c4a94de8919a,	!- Name
+	42dd3022c13f4fc3bea1,	!- Name
 	CEILING,	!- Surface Type
 	Interior Ceiling,	!- Construction Name
 	CM2_S_Outer,	!- Zone Name
@@ -4210,7 +4210,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	83ba61154ea043bb818a,	!- Name
+	57d2dbd3b8624a1eae9c,	!- Name
 	FLOOR,	!- Surface Type
 	Interior Floor,	!- Construction Name
 	CM2_S_Outer,	!- Zone Name
@@ -4243,7 +4243,7 @@ Zone,
 	1;	!- Type
 
 BuildingSurface:Detailed,
-	ff5920d460bf457fb179,	!- Name
+	45353820d561461099d0,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM2_S_Inner,	!- Zone Name
@@ -4268,7 +4268,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	17ec877c5d324b74a63b,	!- Name
+	5e7c702f0083408ea317,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM2_S_Inner,	!- Zone Name
@@ -4293,7 +4293,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	669d1f64416049168c79,	!- Name
+	b4135136579949909824,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM2_S_Inner,	!- Zone Name
@@ -4318,12 +4318,12 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	7c1d6b8ae11f4addb98e,	!- Name
+	12796c7a0b4e4b2ba6da,	!- Name
 	WALL,	!- Surface Type
 	Air Wall,	!- Construction Name
 	CM2_S_Inner,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	6999ac96a6b0411eb320,	!- Outside Boundary Condition Object
+	72ff5022f02e452c8210,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -4343,7 +4343,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	9603b25f4092479db2c6,	!- Name
+	d1d8af47a5804c87b8f7,	!- Name
 	CEILING,	!- Surface Type
 	Interior Ceiling,	!- Construction Name
 	CM2_S_Inner,	!- Zone Name
@@ -4368,7 +4368,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	746d72514e934b2daf32,	!- Name
+	12480503240e4640a671,	!- Name
 	FLOOR,	!- Surface Type
 	Interior Floor,	!- Construction Name
 	CM2_S_Inner,	!- Zone Name
@@ -4401,7 +4401,7 @@ Zone,
 	1;	!- Type
 
 BuildingSurface:Detailed,
-	d1a8c7a8fc79474ba81c,	!- Name
+	942eb0c876a245a683a3,	!- Name
 	WALL,	!- Surface Type
 	Exterior Wall,	!- Construction Name
 	CM2_N_Outer,	!- Zone Name
@@ -4426,10 +4426,10 @@ BuildingSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	d1a8c7a8fc79474ba81c_glz_0,	!- Name
+	942eb0c876a245a683a3_glz_0,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	d1a8c7a8fc79474ba81c,	!- Surface Name
+	942eb0c876a245a683a3,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -4451,10 +4451,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	d1a8c7a8fc79474ba81c_glz_1,	!- Name
+	942eb0c876a245a683a3_glz_1,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	d1a8c7a8fc79474ba81c,	!- Surface Name
+	942eb0c876a245a683a3,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -4476,10 +4476,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	d1a8c7a8fc79474ba81c_glz_2,	!- Name
+	942eb0c876a245a683a3_glz_2,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	d1a8c7a8fc79474ba81c,	!- Surface Name
+	942eb0c876a245a683a3,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -4501,10 +4501,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	d1a8c7a8fc79474ba81c_glz_3,	!- Name
+	942eb0c876a245a683a3_glz_3,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	d1a8c7a8fc79474ba81c,	!- Surface Name
+	942eb0c876a245a683a3,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -4526,10 +4526,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	d1a8c7a8fc79474ba81c_glz_4,	!- Name
+	942eb0c876a245a683a3_glz_4,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	d1a8c7a8fc79474ba81c,	!- Surface Name
+	942eb0c876a245a683a3,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -4551,10 +4551,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	d1a8c7a8fc79474ba81c_glz_5,	!- Name
+	942eb0c876a245a683a3_glz_5,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	d1a8c7a8fc79474ba81c,	!- Surface Name
+	942eb0c876a245a683a3,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -4576,7 +4576,7 @@ FenestrationSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	c3e6d27573904acfb9a6,	!- Name
+	86cbfd91435144f381bb,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM2_N_Outer,	!- Zone Name
@@ -4601,7 +4601,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	aa84992f04ad4d658ecb,	!- Name
+	c4d84e79f2864934b2f9,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM2_N_Outer,	!- Zone Name
@@ -4626,12 +4626,12 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	6d90fdba6cd04d7a840d,	!- Name
+	10733ba5bacc49138956,	!- Name
 	WALL,	!- Surface Type
 	Air Wall,	!- Construction Name
 	CM2_N_Outer,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	289be6f6055147deb4c6,	!- Outside Boundary Condition Object
+	0c1ccbeba4a841c4a462,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -4651,7 +4651,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	e9e1cf940bf94e92b027,	!- Name
+	557a1e06a12e4f349ea3,	!- Name
 	CEILING,	!- Surface Type
 	Interior Ceiling,	!- Construction Name
 	CM2_N_Outer,	!- Zone Name
@@ -4676,7 +4676,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	4b126176966c4d91910f,	!- Name
+	04bcfdbeb8c04c0780e4,	!- Name
 	FLOOR,	!- Surface Type
 	Interior Floor,	!- Construction Name
 	CM2_N_Outer,	!- Zone Name
@@ -4709,7 +4709,7 @@ Zone,
 	1;	!- Type
 
 BuildingSurface:Detailed,
-	6fb6acdc287a44a7a5f6,	!- Name
+	9237cdf4f33d4eac938d,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM2_N_Inner,	!- Zone Name
@@ -4734,7 +4734,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	fdab389498e245358774,	!- Name
+	5d1bd1146b1e4ff59883,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM2_N_Inner,	!- Zone Name
@@ -4759,7 +4759,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	ab55a794137b4efcaa0c,	!- Name
+	48366661f23148a0a19c,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM2_N_Inner,	!- Zone Name
@@ -4784,12 +4784,12 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	289be6f6055147deb4c6,	!- Name
+	0c1ccbeba4a841c4a462,	!- Name
 	WALL,	!- Surface Type
 	Air Wall,	!- Construction Name
 	CM2_N_Inner,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	6d90fdba6cd04d7a840d,	!- Outside Boundary Condition Object
+	10733ba5bacc49138956,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -4809,7 +4809,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	66e12308505f4d249d26,	!- Name
+	1349e0401ff942a9b967,	!- Name
 	CEILING,	!- Surface Type
 	Interior Ceiling,	!- Construction Name
 	CM2_N_Inner,	!- Zone Name
@@ -4834,7 +4834,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	70d0d8792b594a90bf11,	!- Name
+	94b55e3cab11440abdef,	!- Name
 	FLOOR,	!- Surface Type
 	Interior Floor,	!- Construction Name
 	CM2_N_Inner,	!- Zone Name
@@ -4867,7 +4867,7 @@ Zone,
 	1;	!- Type
 
 BuildingSurface:Detailed,
-	fc4e817479914311bc6b,	!- Name
+	7492f0f65ba44c71b9a3,	!- Name
 	WALL,	!- Surface Type
 	Exterior Wall,	!- Construction Name
 	CM2_E_Outer,	!- Zone Name
@@ -4892,10 +4892,10 @@ BuildingSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	fc4e817479914311bc6b_glz_0,	!- Name
+	7492f0f65ba44c71b9a3_glz_0,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	fc4e817479914311bc6b,	!- Surface Name
+	7492f0f65ba44c71b9a3,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -4917,10 +4917,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	fc4e817479914311bc6b_glz_1,	!- Name
+	7492f0f65ba44c71b9a3_glz_1,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	fc4e817479914311bc6b,	!- Surface Name
+	7492f0f65ba44c71b9a3,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -4942,10 +4942,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	fc4e817479914311bc6b_glz_2,	!- Name
+	7492f0f65ba44c71b9a3_glz_2,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	fc4e817479914311bc6b,	!- Surface Name
+	7492f0f65ba44c71b9a3,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -4967,10 +4967,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	fc4e817479914311bc6b_glz_3,	!- Name
+	7492f0f65ba44c71b9a3_glz_3,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	fc4e817479914311bc6b,	!- Surface Name
+	7492f0f65ba44c71b9a3,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -4992,10 +4992,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	fc4e817479914311bc6b_glz_4,	!- Name
+	7492f0f65ba44c71b9a3_glz_4,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	fc4e817479914311bc6b,	!- Surface Name
+	7492f0f65ba44c71b9a3,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -5017,10 +5017,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	fc4e817479914311bc6b_glz_5,	!- Name
+	7492f0f65ba44c71b9a3_glz_5,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	fc4e817479914311bc6b,	!- Surface Name
+	7492f0f65ba44c71b9a3,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -5042,7 +5042,7 @@ FenestrationSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	b4f24c57198f485093cd,	!- Name
+	f9cfb095091c4664a21b,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM2_E_Outer,	!- Zone Name
@@ -5067,7 +5067,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	5825b9781d2d439c9062,	!- Name
+	76ddbab24c4d4987affe,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM2_E_Outer,	!- Zone Name
@@ -5092,12 +5092,12 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	82555716fda14ae9acaf,	!- Name
+	81d045bb71ad4ab29579,	!- Name
 	WALL,	!- Surface Type
 	Air Wall,	!- Construction Name
 	CM2_E_Outer,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	f04ad6d3f26b425f904a,	!- Outside Boundary Condition Object
+	486b186c6c224288a449,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -5117,7 +5117,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	a971933471d24c888a37,	!- Name
+	65ac1484ce244756ae9e,	!- Name
 	CEILING,	!- Surface Type
 	Interior Ceiling,	!- Construction Name
 	CM2_E_Outer,	!- Zone Name
@@ -5142,7 +5142,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	e669e8d9741941669054,	!- Name
+	4f071219b0e84dab8138,	!- Name
 	FLOOR,	!- Surface Type
 	Interior Floor,	!- Construction Name
 	CM2_E_Outer,	!- Zone Name
@@ -5175,7 +5175,7 @@ Zone,
 	1;	!- Type
 
 BuildingSurface:Detailed,
-	c599c62e313348a29181,	!- Name
+	1bd64053c79a4e8fba9e,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM2_E_Inner,	!- Zone Name
@@ -5200,7 +5200,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	a1731bf117ef4f81abfa,	!- Name
+	49172c87e38b41848711,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM2_E_Inner,	!- Zone Name
@@ -5225,7 +5225,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	cebca89ad1a141d1b68a,	!- Name
+	23db74afc3714febbbb2,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM2_E_Inner,	!- Zone Name
@@ -5250,12 +5250,12 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	f04ad6d3f26b425f904a,	!- Name
+	486b186c6c224288a449,	!- Name
 	WALL,	!- Surface Type
 	Air Wall,	!- Construction Name
 	CM2_E_Inner,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	82555716fda14ae9acaf,	!- Outside Boundary Condition Object
+	81d045bb71ad4ab29579,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -5275,7 +5275,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	776b171f54eb4df3abaa,	!- Name
+	a852c65ea75743adbb15,	!- Name
 	CEILING,	!- Surface Type
 	Interior Ceiling,	!- Construction Name
 	CM2_E_Inner,	!- Zone Name
@@ -5300,7 +5300,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	437e7f1f6a374ca8a7f4,	!- Name
+	4d4206c9c8dc44688c20,	!- Name
 	FLOOR,	!- Surface Type
 	Interior Floor,	!- Construction Name
 	CM2_E_Inner,	!- Zone Name
@@ -5333,7 +5333,7 @@ Zone,
 	1;	!- Type
 
 BuildingSurface:Detailed,
-	6ccf593e469b4a73a69a,	!- Name
+	0bdd022f28414b02a7b0,	!- Name
 	WALL,	!- Surface Type
 	Exterior Wall,	!- Construction Name
 	CM2_W_Outer,	!- Zone Name
@@ -5358,10 +5358,10 @@ BuildingSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	6ccf593e469b4a73a69a_glz_0,	!- Name
+	0bdd022f28414b02a7b0_glz_0,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	6ccf593e469b4a73a69a,	!- Surface Name
+	0bdd022f28414b02a7b0,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -5383,10 +5383,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	6ccf593e469b4a73a69a_glz_1,	!- Name
+	0bdd022f28414b02a7b0_glz_1,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	6ccf593e469b4a73a69a,	!- Surface Name
+	0bdd022f28414b02a7b0,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -5408,10 +5408,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	6ccf593e469b4a73a69a_glz_2,	!- Name
+	0bdd022f28414b02a7b0_glz_2,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	6ccf593e469b4a73a69a,	!- Surface Name
+	0bdd022f28414b02a7b0,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -5433,10 +5433,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	6ccf593e469b4a73a69a_glz_3,	!- Name
+	0bdd022f28414b02a7b0_glz_3,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	6ccf593e469b4a73a69a,	!- Surface Name
+	0bdd022f28414b02a7b0,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -5458,10 +5458,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	6ccf593e469b4a73a69a_glz_4,	!- Name
+	0bdd022f28414b02a7b0_glz_4,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	6ccf593e469b4a73a69a,	!- Surface Name
+	0bdd022f28414b02a7b0,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -5483,10 +5483,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	6ccf593e469b4a73a69a_glz_5,	!- Name
+	0bdd022f28414b02a7b0_glz_5,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	6ccf593e469b4a73a69a,	!- Surface Name
+	0bdd022f28414b02a7b0,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -5508,7 +5508,7 @@ FenestrationSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	c82c12ec9e2342d0b7b0,	!- Name
+	8a677af002284a1d9856,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM2_W_Outer,	!- Zone Name
@@ -5533,7 +5533,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	8e22d9e614354c34b851,	!- Name
+	54a6a25dd7bd486e906c,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM2_W_Outer,	!- Zone Name
@@ -5558,12 +5558,12 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	51768793ecb2412a9535,	!- Name
+	8e44243bdb10430cb957,	!- Name
 	WALL,	!- Surface Type
 	Air Wall,	!- Construction Name
 	CM2_W_Outer,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	e051947985994bd79293,	!- Outside Boundary Condition Object
+	3468816c440440f5a1d6,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -5583,7 +5583,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	5a6627401fa6476da1aa,	!- Name
+	9f9eace988a246ceba03,	!- Name
 	CEILING,	!- Surface Type
 	Interior Ceiling,	!- Construction Name
 	CM2_W_Outer,	!- Zone Name
@@ -5608,7 +5608,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	fc3373822fd942f882be,	!- Name
+	49f7d32008ff4fc6a488,	!- Name
 	FLOOR,	!- Surface Type
 	Interior Floor,	!- Construction Name
 	CM2_W_Outer,	!- Zone Name
@@ -5641,7 +5641,7 @@ Zone,
 	1;	!- Type
 
 BuildingSurface:Detailed,
-	3e946fc5e2384be8b1a3,	!- Name
+	a4a70308e65c49c18fa4,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM2_W_Inner,	!- Zone Name
@@ -5666,7 +5666,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	7b4fdaaa182d4e2988d8,	!- Name
+	e0a8c71590d348f2a931,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM2_W_Inner,	!- Zone Name
@@ -5691,7 +5691,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	0b61cea0e4d748a0a538,	!- Name
+	82e5f3c35a7442c187e0,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM2_W_Inner,	!- Zone Name
@@ -5716,12 +5716,12 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	e051947985994bd79293,	!- Name
+	3468816c440440f5a1d6,	!- Name
 	WALL,	!- Surface Type
 	Air Wall,	!- Construction Name
 	CM2_W_Inner,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	51768793ecb2412a9535,	!- Outside Boundary Condition Object
+	8e44243bdb10430cb957,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -5741,7 +5741,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	0033e2735f2f4ce28469,	!- Name
+	7f44439e545b47379e6e,	!- Name
 	CEILING,	!- Surface Type
 	Interior Ceiling,	!- Construction Name
 	CM2_W_Inner,	!- Zone Name
@@ -5766,7 +5766,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	0a615bfa5c89477f8f6e,	!- Name
+	9e2287687b7d49a5a631,	!- Name
 	FLOOR,	!- Surface Type
 	Interior Floor,	!- Construction Name
 	CM2_W_Inner,	!- Zone Name
@@ -5979,7 +5979,7 @@ BuildingSurface:Detailed,
 	Interior Floor,	!- Construction Name
 	CM1_Adj_00,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	74a1807273084a859570,	!- Outside Boundary Condition Object
+	27126d7425f84ed9aa73,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -6255,7 +6255,7 @@ BuildingSurface:Detailed,
 	Interior Ceiling,	!- Construction Name
 	CM1_Adj_01,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	298aad8058cf439eabd2,	!- Outside Boundary Condition Object
+	8cd705d0f2e64ae4b672,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -6401,7 +6401,7 @@ BuildingSurface:Detailed,
 	Interior Wall,	!- Construction Name
 	CM1_Adj_02,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	ada3dbbc097a42348ac5,	!- Outside Boundary Condition Object
+	43a14b60c5564c55aef4,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -6426,7 +6426,7 @@ BuildingSurface:Detailed,
 	Interior Wall,	!- Construction Name
 	CM1_Adj_02,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	b366530f9f024a149a24,	!- Outside Boundary Condition Object
+	81603ea8ce094af88de5,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -6451,7 +6451,7 @@ BuildingSurface:Detailed,
 	Interior Wall,	!- Construction Name
 	CM1_Adj_02,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	59ac3b5abc4247a48e10,	!- Outside Boundary Condition Object
+	7072f62a8a0043538769,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -6501,7 +6501,7 @@ BuildingSurface:Detailed,
 	Interior Wall,	!- Construction Name
 	CM1_Adj_02,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	ed846efa881346dfa574,	!- Outside Boundary Condition Object
+	1247f13e75c242fdb0cf,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -6526,7 +6526,7 @@ BuildingSurface:Detailed,
 	Interior Wall,	!- Construction Name
 	CM1_Adj_02,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	3083d85d0e8a4985a7b7,	!- Outside Boundary Condition Object
+	123b95190d424d7c9522,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -6551,7 +6551,7 @@ BuildingSurface:Detailed,
 	Interior Wall,	!- Construction Name
 	CM1_Adj_02,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	9703987491614f41bbce,	!- Outside Boundary Condition Object
+	6311a2cb836f44f4ae6b,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -6626,7 +6626,7 @@ BuildingSurface:Detailed,
 	Interior Wall,	!- Construction Name
 	CM1_Adj_02,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	6445884f127f438496e9,	!- Outside Boundary Condition Object
+	c3588fa60274489ab6b2,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -6651,7 +6651,7 @@ BuildingSurface:Detailed,
 	Interior Wall,	!- Construction Name
 	CM1_Adj_02,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	469a94da266f434cb3bb,	!- Outside Boundary Condition Object
+	707c777c63224d3ba702,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -6676,7 +6676,7 @@ BuildingSurface:Detailed,
 	Interior Wall,	!- Construction Name
 	CM1_Adj_02,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	9dc28a6a453f483292a8,	!- Outside Boundary Condition Object
+	3ff8c08cdf924e78bd87,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -6751,7 +6751,7 @@ BuildingSurface:Detailed,
 	Interior Wall,	!- Construction Name
 	CM1_Adj_02,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	b5400d61828942c290ac,	!- Outside Boundary Condition Object
+	0fb92d944e5f47608c64,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -6776,7 +6776,7 @@ BuildingSurface:Detailed,
 	Interior Wall,	!- Construction Name
 	CM1_Adj_02,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	cccf1691a90246f5a7cb,	!- Outside Boundary Condition Object
+	f1ac586d5ffd4fb19a95,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -6801,7 +6801,7 @@ BuildingSurface:Detailed,
 	Interior Wall,	!- Construction Name
 	CM1_Adj_02,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	1b1174592ded4ad8b06e,	!- Outside Boundary Condition Object
+	46eea7f5a58944bf92ba,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -6876,7 +6876,7 @@ BuildingSurface:Detailed,
 	Interior Wall,	!- Construction Name
 	CM1_Adj_02,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	b304cbd547ef4c13b2a2,	!- Outside Boundary Condition Object
+	f7a3749ca27149359e38,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -6901,7 +6901,7 @@ BuildingSurface:Detailed,
 	Interior Wall,	!- Construction Name
 	CM1_Adj_02,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	36e2520c36a04352b7be,	!- Outside Boundary Condition Object
+	59ef54c2510342408966,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -6926,7 +6926,7 @@ BuildingSurface:Detailed,
 	Interior Wall,	!- Construction Name
 	CM1_Adj_02,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	9901d0b838bb470b82e8,	!- Outside Boundary Condition Object
+	294cdbb29bfc44648c62,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -7036,7 +7036,7 @@ Zone,
 	1;	!- Type
 
 BuildingSurface:Detailed,
-	abe6db34ed0748a3aa85,	!- Name
+	16673c6c4fbf406ebb0a,	!- Name
 	WALL,	!- Surface Type
 	Exterior Wall,	!- Construction Name
 	CM1_N_Outer,	!- Zone Name
@@ -7061,10 +7061,10 @@ BuildingSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	abe6db34ed0748a3aa85_glz_0,	!- Name
+	16673c6c4fbf406ebb0a_glz_0,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	abe6db34ed0748a3aa85,	!- Surface Name
+	16673c6c4fbf406ebb0a,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -7086,10 +7086,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	abe6db34ed0748a3aa85_glz_1,	!- Name
+	16673c6c4fbf406ebb0a_glz_1,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	abe6db34ed0748a3aa85,	!- Surface Name
+	16673c6c4fbf406ebb0a,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -7111,10 +7111,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	abe6db34ed0748a3aa85_glz_2,	!- Name
+	16673c6c4fbf406ebb0a_glz_2,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	abe6db34ed0748a3aa85,	!- Surface Name
+	16673c6c4fbf406ebb0a,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -7136,10 +7136,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	abe6db34ed0748a3aa85_glz_3,	!- Name
+	16673c6c4fbf406ebb0a_glz_3,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	abe6db34ed0748a3aa85,	!- Surface Name
+	16673c6c4fbf406ebb0a,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -7161,10 +7161,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	abe6db34ed0748a3aa85_glz_4,	!- Name
+	16673c6c4fbf406ebb0a_glz_4,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	abe6db34ed0748a3aa85,	!- Surface Name
+	16673c6c4fbf406ebb0a,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -7186,10 +7186,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	abe6db34ed0748a3aa85_glz_5,	!- Name
+	16673c6c4fbf406ebb0a_glz_5,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	abe6db34ed0748a3aa85,	!- Surface Name
+	16673c6c4fbf406ebb0a,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -7211,7 +7211,7 @@ FenestrationSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	59ac3b5abc4247a48e10,	!- Name
+	7072f62a8a0043538769,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM1_N_Outer,	!- Zone Name
@@ -7236,7 +7236,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	2bfca80006b5401f92a4,	!- Name
+	f49aac9f603648549c84,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM1_N_Outer,	!- Zone Name
@@ -7261,12 +7261,12 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	5703deec85874c89ac0f,	!- Name
+	f1981f6c0871403086d1,	!- Name
 	WALL,	!- Surface Type
 	Air Wall,	!- Construction Name
 	CM1_N_Outer,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	8bb9ca20f787494aa4f8,	!- Outside Boundary Condition Object
+	5bdab438512a47f2a5a2,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -7286,7 +7286,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	271c5f7deebe4dc78d25,	!- Name
+	2afc98870f034c0d8c9a,	!- Name
 	CEILING,	!- Surface Type
 	Interior Ceiling,	!- Construction Name
 	CM1_N_Outer,	!- Zone Name
@@ -7311,7 +7311,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	d3a81ddc66a344fcb2e7,	!- Name
+	e5d433b0c1f847a984ad,	!- Name
 	FLOOR,	!- Surface Type
 	Interior Floor,	!- Construction Name
 	CM1_N_Outer,	!- Zone Name
@@ -7344,7 +7344,7 @@ Zone,
 	1;	!- Type
 
 BuildingSurface:Detailed,
-	3b96b18b5cb940efa2f9,	!- Name
+	4e1b2cd7578340f89512,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM1_N_Inner,	!- Zone Name
@@ -7369,7 +7369,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	b366530f9f024a149a24,	!- Name
+	81603ea8ce094af88de5,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM1_N_Inner,	!- Zone Name
@@ -7394,7 +7394,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	ada3dbbc097a42348ac5,	!- Name
+	43a14b60c5564c55aef4,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM1_N_Inner,	!- Zone Name
@@ -7419,12 +7419,12 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	8bb9ca20f787494aa4f8,	!- Name
+	5bdab438512a47f2a5a2,	!- Name
 	WALL,	!- Surface Type
 	Air Wall,	!- Construction Name
 	CM1_N_Inner,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	5703deec85874c89ac0f,	!- Outside Boundary Condition Object
+	f1981f6c0871403086d1,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -7444,7 +7444,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	d817bf98e4664b0a9cf4,	!- Name
+	9816040a8db94ab38dbc,	!- Name
 	CEILING,	!- Surface Type
 	Interior Ceiling,	!- Construction Name
 	CM1_N_Inner,	!- Zone Name
@@ -7469,7 +7469,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	3388e4e723c84ff6a989,	!- Name
+	201bac2adbf14615b7b7,	!- Name
 	FLOOR,	!- Surface Type
 	Interior Floor,	!- Construction Name
 	CM1_N_Inner,	!- Zone Name
@@ -7502,7 +7502,7 @@ Zone,
 	1;	!- Type
 
 BuildingSurface:Detailed,
-	c9bb9c6f4f864440b2bf,	!- Name
+	8b72b40ee1324032a428,	!- Name
 	WALL,	!- Surface Type
 	Exterior Wall,	!- Construction Name
 	CM1_E_Outer,	!- Zone Name
@@ -7527,10 +7527,10 @@ BuildingSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	c9bb9c6f4f864440b2bf_glz_0,	!- Name
+	8b72b40ee1324032a428_glz_0,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	c9bb9c6f4f864440b2bf,	!- Surface Name
+	8b72b40ee1324032a428,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -7552,10 +7552,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	c9bb9c6f4f864440b2bf_glz_1,	!- Name
+	8b72b40ee1324032a428_glz_1,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	c9bb9c6f4f864440b2bf,	!- Surface Name
+	8b72b40ee1324032a428,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -7577,10 +7577,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	c9bb9c6f4f864440b2bf_glz_2,	!- Name
+	8b72b40ee1324032a428_glz_2,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	c9bb9c6f4f864440b2bf,	!- Surface Name
+	8b72b40ee1324032a428,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -7602,10 +7602,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	c9bb9c6f4f864440b2bf_glz_3,	!- Name
+	8b72b40ee1324032a428_glz_3,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	c9bb9c6f4f864440b2bf,	!- Surface Name
+	8b72b40ee1324032a428,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -7627,10 +7627,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	c9bb9c6f4f864440b2bf_glz_4,	!- Name
+	8b72b40ee1324032a428_glz_4,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	c9bb9c6f4f864440b2bf,	!- Surface Name
+	8b72b40ee1324032a428,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -7652,10 +7652,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	c9bb9c6f4f864440b2bf_glz_5,	!- Name
+	8b72b40ee1324032a428_glz_5,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	c9bb9c6f4f864440b2bf,	!- Surface Name
+	8b72b40ee1324032a428,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -7677,7 +7677,7 @@ FenestrationSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	5ec675e1048d4bc3b94c,	!- Name
+	249521cdbda44c84b6d3,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM1_E_Outer,	!- Zone Name
@@ -7702,7 +7702,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	147b06b967c44e05b74d,	!- Name
+	1435fa5aeaed4b109c9a,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM1_E_Outer,	!- Zone Name
@@ -7727,12 +7727,12 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	c254aa7326034152bee6,	!- Name
+	6824f76fb23845ceb739,	!- Name
 	WALL,	!- Surface Type
 	Air Wall,	!- Construction Name
 	CM1_E_Outer,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	a69794f6029f469281f5,	!- Outside Boundary Condition Object
+	637a0639c1db4b1faec1,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -7752,7 +7752,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	7b93d498df5d4c0091a3,	!- Name
+	39e8930a4c28488997cd,	!- Name
 	CEILING,	!- Surface Type
 	Interior Ceiling,	!- Construction Name
 	CM1_E_Outer,	!- Zone Name
@@ -7777,7 +7777,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	063c01ad3df24b1fa593,	!- Name
+	c5e6dbe5ef024fa6a7b9,	!- Name
 	FLOOR,	!- Surface Type
 	Interior Floor,	!- Construction Name
 	CM1_E_Outer,	!- Zone Name
@@ -7810,7 +7810,7 @@ Zone,
 	1;	!- Type
 
 BuildingSurface:Detailed,
-	36e2520c36a04352b7be,	!- Name
+	59ef54c2510342408966,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM1_E_Inner,	!- Zone Name
@@ -7835,7 +7835,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	9901d0b838bb470b82e8,	!- Name
+	294cdbb29bfc44648c62,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM1_E_Inner,	!- Zone Name
@@ -7860,7 +7860,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	b304cbd547ef4c13b2a2,	!- Name
+	f7a3749ca27149359e38,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM1_E_Inner,	!- Zone Name
@@ -7885,12 +7885,12 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	a69794f6029f469281f5,	!- Name
+	637a0639c1db4b1faec1,	!- Name
 	WALL,	!- Surface Type
 	Air Wall,	!- Construction Name
 	CM1_E_Inner,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	c254aa7326034152bee6,	!- Outside Boundary Condition Object
+	6824f76fb23845ceb739,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -7910,7 +7910,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	96d7a58f3e8340b28961,	!- Name
+	9fa961401a4d4492ac61,	!- Name
 	CEILING,	!- Surface Type
 	Interior Ceiling,	!- Construction Name
 	CM1_E_Inner,	!- Zone Name
@@ -7935,7 +7935,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	a88701e8866748ffa636,	!- Name
+	39b2f28f6a934f00ba5c,	!- Name
 	FLOOR,	!- Surface Type
 	Interior Floor,	!- Construction Name
 	CM1_E_Inner,	!- Zone Name
@@ -7968,7 +7968,7 @@ Zone,
 	1;	!- Type
 
 BuildingSurface:Detailed,
-	2433ae81905e4f6f9ee6,	!- Name
+	36989828b80e4354aacb,	!- Name
 	WALL,	!- Surface Type
 	Exterior Wall,	!- Construction Name
 	CM1_SE_Outer,	!- Zone Name
@@ -7993,10 +7993,10 @@ BuildingSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	2433ae81905e4f6f9ee6_glz_0,	!- Name
+	36989828b80e4354aacb_glz_0,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	2433ae81905e4f6f9ee6,	!- Surface Name
+	36989828b80e4354aacb,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -8018,10 +8018,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	2433ae81905e4f6f9ee6_glz_1,	!- Name
+	36989828b80e4354aacb_glz_1,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	2433ae81905e4f6f9ee6,	!- Surface Name
+	36989828b80e4354aacb,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -8043,10 +8043,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	2433ae81905e4f6f9ee6_glz_2,	!- Name
+	36989828b80e4354aacb_glz_2,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	2433ae81905e4f6f9ee6,	!- Surface Name
+	36989828b80e4354aacb,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -8068,10 +8068,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	2433ae81905e4f6f9ee6_glz_3,	!- Name
+	36989828b80e4354aacb_glz_3,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	2433ae81905e4f6f9ee6,	!- Surface Name
+	36989828b80e4354aacb,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -8093,10 +8093,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	2433ae81905e4f6f9ee6_glz_4,	!- Name
+	36989828b80e4354aacb_glz_4,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	2433ae81905e4f6f9ee6,	!- Surface Name
+	36989828b80e4354aacb,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -8118,10 +8118,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	2433ae81905e4f6f9ee6_glz_5,	!- Name
+	36989828b80e4354aacb_glz_5,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	2433ae81905e4f6f9ee6,	!- Surface Name
+	36989828b80e4354aacb,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -8143,7 +8143,7 @@ FenestrationSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	10803ef635c145e4a9c4,	!- Name
+	7190c0c70e244bfc8812,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM1_SE_Outer,	!- Zone Name
@@ -8168,7 +8168,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	1db03b4974d14c6aa588,	!- Name
+	df7590c0dab34cd7a2f2,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM1_SE_Outer,	!- Zone Name
@@ -8193,12 +8193,12 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	be81635ca82846bf9073,	!- Name
+	e2879fb244304c6f915b,	!- Name
 	WALL,	!- Surface Type
 	Air Wall,	!- Construction Name
 	CM1_SE_Outer,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	7057d94787ad4d658dd7,	!- Outside Boundary Condition Object
+	f26d4db0de9542a38674,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -8218,7 +8218,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	a99298f34e284916b9e1,	!- Name
+	48f5418ec5ee4a8bba46,	!- Name
 	CEILING,	!- Surface Type
 	Interior Ceiling,	!- Construction Name
 	CM1_SE_Outer,	!- Zone Name
@@ -8243,7 +8243,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	4258df3191c8406990a8,	!- Name
+	8b072285f52e4e75a752,	!- Name
 	FLOOR,	!- Surface Type
 	Interior Floor,	!- Construction Name
 	CM1_SE_Outer,	!- Zone Name
@@ -8276,7 +8276,7 @@ Zone,
 	1;	!- Type
 
 BuildingSurface:Detailed,
-	cccf1691a90246f5a7cb,	!- Name
+	f1ac586d5ffd4fb19a95,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM1_SE_Inner,	!- Zone Name
@@ -8301,7 +8301,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	1b1174592ded4ad8b06e,	!- Name
+	46eea7f5a58944bf92ba,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM1_SE_Inner,	!- Zone Name
@@ -8326,7 +8326,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	b5400d61828942c290ac,	!- Name
+	0fb92d944e5f47608c64,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM1_SE_Inner,	!- Zone Name
@@ -8351,12 +8351,12 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	7057d94787ad4d658dd7,	!- Name
+	f26d4db0de9542a38674,	!- Name
 	WALL,	!- Surface Type
 	Air Wall,	!- Construction Name
 	CM1_SE_Inner,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	be81635ca82846bf9073,	!- Outside Boundary Condition Object
+	e2879fb244304c6f915b,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -8376,7 +8376,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	8c59c1e96b8e44aba7f4,	!- Name
+	da3c305e3b6b4416bf56,	!- Name
 	CEILING,	!- Surface Type
 	Interior Ceiling,	!- Construction Name
 	CM1_SE_Inner,	!- Zone Name
@@ -8401,7 +8401,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	ba27f930f00e41759704,	!- Name
+	53104f03b84049b7b410,	!- Name
 	FLOOR,	!- Surface Type
 	Interior Floor,	!- Construction Name
 	CM1_SE_Inner,	!- Zone Name
@@ -8434,7 +8434,7 @@ Zone,
 	1;	!- Type
 
 BuildingSurface:Detailed,
-	e19120f2428145dc8c82,	!- Name
+	ab6a5f0f7fc94e018763,	!- Name
 	WALL,	!- Surface Type
 	Exterior Wall,	!- Construction Name
 	CM1_SW_Outer,	!- Zone Name
@@ -8459,10 +8459,10 @@ BuildingSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	e19120f2428145dc8c82_glz_0,	!- Name
+	ab6a5f0f7fc94e018763_glz_0,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	e19120f2428145dc8c82,	!- Surface Name
+	ab6a5f0f7fc94e018763,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -8484,10 +8484,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	e19120f2428145dc8c82_glz_1,	!- Name
+	ab6a5f0f7fc94e018763_glz_1,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	e19120f2428145dc8c82,	!- Surface Name
+	ab6a5f0f7fc94e018763,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -8509,10 +8509,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	e19120f2428145dc8c82_glz_2,	!- Name
+	ab6a5f0f7fc94e018763_glz_2,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	e19120f2428145dc8c82,	!- Surface Name
+	ab6a5f0f7fc94e018763,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -8534,10 +8534,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	e19120f2428145dc8c82_glz_3,	!- Name
+	ab6a5f0f7fc94e018763_glz_3,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	e19120f2428145dc8c82,	!- Surface Name
+	ab6a5f0f7fc94e018763,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -8559,10 +8559,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	e19120f2428145dc8c82_glz_4,	!- Name
+	ab6a5f0f7fc94e018763_glz_4,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	e19120f2428145dc8c82,	!- Surface Name
+	ab6a5f0f7fc94e018763,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -8584,10 +8584,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	e19120f2428145dc8c82_glz_5,	!- Name
+	ab6a5f0f7fc94e018763_glz_5,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	e19120f2428145dc8c82,	!- Surface Name
+	ab6a5f0f7fc94e018763,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -8609,7 +8609,7 @@ FenestrationSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	827a8f50262041f3ab7f,	!- Name
+	203774505668474aaac5,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM1_SW_Outer,	!- Zone Name
@@ -8634,7 +8634,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	bdf473c635394303b051,	!- Name
+	0006c507ad5843fa9d82,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM1_SW_Outer,	!- Zone Name
@@ -8659,12 +8659,12 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	76512cb1db5447079e8f,	!- Name
+	38ebea8801314c478d33,	!- Name
 	WALL,	!- Surface Type
 	Air Wall,	!- Construction Name
 	CM1_SW_Outer,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	bcac4cc467d24419bad5,	!- Outside Boundary Condition Object
+	b0baba1d5c21468db943,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -8684,7 +8684,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	66f40fd7e2414dbb8e12,	!- Name
+	db832ed2298a433d9e4d,	!- Name
 	CEILING,	!- Surface Type
 	Interior Ceiling,	!- Construction Name
 	CM1_SW_Outer,	!- Zone Name
@@ -8709,7 +8709,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	d2b5316cd0c54b2c8995,	!- Name
+	d9010daf1ec942d2b121,	!- Name
 	FLOOR,	!- Surface Type
 	Interior Floor,	!- Construction Name
 	CM1_SW_Outer,	!- Zone Name
@@ -8742,7 +8742,7 @@ Zone,
 	1;	!- Type
 
 BuildingSurface:Detailed,
-	469a94da266f434cb3bb,	!- Name
+	707c777c63224d3ba702,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM1_SW_Inner,	!- Zone Name
@@ -8767,7 +8767,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	9dc28a6a453f483292a8,	!- Name
+	3ff8c08cdf924e78bd87,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM1_SW_Inner,	!- Zone Name
@@ -8792,7 +8792,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	6445884f127f438496e9,	!- Name
+	c3588fa60274489ab6b2,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM1_SW_Inner,	!- Zone Name
@@ -8817,12 +8817,12 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	bcac4cc467d24419bad5,	!- Name
+	b0baba1d5c21468db943,	!- Name
 	WALL,	!- Surface Type
 	Air Wall,	!- Construction Name
 	CM1_SW_Inner,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	76512cb1db5447079e8f,	!- Outside Boundary Condition Object
+	38ebea8801314c478d33,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -8842,7 +8842,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	a2bacb9ba29b4191834b,	!- Name
+	eccdc94777a843f1b44c,	!- Name
 	CEILING,	!- Surface Type
 	Interior Ceiling,	!- Construction Name
 	CM1_SW_Inner,	!- Zone Name
@@ -8867,7 +8867,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	ec64cf1fd9f8408bb309,	!- Name
+	ce6dcc10704a4cbc9c67,	!- Name
 	FLOOR,	!- Surface Type
 	Interior Floor,	!- Construction Name
 	CM1_SW_Inner,	!- Zone Name
@@ -8900,7 +8900,7 @@ Zone,
 	1;	!- Type
 
 BuildingSurface:Detailed,
-	6267665ae8654d3b8378,	!- Name
+	4ed3923933e5490698b1,	!- Name
 	WALL,	!- Surface Type
 	Exterior Wall,	!- Construction Name
 	CM1_NW_Outer,	!- Zone Name
@@ -8925,10 +8925,10 @@ BuildingSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	6267665ae8654d3b8378_glz_0,	!- Name
+	4ed3923933e5490698b1_glz_0,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	6267665ae8654d3b8378,	!- Surface Name
+	4ed3923933e5490698b1,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -8950,10 +8950,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	6267665ae8654d3b8378_glz_1,	!- Name
+	4ed3923933e5490698b1_glz_1,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	6267665ae8654d3b8378,	!- Surface Name
+	4ed3923933e5490698b1,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -8975,10 +8975,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	6267665ae8654d3b8378_glz_2,	!- Name
+	4ed3923933e5490698b1_glz_2,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	6267665ae8654d3b8378,	!- Surface Name
+	4ed3923933e5490698b1,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -9000,10 +9000,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	6267665ae8654d3b8378_glz_3,	!- Name
+	4ed3923933e5490698b1_glz_3,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	6267665ae8654d3b8378,	!- Surface Name
+	4ed3923933e5490698b1,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -9025,10 +9025,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	6267665ae8654d3b8378_glz_4,	!- Name
+	4ed3923933e5490698b1_glz_4,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	6267665ae8654d3b8378,	!- Surface Name
+	4ed3923933e5490698b1,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -9050,10 +9050,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	6267665ae8654d3b8378_glz_5,	!- Name
+	4ed3923933e5490698b1_glz_5,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	6267665ae8654d3b8378,	!- Surface Name
+	4ed3923933e5490698b1,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -9075,10 +9075,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	6267665ae8654d3b8378_glz_6,	!- Name
+	4ed3923933e5490698b1_glz_6,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	6267665ae8654d3b8378,	!- Surface Name
+	4ed3923933e5490698b1,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -9100,10 +9100,10 @@ FenestrationSurface:Detailed,
 
 
 FenestrationSurface:Detailed,
-	6267665ae8654d3b8378_glz_7,	!- Name
+	4ed3923933e5490698b1_glz_7,	!- Name
 	WINDOW,	!- Surface Type
 	Exterior Window,	!- Construction Name
-	6267665ae8654d3b8378,	!- Surface Name
+	4ed3923933e5490698b1,	!- Surface Name
 	,	!- Outside Boundary Condition Object
 	autocalculate,	!- View Factor to Ground
 	,	!- Shading Control Name
@@ -9125,7 +9125,7 @@ FenestrationSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	eebb0c89f6f34bac84de,	!- Name
+	141fc717d46b41619edd,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM1_NW_Outer,	!- Zone Name
@@ -9150,7 +9150,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	ed846efa881346dfa574,	!- Name
+	1247f13e75c242fdb0cf,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM1_NW_Outer,	!- Zone Name
@@ -9175,12 +9175,12 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	1b6c04b5119e4e40827d,	!- Name
+	bfd17633bb484034bad8,	!- Name
 	WALL,	!- Surface Type
 	Air Wall,	!- Construction Name
 	CM1_NW_Outer,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	3431818984f243cd988c,	!- Outside Boundary Condition Object
+	9b13dd196aa64930997f,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -9200,7 +9200,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	4db8a64cf7a7419bb8d2,	!- Name
+	a02a5fc5f43041d3a9af,	!- Name
 	CEILING,	!- Surface Type
 	Interior Ceiling,	!- Construction Name
 	CM1_NW_Outer,	!- Zone Name
@@ -9225,7 +9225,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	340f325b5e104e4c9ab4,	!- Name
+	187d64b535a248a8b932,	!- Name
 	FLOOR,	!- Surface Type
 	Interior Floor,	!- Construction Name
 	CM1_NW_Outer,	!- Zone Name
@@ -9258,7 +9258,7 @@ Zone,
 	1;	!- Type
 
 BuildingSurface:Detailed,
-	3083d85d0e8a4985a7b7,	!- Name
+	123b95190d424d7c9522,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM1_NW_Inner,	!- Zone Name
@@ -9283,7 +9283,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	9703987491614f41bbce,	!- Name
+	6311a2cb836f44f4ae6b,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM1_NW_Inner,	!- Zone Name
@@ -9308,7 +9308,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	da9a5ea607bf4707bc79,	!- Name
+	2f0e023752a94ced99f9,	!- Name
 	WALL,	!- Surface Type
 	Interior Wall,	!- Construction Name
 	CM1_NW_Inner,	!- Zone Name
@@ -9333,12 +9333,12 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	3431818984f243cd988c,	!- Name
+	9b13dd196aa64930997f,	!- Name
 	WALL,	!- Surface Type
 	Air Wall,	!- Construction Name
 	CM1_NW_Inner,	!- Zone Name
 	SURFACE,	!- Outside Boundary Condition
-	1b6c04b5119e4e40827d,	!- Outside Boundary Condition Object
+	bfd17633bb484034bad8,	!- Outside Boundary Condition Object
 	NoSun,	!- Sun Exposure
 	NoWind,	!- Wind Exposure
 	autocalculate,	!- View Factor to Ground
@@ -9358,7 +9358,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	74a1807273084a859570,	!- Name
+	27126d7425f84ed9aa73,	!- Name
 	CEILING,	!- Surface Type
 	Interior Ceiling,	!- Construction Name
 	CM1_NW_Inner,	!- Zone Name
@@ -9383,7 +9383,7 @@ BuildingSurface:Detailed,
 
 
 BuildingSurface:Detailed,
-	298aad8058cf439eabd2,	!- Name
+	8cd705d0f2e64ae4b672,	!- Name
 	FLOOR,	!- Surface Type
 	Interior Floor,	!- Construction Name
 	CM1_NW_Inner,	!- Zone Name
