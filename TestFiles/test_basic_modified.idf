@@ -1,4 +1,4 @@
-!- Windows Line endings 
+!- Darwin Line endings 
 
 VERSION,
     8.8.0;                    !- Version Identifier
@@ -702,6 +702,12 @@ WINDOWMATERIAL:SIMPLEGLAZINGSYSTEM,
     0.3,                      !- Solar Heat Gain Coefficient
     0.65;                     !- Visible Transmittance
 
+WINDOWMATERIAL:SIMPLEGLAZINGSYSTEM,
+    INTERIOR GLAZING MATERIAL,    !- Name
+    1.6,                      !- UFactor
+    0.9,                      !- Solar Heat Gain Coefficient
+    0.9;                      !- Visible Transmittance
+
 CONSTRUCTION,
     EXTERIOR WALL,            !- Name
     EXTERIOR WALL MATERIAL;    !- Outside Layer
@@ -729,6 +735,10 @@ CONSTRUCTION,
 CONSTRUCTION,
     EXTERIOR WINDOW,          !- Name
     EXTERIOR GLAZING MATERIAL;    !- Outside Layer
+
+CONSTRUCTION,
+    INTERIOR WINDOW,          !- Name
+    INTERIOR GLAZING MATERIAL;    !- Outside Layer
 
 CONSTRUCTION,
     THERMAL MASS,             !- Name
