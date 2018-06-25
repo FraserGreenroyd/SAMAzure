@@ -1,4 +1,4 @@
-!- Darwin Line endings 
+!- Windows Line endings 
 
 VERSION,
     8.8.0;                    !- Version Identifier
@@ -691,10 +691,10 @@ MATERIAL:NOMASS,
 MATERIAL:NOMASS,
     AIR WALL MATERIAL,        !- Name
     MediumRough,              !- Roughness
-    5.55555555556,            !- Thermal Resistance
-    0.9,                      !- Thermal Absorptance
-    0.7,                      !- Solar Absorptance
-    0.3;                      !- Visible Absorptance
+    0.001,                    !- Thermal Resistance
+    0.001,                    !- Thermal Absorptance
+    0.001,                    !- Solar Absorptance
+    0.001;                    !- Visible Absorptance
 
 WINDOWMATERIAL:SIMPLEGLAZINGSYSTEM,
     EXTERIOR GLAZING MATERIAL,    !- Name
@@ -704,7 +704,7 @@ WINDOWMATERIAL:SIMPLEGLAZINGSYSTEM,
 
 WINDOWMATERIAL:SIMPLEGLAZINGSYSTEM,
     INTERIOR GLAZING MATERIAL,    !- Name
-    1.6,                      !- UFactor
+    0.8,                      !- UFactor
     0.9,                      !- Solar Heat Gain Coefficient
     0.9;                      !- Visible Transmittance
 
