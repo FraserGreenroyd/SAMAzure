@@ -1,5 +1,6 @@
 {
-    "idd_file": "C:/EnergyPlusV8-8-0/Energy+.idd",
+    "idd_file_windows": "C:/EnergyPlusV8-8-0/Energy+.idd",
+    "idd_file_os": "/Applications/EnergyPlus-8-8-0/Energy+.idd",
     "source_idf": "test_basic.idf",
     "target_idf": "test_basic_modified.idf",
     "weather_file": "GBR_Cardiff_CIBSE_TRY.epw",
