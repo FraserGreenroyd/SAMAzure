@@ -39,6 +39,11 @@ namespace AzureEngine
                 ae.DeallocateVM();
                 ae.DeleteResourceGroup();
             }
+            else
+            {
+                Console.WriteLine("Powering down VM...");
+                ae.SwitchOff();
+            }
 
             Console.WriteLine("Press any key to exit...");
             Console.ReadLine();

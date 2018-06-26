@@ -33,7 +33,11 @@ namespace AzureEngine
 
         private void CreateResourceGroupIfNotExists(String resourceGroupName)
         {
-            if (azureConnection == null) throw new NullReferenceException("The Azure component has not been initialised");
+            if (azureConnection == null)
+            {
+                messageContainer.AddErrorMessage("The Azure component has not been initialised");
+                return;
+            }
 
             if(!azureConnection.AzureLink.ResourceGroups.Contain(resourceGroupName))
                 azureConnection.AzureLink.ResourceGroups.Define(resourceGroupName).WithRegion(azureConnection.Region).Create();
@@ -57,6 +61,11 @@ namespace AzureEngine
         public void DeleteResourceGroup()
         {
             azureConnection.AzureLink.ResourceGroups.DeleteByName(azureConnection.ResourceGroup);
+        }
+
+        public void SwitchOff()
+        {
+            virtualMachine.SwitchOffVM();
         }
     }
 }
