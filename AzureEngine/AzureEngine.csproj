@@ -147,6 +147,7 @@
   <ItemGroup>
     <Compile Include="AzureObjects\AzureConnection.cs" />
     <Compile Include="AzureEngine.cs" />
+    <Compile Include="AzureObjects\AzureBatchClient.cs" />
     <Compile Include="AzureObjects\BlobStorage.cs" />
     <Compile Include="AzureObjects\VirtualMachine.cs" />
     <Compile Include="Program.cs" />

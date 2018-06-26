@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 
+using Microsoft.Azure.Batch;
+
+using System.IO;
+
 namespace AzureEngine.AzureObjects
 {
     public class BlobStorage
@@ -17,8 +21,7 @@ namespace AzureEngine.AzureObjects
 
         public BlobStorage(String connectionString = null, SystemMessageContainer container = null)
         {
-            if (connectionString == null) //throw new NullReferenceException("Please provide a connection string for creating blob storage on Azure");
-                connectionString = Environment.GetEnvironmentVariable("azureStorageConnectionString"); //Throw exception in the future...
+            if (connectionString == null) throw new NullReferenceException("Please provide a connection string for creating blob storage on Azure");
 
             messageContainer = (container == null ? new SystemMessageContainer() : container);
 
@@ -84,6 +87,23 @@ namespace AzureEngine.AzureObjects
             messageContainer.AddInformationMessage("Deleting the blob container...");
             await blobContainer.DeleteIfExistsAsync();
             messageContainer.AddInformationMessage("Blob container deleted");
+        }
+
+        public ResourceFile GenerateResourceFile(String fileName = null)
+        {
+            if (fileName == null) return null;
+
+            SharedAccessBlobPolicy sasConstraints = new SharedAccessBlobPolicy
+            {
+                SharedAccessExpiryTime = DateTime.UtcNow.AddHours(2),
+                Permissions = SharedAccessBlobPermissions.Read
+            };
+
+            CloudBlockBlob blobBlock = blobContainer.GetBlockBlobReference(fileName);
+            String sasBlobToken = blobBlock.GetSharedAccessSignature(sasConstraints);
+            String blobSasUri = String.Format("{0}{1}", blobBlock.Uri, sasBlobToken);
+
+            return new ResourceFile(blobSasUri, Path.GetFileName(fileName));
         }
     }
 }

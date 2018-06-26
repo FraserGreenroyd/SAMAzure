@@ -20,7 +20,23 @@ namespace AzureEngine
         {
             systemMessages = new SystemMessageContainer();
             systemMessages.MessagesUpdated += SystemMessages_MessagesUpdated;
-            AzureEngine ae = new AzureEngine(@"C:\Users\fgreenro\Documents\Repo Code\SAM\AzureEngine\AzureEngine\azureauth.properties", "azureAutoTest", "West Europe", systemMessages);
+
+            AzureEngine ae = new AzureEngine(systemMessages);
+            ae.CreateAzureConnection(@"C:\Users\fgreenro\Documents\Repo Code\SAM\AzureEngine\AzureEngine\azureauth.properties", "azureAutoTest", "West Europe");
+            ae.CreateVirtualMachine();
+            ae.CreateBlobStorage(@"DefaultEndpointsProtocol=https;AccountName=azureenginetest123;AccountKey=CHR1QTB2tqY21biqzn+UKSn3yNqmSWFAT2lZK9eJ1vGnP9Q6tvafRZgOlbTOu6lgqW+0OBxf5wPxPq8XWRAtTg==;EndpointSuffix=core.windows.net");
+
+            ae.CreateBatchClient("enginebatchtest123", @"xTQl3xJIJ/D6mZDoEysL0R3q9ko1y0vX6awmQzrPmyZcP7xJT/OioXGvqMpRF6736OxYSE+B/aJ/moOf+WXIlQ==", "https://enginebatchtest123.westeurope.batch.azure.com", "azureBatchPoolTest", "azureBatchJobTest", 2, "Basic_A1");
+
+            ae.SendFile(@"C:\Users\fgreenro\Documents\Repo Code\Test Files & Scripts\", "SimpleTask.py");
+
+            Console.WriteLine("Wait for file to upload - press k to continue");
+            if (Console.ReadLine().ToUpper() == "K")
+            {
+                ae.AddTask("python SimpleTask.py Hello World", "SimpleTask.py");
+                ae.MoveCompletedTaskFiles();
+            }
+
             /*ae.InitStorage();
             Console.WriteLine("Press any key to upload the test file");
             Console.ReadLine();
@@ -32,7 +48,7 @@ namespace AzureEngine
             Console.ReadLine();
             ae.DeleteBlob().GetAwaiter().GetResult();*/
 
-            ae.SpinUpVM();
+            //ae.SpinUpVM();
             Console.WriteLine("Press D to delete the VM and associated resources");
             if (Console.ReadLine().ToUpper() == "D")
             {
