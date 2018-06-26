@@ -4,21 +4,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob;
+using AzureEngine.AzureObjects;
 
 namespace AzureEngine
 {
     public class AzureEngine
     {
         //This file will contain the engine configurations for communicating with Azure
-        private CloudStorageAccount storageAccount = null;
-        private CloudBlobContainer blobContainer = null;
         private SystemMessageContainer messageContainer;
 
-        public AzureEngine()
+        private AzureConnection azureConnection = null;
+        private VirtualMachine virtualMachine = null;
+
+        public AzureEngine(String credentialsFile, String resourceGroup, String region, SystemMessageContainer container = null)
         {
-            messageContainer = new SystemMessageContainer();
+            messageContainer = (container == null ? new SystemMessageContainer() : container);
+
+            azureConnection = new AzureConnection(credentialsFile, resourceGroup, region);
+            virtualMachine = new VirtualMachine(azureConnection, container);
+
+            CreateResourceGroupIfNotExists(resourceGroup);
         }
 
         public AzureEngine(SystemMessageContainer container)
@@ -26,73 +31,32 @@ namespace AzureEngine
             messageContainer = container;
         }
 
-        public void InitStorage(String connectionString = null)
+        private void CreateResourceGroupIfNotExists(String resourceGroupName)
         {
-            if (connectionString == null)
-                connectionString = Environment.GetEnvironmentVariable("azureStorageConnectionString");
+            if (azureConnection == null) throw new NullReferenceException("The Azure component has not been initialised");
 
-            if(CloudStorageAccount.TryParse(connectionString, out storageAccount))
-                messageContainer.AddInformationMessage("Successfully connected to storage account");
-            else //Failure - alert user in a friendly manner
-                messageContainer.AddErrorMessage("An error occurred in connecting to the storage account", "Attempted to use connection string: " + connectionString);
+            if(!azureConnection.AzureLink.ResourceGroups.Contain(resourceGroupName))
+                azureConnection.AzureLink.ResourceGroups.Define(resourceGroupName).WithRegion(azureConnection.Region).Create();
         }
 
-        public async Task SendFile(String filePath, String fileName)
+        public void SpinUpVM()
         {
-            if (storageAccount == null) return;
-
-            try
-            {
-                messageContainer.AddInformationMessage("Creating Blob Client...");
-                CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
-
-                messageContainer.AddInformationMessage("Creating Blob Container...");
-                blobContainer = blobClient.GetContainerReference("enginetestblob" + Guid.NewGuid().ToString());
-                await blobContainer.CreateAsync();
-                messageContainer.AddInformationMessage("Blob Container " + blobContainer.Name + " created");
-
-                messageContainer.AddInformationMessage("Setting Blob Permissions...");
-                BlobContainerPermissions blobPermissions = new BlobContainerPermissions { PublicAccess = BlobContainerPublicAccessType.Blob };
-                await blobContainer.SetPermissionsAsync(blobPermissions);
-
-                String fullFile = filePath + fileName;
-
-                messageContainer.AddInformationMessage("Uploading file...");
-                CloudBlockBlob blobBlock = blobContainer.GetBlockBlobReference(fileName);
-                await blobBlock.UploadFromFileAsync(fullFile);
-                messageContainer.AddInformationMessage("File uploaded...");
-            }
-            catch (Exception e)
-            {
-                messageContainer.AddErrorMessage("An error occurred. Details are below", e.ToString());
-            }
+            messageContainer.AddInformationMessage("Spinning up Virtual Machine... Please wait...");
+            virtualMachine.CreateVM();
+            messageContainer.AddStatusMessage("VM set up - some stats are below");
+            foreach (String s in virtualMachine.Details())
+                messageContainer.AddInformationMessage(s);
         }
 
-        public async Task DownloadFile(String filePath, String fileName, String downloadFile)
+        public void DeallocateVM()
         {
-            String fullFile = filePath + fileName;
-
-            try
-            {
-                CloudBlockBlob blobBlock = blobContainer.GetBlockBlobReference(downloadFile);
-
-                messageContainer.AddInformationMessage("Downloading blob file to " + fullFile);
-                await blobBlock.DownloadToFileAsync(fullFile, System.IO.FileMode.Create);
-                messageContainer.AddInformationMessage("File downloaded...");
-            }
-            catch (Exception e)
-            {
-                messageContainer.AddErrorMessage("An error occurred. Details are below", e.ToString());
-            }
+            if (virtualMachine != null)
+                virtualMachine.DeallocateVM();
         }
 
-        public async Task DeleteBlob()
+        public void DeleteResourceGroup()
         {
-            if (blobContainer == null) return;
-
-            messageContainer.AddInformationMessage("Deleting the blob container...");
-            await blobContainer.DeleteIfExistsAsync();
-            messageContainer.AddInformationMessage("Blob container deleted");
+            azureConnection.AzureLink.ResourceGroups.DeleteByName(azureConnection.ResourceGroup);
         }
     }
 }
