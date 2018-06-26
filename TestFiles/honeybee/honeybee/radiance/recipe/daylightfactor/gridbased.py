@@ -20,7 +20,7 @@ class GridBased(PITGridBased):
     """
     SKYILLUM = 100000
 
-    def __init__(self, analysis_grids, rad_parameters=None, hb_objects=None,
+    def __init__(self, analysis_grids, hb_objects=None, rad_parameters=None,
                  sub_folder="daylightfactor"):
         """Create grid-based recipe."""
         # create the sky for daylight factor

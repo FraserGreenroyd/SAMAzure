@@ -14,6 +14,8 @@ Annotations:
 import json
 import sys
 from eppy.modeleditor import IDF
+import platform
+
 
 def load_json(path):
     """
@@ -33,17 +35,14 @@ with open(sys.argv[1], "r") as f:
 
 # Load IDF ready for pre-processing and modification
 IDF_FILE = CONFIG["source_idf"]
-try:
-    IDD_FILE = CONFIG["idd_file_os"]
-except:
-    try:
-        IDD_FILE = CONFIG["idd_file_windows"]
-    except:
-        pass
+if "win" in platform.platform().lower() and "dar" not in platform.platform().lower():
+    IDF.setiddname(CONFIG["idd_file_windows"])
+elif "linux" in platform.platform().lower():
+    IDF.setiddname(CONFIG["idd_file_linux"])
+elif "dar" in platform.platform().lower():
+    IDF.setiddname(CONFIG["idd_file_os"])
 
 EPW_FILE = CONFIG["weather_file"]
-
-IDF.setiddname(IDD_FILE)
 idf = IDF(IDF_FILE)
 
 # Load the JSON file containing internal gains, schedules and setpoints
@@ -638,33 +637,33 @@ idf.idfobjects["WINDOWMATERIAL:SIMPLEGLAZINGSYSTEM"] = []
 idf.newidfobject(
     "WINDOWMATERIAL:SIMPLEGLAZINGSYSTEM",
     Name="EXTERIOR GLAZING MATERIAL_N",
-    UFactor=CONFIG["glazing_u_value"],
-    Solar_Heat_Gain_Coefficient=CONFIG["glazing_solar_heat_gain_coefficient_N"],
-    Visible_Transmittance=CONFIG["glazing_visible_transmittance_N"]
+    UFactor=CONFIG["glass_u_value"],
+    Solar_Heat_Gain_Coefficient=CONFIG["glass_solar_heat_gain_coefficient_N"],
+    Visible_Transmittance=CONFIG["glass_visible_transmittance_N"]
 )
 
 idf.newidfobject(
     "WINDOWMATERIAL:SIMPLEGLAZINGSYSTEM",
     Name="EXTERIOR GLAZING MATERIAL_E",
-    UFactor=CONFIG["glazing_u_value"],
-    Solar_Heat_Gain_Coefficient=CONFIG["glazing_solar_heat_gain_coefficient_E"],
-    Visible_Transmittance=CONFIG["glazing_visible_transmittance_N"]
+    UFactor=CONFIG["glass_u_value"],
+    Solar_Heat_Gain_Coefficient=CONFIG["glass_solar_heat_gain_coefficient_E"],
+    Visible_Transmittance=CONFIG["glass_visible_transmittance_N"]
 )
 
 idf.newidfobject(
     "WINDOWMATERIAL:SIMPLEGLAZINGSYSTEM",
     Name="EXTERIOR GLAZING MATERIAL_S",
-    UFactor=CONFIG["glazing_u_value"],
-    Solar_Heat_Gain_Coefficient=CONFIG["glazing_solar_heat_gain_coefficient_S"],
-    Visible_Transmittance=CONFIG["glazing_visible_transmittance_N"]
+    UFactor=CONFIG["glass_u_value"],
+    Solar_Heat_Gain_Coefficient=CONFIG["glass_solar_heat_gain_coefficient_S"],
+    Visible_Transmittance=CONFIG["glass_visible_transmittance_N"]
 )
 
 idf.newidfobject(
     "WINDOWMATERIAL:SIMPLEGLAZINGSYSTEM",
     Name="EXTERIOR GLAZING MATERIAL_W",
-    UFactor=CONFIG["glazing_u_value"],
-    Solar_Heat_Gain_Coefficient=CONFIG["glazing_solar_heat_gain_coefficient_W"],
-    Visible_Transmittance=CONFIG["glazing_visible_transmittance_N"]
+    UFactor=CONFIG["glass_u_value"],
+    Solar_Heat_Gain_Coefficient=CONFIG["glass_solar_heat_gain_coefficient_W"],
+    Visible_Transmittance=CONFIG["glass_visible_transmittance_N"]
 )
 
 idf.newidfobject(
@@ -816,7 +815,7 @@ for zone in [str(i.Name) for i in idf.idfobjects["ZONE"]]:
     ZONE_WALL_AREA.append(area)
 
 idf.idfobjects["INTERNALMASS"] = []
-for i, j in list(zip([str(i.Name) for i in idf.idfobjects["ZONE"]], zone_wall_area)):
+for i, j in list(zip([str(i.Name) for i in idf.idfobjects["ZONE"]], ZONE_WALL_AREA)):
     if j != 0:
         idf.newidfobject(
             "INTERNALMASS",
