@@ -1,0 +1,12 @@
+# Test the generation of a modified IDF - with the error file sent by Fraser as refernce
+
+# Test the outputs fromteh IDF for accuracy against a comparison IES model
+
+# Test the generation fot he recipes for Radiance usign teh IDF to Radiacne script - this time with triangulated surfaces
+
+# Tidy the directory into:
+    - PythonScripts
+    - ResourceFiles
+    - RandomStuff
+    - ladybug
+    - honeybee

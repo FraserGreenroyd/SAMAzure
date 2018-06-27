@@ -1,0 +1,23 @@
+Program Version,EnergyPlus, Version 8.8.0-7c3bbe4830, YMD=2018.06.27 15:52,IDD_Version 8.8.0
+   ** Severe  ** Did not find matching material for Construction EXTERIOR WINDOW, missing material = EXTERIOR GLAZING MATERIAL
+   ** Severe  ** Nominal U is zero, for construction=EXTERIOR WINDOW
+   ** Severe  ** FenestrationSurface:Detailed="C1069E5D94494391A8E2_GLZ_0_E13CD7837CE448589D5E" has an opaque surface construction; it should have a window construction.
+   ** Severe  ** FenestrationSurface:Detailed="C1069E5D94494391A8E2_GLZ_1_FA1C3C4A34AB44819599" has an opaque surface construction; it should have a window construction.
+   ** Severe  ** FenestrationSurface:Detailed="AB7813722C2E43AFA67E_GLZ_0_3777C54FD5564E09AB34" has an opaque surface construction; it should have a window construction.
+   ** Severe  ** FenestrationSurface:Detailed="ED3F9AC6258A4FB2B24F_GLZ_0_93BF5841A176438D97BB" has an opaque surface construction; it should have a window construction.
+   ** Severe  ** FenestrationSurface:Detailed="3FE1E66B777849C98ACD_GLZ_0_8D6F1F65EBE94BB79282" has an opaque surface construction; it should have a window construction.
+   ** Severe  ** FenestrationSurface:Detailed="A362597327B149ED8ED6_GLZ_0_D730C0AAE2E74709B27D" has an opaque surface construction; it should have a window construction.
+   ** Severe  ** FenestrationSurface:Detailed="360B53CFF22B4DEFA605_GLZ_0_F4278D197D3F49A68567" has an opaque surface construction; it should have a window construction.
+   ** Severe  ** FenestrationSurface:Detailed="360B53CFF22B4DEFA605_GLZ_1_ACC246A44CC6473E9FB1" has an opaque surface construction; it should have a window construction.
+   ** Severe  ** FenestrationSurface:Detailed="360B53CFF22B4DEFA605_GLZ_2_6C253C1F28FE4270A6D8" has an opaque surface construction; it should have a window construction.
+   ** Severe  ** FenestrationSurface:Detailed="44D2C9CA96FD427BAFC5_GLZ_0_933EA5D323AB41DAA6E5" has an opaque surface construction; it should have a window construction.
+   ** Severe  ** FenestrationSurface:Detailed="9BF8315766C546B9AFEC_GLZ_0_D647B3CC32B746C5A193" has an opaque surface construction; it should have a window construction.
+   **  Fatal  ** GetSurfaceData: Errors discovered, program terminates.
+   ...Summary of Errors that led to program termination:
+   ..... Reference severe error count=13
+   ..... Last severe error=FenestrationSurface:Detailed="9BF8315766C546B9AFEC_GLZ_0_D647B3CC32B746C5A193" has an opaque surface construction; it should have a window construction.
+   ************* Warning:  Node connection errors not checked - most system input has not been read (see previous warning).
+   ************* Fatal error -- final processing.  Program exited before simulations began.  See previous error messages.
+   ************* EnergyPlus Warmup Error Summary. During Warmup: 0 Warning; 0 Severe Errors.
+   ************* EnergyPlus Sizing Error Summary. During Sizing: 0 Warning; 0 Severe Errors.
+   ************* EnergyPlus Terminated--Fatal Error Detected. 0 Warning; 13 Severe Errors; Elapsed Time=00hr 00min  0.94sec
