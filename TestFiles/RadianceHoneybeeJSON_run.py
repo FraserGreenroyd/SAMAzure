@@ -25,11 +25,11 @@ def load_json(path):
 
 # Load the recipe
 ZONE = "CM2_S_Outer"
-RECIPE_PATH = "C:/Users/tgerrish/Desktop/SAMAzure/TestFiles/TESTTESTTEST/CM2_S_Inner/annual/recipe.json"
+RECIPE_PATH = "TESTTESTTEST/zone2/daylight_factor/recipe.json"
 RECIPE = load_json(RECIPE_PATH)
 
 # Load the geometry
-GEOMETRY_PATH = r"C:\Users\tgerrish\Desktop\SAMAzure\TestFiles\TESTTESTTEST\geometry.json"
+GEOMETRY_PATH = "TESTTESTTEST/geometry.json"
 GEOMETRY = load_json(GEOMETRY_PATH)["surfaces"]
 
 # Update recipe to include geometry
@@ -38,7 +38,10 @@ RECIPE["surfaces"] = GEOMETRY
 # Generate the Radiance case from the reconstituted recipe
 RECIPE = GridBasedDF.from_json(RECIPE)
 
-
+# Generate bat file
+BAT_FILE = RECIPE.write("TESTTESTTEST", "temp_RAD")
+# Convert bat to sh
+SHELL_FILE = bat_to_sh(BAT_FILE)
 
 # Fix the -dr issue
 for file in [SHELL_FILE, BAT_FILE]:

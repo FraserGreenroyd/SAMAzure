@@ -11,7 +11,7 @@ Annotations:
     TODO - Create ability to visualise surfaces and analsyis grids in context
     TODO - Add radiance parameters to the config.json to put into the generated recipes
     TODO - Add method interpreting results for SDA, DA, DF, UDI, UDILess, UDIMore
-    TODO - Replace sys.stdout with print() statements giving indication of current running process
+    TODO - Check the fenestration surface normal is point teh right direction fro correct window angle for G value assignment
 """
 
 # Load necessary packages
@@ -50,6 +50,29 @@ def unit_vector(start, end):
     pt_distance = np.array(end) - np.array(start)
     vector = pt_distance / np.sqrt(np.sum(pt_distance * pt_distance))
     return vector
+
+
+def surface_normal(points, flip=False):
+    """
+    Description:
+        Given 3 points from a surface, return the surface normal
+    Arguments:
+        points [array]: List of 3 XYZ points
+        flip [bool]: Reverse the unit vector
+    Returns:
+        x, y, z [array]: Unit vector
+    """
+    U = np.array(points[1]) - np.array(points[0])
+    V = np.array(points[2]) - np.array(points[0])
+    Nx = U[1]*V[2] - U[2]*V[1]
+    Ny = U[2]*V[0] - U[0]*V[2]
+    Nz = U[0]*V[1] - U[1]*V[0]
+    mag = np.sqrt(Nx**2 + Ny**2 + Nz**2)
+
+    if flip:
+        return (np.array([Nx, Ny, Nz]) / mag).tolist()
+    else:
+        return (-np.array([Nx, Ny, Nz]) / mag).tolist()
 
 
 def translated_point(uv, uw, origin, point):
@@ -293,7 +316,7 @@ floor_material = Plastic(
     roughness=0
 )
 
-print("Materials defined from reflectivity and transmissivity in {0:}\n".format(sys.argv[1]))
+print("Materials defined from reflectivity and transmissivity in config file\n")
 
 print("Generating surfaces:")
 
@@ -349,7 +372,7 @@ print("{0:} interior wall surfaces generated".format(len(INTERIOR_WALL_SURFACES)
 
 EXTERIOR_WALL_SURFACES = []
 for wall_n, wall in enumerate([i for i in idf.idfobjects["BUILDINGSURFACE:DETAILED"] if i.Construction_Name == "Exterior Wall"]):
-    angle_to_north = np.degrees(angle_between(north_vector, srf.normal))
+    angle_to_north = np.degrees(angle_between(north_vector, surface_normal(wall.coords[:3], flip=False)))
     if (angle_to_north > 315) or (angle_to_north <= 45):
         orientation_glass_material = glass_material_N
     elif (angle_to_north > 45) and (angle_to_north <= 135):

@@ -10,3 +10,6 @@
     - RandomStuff
     - ladybug
     - honeybee
+
+# Useful commands
+"/Applications/EnergyPlus-8-8-0/energyplus-8.8.0" -a -x -r -w "GBR_Cardiff_CIBSE_TRY.epw" "test_basic_modified.idf"

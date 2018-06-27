@@ -634,6 +634,15 @@ idf.idfobjects["MATERIAL"] = []
 
 # Create single layer window material for glazing transmittance/g-value
 idf.idfobjects["WINDOWMATERIAL:SIMPLEGLAZINGSYSTEM"] = []
+
+idf.newidfobject(
+    "WINDOWMATERIAL:SIMPLEGLAZINGSYSTEM",
+    Name="EXTERIOR GLAZING MATERIAL_X",
+    UFactor=CONFIG["glass_u_value"],
+    Solar_Heat_Gain_Coefficient=CONFIG["glass_solar_heat_gain_coefficient_X"],
+    Visible_Transmittance=CONFIG["glass_visible_transmittance_X"]
+)
+
 idf.newidfobject(
     "WINDOWMATERIAL:SIMPLEGLAZINGSYSTEM",
     Name="EXTERIOR GLAZING MATERIAL_N",
@@ -790,7 +799,7 @@ idf.newidfobject(
 idf.newidfobject(
     "CONSTRUCTION",
     Name="EXTERIOR WINDOW",
-    Outside_Layer="EXTERIOR GLAZING MATERIAL"
+    Outside_Layer="EXTERIOR GLAZING MATERIAL_X"
 )
 
 idf.newidfobject(

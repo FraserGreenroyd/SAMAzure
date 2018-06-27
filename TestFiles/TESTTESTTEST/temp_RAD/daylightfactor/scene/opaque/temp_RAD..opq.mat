@@ -1,0 +1,15 @@
+# Created by Honeybee[+] at 2018-06-27 22:58:14
+# www.ladybug.tools
+
+void plastic FloorMaterial
+0
+0
+5 0.2 0.2 0.2 0.0 0.0
+void plastic CeilingMaterial
+0
+0
+5 0.7 0.7 0.7 0.0 0.0
+void plastic WallMaterial
+0
+0
+5 0.5 0.5 0.5 0.0 0.0
