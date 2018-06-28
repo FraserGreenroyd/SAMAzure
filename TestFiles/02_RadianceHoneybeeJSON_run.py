@@ -39,7 +39,7 @@ RECIPE["surfaces"] = GEOMETRY
 RECIPE = GridBasedDF.from_json(RECIPE)
 
 # Generate bat file
-BAT_FILE = RECIPE.write("TESTTESTTEST", "temp_RAD")
+BAT_FILE = RECIPE.write("TESTTESTTEST", "DF_TEMP")
 # Convert bat to sh
 SHELL_FILE = bat_to_sh(BAT_FILE)
 
@@ -56,3 +56,5 @@ if os.name == 'nt':
 else:
     success = RECIPE.run(SHELL_FILE)
 # Process the results to give actual bona-fide analysis data as JSON outputs for ease of processing later on!
+
+# Update from teh Testing notebook for radiance file! - reconstituting from the various recipe parts

@@ -1,3 +1,0 @@
-**************
-*** PID 30618: /usr/local/radiance/bin/rtrace -I -lr 4 -aa 0.25 -dj 0.0 -ds 0.5 -ss 0.0 -dp 64 -dt 0.5 -ad 512 -st 0.85 -lw 0.05 -as 128 -dc 0.25 -ab 2 -e error.txt -h -dr 3 -ar 16 temp_RAD.oct
-

@@ -187,7 +187,8 @@ idf = IDF(IDF_FILE)
 print("{0:} loaded\n".format(IDF_FILE))
 
 # Set the "vector to north", so that wall orientation can be obtained
-north_angle = np.radians(idf.idfobjects["BUILDING"][0].North_Axis)
+north_angle_deg = idf.idfobjects["BUILDING"][0].North_Axis
+north_angle = np.radians(north_angle_deg)
 north_vector = (np.sin(north_angle), np.cos(north_angle), 0)
 print("North angle has been read as {0:}\n".format(north_angle))
 
@@ -332,7 +333,7 @@ for wall_n, wall in enumerate([i for i in idf.idfobjects["BUILDINGSURFACE:DETAIL
                 HBSurface(
                     "fenestration_{0:}".format(fen.Name),
                     fen_coords,
-                    surface_type=0,
+                    surface_type=5,
                     is_name_set_by_user=True,
                     is_type_set_by_user=True,
                     rad_properties=RadianceProperties(
@@ -389,7 +390,7 @@ for wall_n, wall in enumerate([i for i in idf.idfobjects["BUILDINGSURFACE:DETAIL
                 HBSurface(
                     "fenestration_{0:}".format(fen.Name),
                     fen_coords,
-                    surface_type=0,
+                    surface_type=5,
                     is_name_set_by_user=True,
                     is_type_set_by_user=True,
                     rad_properties=RadianceProperties(
@@ -555,34 +556,68 @@ for floor_srf in [i for i in idf.idfobjects["BUILDINGSURFACE:DETAILED"] if ("Flo
 
 # Generate sky matrix for annual analysis
 print("\nGenerating sky matrix ...")
-SKY_MATRIX = SkyMatrix.from_epw_file(EPW_FILE, sky_density=2, north=0, hoys=range(0, 8760), mode=0, suffix="")
+SKY_MATRIX = SkyMatrix.from_epw_file(EPW_FILE, sky_density=2, north=north_angle_deg, hoys=range(0, 8760), mode=0, suffix="")
 print("Sky matrix ({0:}) generated\n".format(SKY_MATRIX))
 
-# Create the analysis recipes for each IDF zone
-print("Generating analysis grids ...")
+# Create output directory for HB radiance case files
+if not os.path.exists(CONFIG["output_directory"]):
+    os.makedirs(CONFIG["output_directory"])
+    os.makedirs("{0:}/analysis_grids".format(CONFIG["output_directory"]))
+
+# Write the sky matrix for annual simulation to file
+SKY_MTX_PATH = "{0:}/sky_mtx.json".format(CONFIG["output_directory"])
+with open(SKY_MTX_PATH, "w") as f:
+    json.dump({"sky_mtx": SKY_MATRIX.to_json()}, f)
+
+print("Sky matrix written to {0:}\n".format(SKY_MTX_PATH))
+
 for HB_ANALYSIS_GRID in HB_ANALYSIS_GRIDS:
+    ANALYSIS_GRID_PATH = "{0:}/analysis_grids/{1:}.json".format(CONFIG["output_directory"], HB_ANALYSIS_GRID.name)
+    with open(ANALYSIS_GRID_PATH, "w") as f:
+        json.dump({"analysis_grids": [HB_ANALYSIS_GRID.to_json()]}, f)
 
-    # Create a directory in which to save the DF recipe/s
-    DF_RECIPE_DIR = "{0:}/{1:}/daylight_factor".format(CONFIG["output_directory"], HB_ANALYSIS_GRID.name)
-    if not os.path.exists(DF_RECIPE_DIR):
-        os.makedirs(DF_RECIPE_DIR)
+    print("Analysis grid for {0:} written to {1:}\n".format(HB_ANALYSIS_GRID.name, ANALYSIS_GRID_PATH))
 
-    # Generate a DF recipe as JSON and save [WITHOUT CONTEXT GEOMETRY]
-    with open("{0:}/recipe.json".format(DF_RECIPE_DIR), "w") as f:
-        json.dump(GridBasedDF(analysis_grids=[HB_ANALYSIS_GRID], hb_objects=[]).to_json(), f)
-    print("{0:} daylight factor analysis grid written to {1:}/recipe.json\n".format(HB_ANALYSIS_GRID.name, DF_RECIPE_DIR))
-
-    # Create a directory in which to save the Annual recipe/s
-    ANNUAL_RECIPE_DIR = "{0:}/{1:}/annual".format(CONFIG["output_directory"], HB_ANALYSIS_GRID.name)
-    if not os.path.exists(ANNUAL_RECIPE_DIR):
-        os.makedirs(ANNUAL_RECIPE_DIR)
-
-    # Generate an ANNUAL recipe as JSON and save [WITHOUT CONTEXT GEOMETRY]
-    with open("{0:}/recipe.json".format(ANNUAL_RECIPE_DIR), "w") as f:
-        json.dump(GridBasedAnnual(SKY_MATRIX, analysis_grids=[HB_ANALYSIS_GRID], hb_objects=[]).to_json(), f)
-    print("{0:} annual analysis grid written to {1:}/recipe.json\n".format(HB_ANALYSIS_GRID.name, ANNUAL_RECIPE_DIR))
-
-# Write the context geometry to a seperate file
-with open(CONFIG["output_directory"]+"/geometry.json", "w") as f:
+# Write the context geometry (surfaces) around the analysis grids
+SURFACES_PATH = "{0:}/surfaces.json".format(CONFIG["output_directory"])
+with open(SURFACES_PATH, "w") as f:
     f.write(repr({"surfaces": [i.to_json() for i in HB_OBJECTS]}).replace("'", '"').replace("(", '[').replace(")", ']'))
-print("Geometry written to {0:}\n".format(CONFIG["output_directory"]+"/geometry.json"))
+
+print("Surfaces written to {0:}\n".format(SURFACES_PATH))
+
+# print(HB_ANALYSIS_GRIDS[0].to_json())
+
+# Create the analysis recipes for each IDF zone
+# print("Generating analysis grids ...")
+# for HB_ANALYSIS_GRID in HB_ANALYSIS_GRIDS:
+
+#     # Create a directory in which to save the DF recipe/s
+#     DF_RECIPE_DIR = "{0:}/{1:}/daylight_factor".format(CONFIG["output_directory"], HB_ANALYSIS_GRID.name)
+#     if not os.path.exists(DF_RECIPE_DIR):
+#         os.makedirs(DF_RECIPE_DIR)
+
+#     # Generate a DF recipe as JSON and save [WITHOUT CONTEXT GEOMETRY]
+#     with open("{0:}/df_recipe.json".format(DF_RECIPE_DIR), "w") as f:
+#         json.dump(GridBasedDF(analysis_grids=[HB_ANALYSIS_GRID], hb_objects=[]).to_json(), f)
+#     print("{0:} daylight factor analysis grid written to {1:}/df_recipe.json\n".format(HB_ANALYSIS_GRID.name, DF_RECIPE_DIR))
+
+#     # Create a directory in which to save the Annual recipe/s
+#     ANNUAL_RECIPE_DIR = "{0:}/{1:}/annual".format(CONFIG["output_directory"], HB_ANALYSIS_GRID.name)
+#     if not os.path.exists(ANNUAL_RECIPE_DIR):
+#         os.makedirs(ANNUAL_RECIPE_DIR)
+
+#     # Generate an ANNUAL recipe as JSON and save [WITHOUT CONTEXT GEOMETRY]
+#     with open("{0:}/annual_recipe.json".format(ANNUAL_RECIPE_DIR), "w") as f:
+#         # Remove sky matrix from the Annual recipe and assign to variable
+#         json.dump(GridBasedAnnual(SKY_MATRIX, analysis_grids=[HB_ANALYSIS_GRID], hb_objects=[]).to_json(), f)
+#     print("{0:} annual analysis grid written to {1:}/annual_recipe.json\n".format(HB_ANALYSIS_GRID.name, ANNUAL_RECIPE_DIR))
+
+# # Write the context geometry to a seperate file
+# with open(CONFIG["output_directory"]+"/geometry.json", "w") as f:
+#     f.write(repr({"surfaces": [i.to_json() for i in HB_OBJECTS]}).replace("'", '"').replace("(", '[').replace(")", ']'))
+# print("Geometry written to {0:}\n".format(CONFIG["output_directory"]+"/geometry.json"))
+
+# # Write the sky matrix to a seperate file
+# with open(CONFIG["output_directory"]+"/sky_matrix.json", "w") as f:
+#     json.dump(sky_matrix_json, f)
+# print("Annual sky matrix written to {0:}\n".format(CONFIG["output_directory"]+"/sky_matrix.json"))

@@ -30,7 +30,9 @@ def load_json(path):
         return json.load(data_file)
 
 # Load the setup configuration for this IDF modification
-with open(sys.argv[1], "r") as f:
+# with open(sys.argv[1], "r") as f:
+#     CONFIG = json.load(f)
+with open("idf_config.json", "r") as f:
     CONFIG = json.load(f)
 
 # Load IDF ready for pre-processing and modification
@@ -195,7 +197,7 @@ TEMP = idf.newidfobject(
 )
 
 for i in range(24):
-    TEMP["Hour_{0:}".format(i+1)] = 1
+    TEMP["Hour_{0:}".format(i + 1)] = 1
 
 # Set a daily Always Off profile
 TEMP = idf.newidfobject(
@@ -205,7 +207,7 @@ TEMP = idf.newidfobject(
 )
 
 for i in range(24):
-    TEMP["Hour_{0:}".format(i+1)] = 0
+    TEMP["Hour_{0:}".format(i + 1)] = 0
 
 # Set daily cooling profile from JSON
 setpoint = ZONE_CONDITIONS["cooling_setpoint"]
@@ -216,18 +218,18 @@ TEMP = idf.newidfobject(
     Schedule_Type_Limits_Name="TemperatureSetpointLimits"
 )
 for i in range(24):
-    TEMP["Hour_{0:}".format(i+1)] = setpoint if ZONE_CONDITIONS[
+    TEMP["Hour_{0:}".format(i + 1)] = setpoint if ZONE_CONDITIONS[
         "cooling_setpoint_weekday"
-    ]["Hour_{0:}".format(i+1)] == 0 else setback
+    ]["Hour_{0:}".format(i + 1)] == 0 else setback
 TEMP = idf.newidfobject(
     "SCHEDULE:DAY:HOURLY",
     Name="CoolingSetpointDayWeekend",
     Schedule_Type_Limits_Name="TemperatureSetpointLimits"
 )
 for i in range(24):
-    TEMP["Hour_{0:}".format(i+1)] = setpoint if ZONE_CONDITIONS[
+    TEMP["Hour_{0:}".format(i + 1)] = setpoint if ZONE_CONDITIONS[
         "cooling_setpoint_weekend"
-    ]["Hour_{0:}".format(i+1)] == 0 else setback
+    ]["Hour_{0:}".format(i + 1)] == 0 else setback
 
 # Set daily heating profile from JSON
 setpoint = ZONE_CONDITIONS["heating_setpoint"]
@@ -238,18 +240,18 @@ TEMP = idf.newidfobject(
     Schedule_Type_Limits_Name="TemperatureSetpointLimits"
 )
 for i in range(24):
-    TEMP["Hour_{0:}".format(i+1)] = setpoint if ZONE_CONDITIONS[
+    TEMP["Hour_{0:}".format(i + 1)] = setpoint if ZONE_CONDITIONS[
         "heating_setpoint_weekday"
-    ]["Hour_{0:}".format(i+1)] == 0 else setback
+    ]["Hour_{0:}".format(i + 1)] == 0 else setback
 TEMP = idf.newidfobject(
     "SCHEDULE:DAY:HOURLY",
     Name="HeatingSetpointDayWeekend",
     Schedule_Type_Limits_Name="TemperatureSetpointLimits"
 )
 for i in range(24):
-    TEMP["Hour_{0:}".format(i+1)] = setpoint if ZONE_CONDITIONS[
+    TEMP["Hour_{0:}".format(i + 1)] = setpoint if ZONE_CONDITIONS[
         "heating_setpoint_weekend"
-    ]["Hour_{0:}".format(i+1)] == 0 else setback
+    ]["Hour_{0:}".format(i + 1)] == 0 else setback
 
 # Set a daily Occupant profile
 TEMP = idf.newidfobject(
@@ -258,18 +260,18 @@ TEMP = idf.newidfobject(
     Schedule_Type_Limits_Name="FractionLimits"
 )
 for i in range(24):
-    TEMP["Hour_{0:}".format(i+1)] = ZONE_CONDITIONS[
+    TEMP["Hour_{0:}".format(i + 1)] = ZONE_CONDITIONS[
         "occupant_profile_weekday"
-    ]["Hour_{0:}".format(i+1)]
+    ]["Hour_{0:}".format(i + 1)]
 TEMP = idf.newidfobject(
     "SCHEDULE:DAY:HOURLY",
     Name="OccupantGainDayWeekend",
     Schedule_Type_Limits_Name="FractionLimits"
 )
 for i in range(24):
-    TEMP["Hour_{0:}".format(i+1)] = ZONE_CONDITIONS[
+    TEMP["Hour_{0:}".format(i + 1)] = ZONE_CONDITIONS[
         "occupant_profile_weekend"
-    ]["Hour_{0:}".format(i+1)]
+    ]["Hour_{0:}".format(i + 1)]
 
 # Set a daily Lighting profile
 TEMP = idf.newidfobject(
@@ -278,18 +280,18 @@ TEMP = idf.newidfobject(
     Schedule_Type_Limits_Name="FractionLimits"
 )
 for i in range(24):
-    TEMP["Hour_{0:}".format(i+1)] = ZONE_CONDITIONS[
+    TEMP["Hour_{0:}".format(i + 1)] = ZONE_CONDITIONS[
         "lighting_profile_weekday"
-    ]["Hour_{0:}".format(i+1)]
+    ]["Hour_{0:}".format(i + 1)]
 TEMP = idf.newidfobject(
     "SCHEDULE:DAY:HOURLY",
     Name="LightingGainDayWeekend",
     Schedule_Type_Limits_Name="FractionLimits"
 )
 for i in range(24):
-    TEMP["Hour_{0:}".format(i+1)] = ZONE_CONDITIONS[
+    TEMP["Hour_{0:}".format(i + 1)] = ZONE_CONDITIONS[
         "lighting_profile_weekend"
-    ]["Hour_{0:}".format(i+1)]
+    ]["Hour_{0:}".format(i + 1)]
 
 # Set a daily Equipment profile
 TEMP = idf.newidfobject(
@@ -298,18 +300,18 @@ TEMP = idf.newidfobject(
     Schedule_Type_Limits_Name="FractionLimits"
 )
 for i in range(24):
-    TEMP["Hour_{0:}".format(i+1)] = ZONE_CONDITIONS[
+    TEMP["Hour_{0:}".format(i + 1)] = ZONE_CONDITIONS[
         "equipment_profile_weekday"
-    ]["Hour_{0:}".format(i+1)]
+    ]["Hour_{0:}".format(i + 1)]
 TEMP = idf.newidfobject(
     "SCHEDULE:DAY:HOURLY",
     Name="EquipmentGainDayWeekend",
     Schedule_Type_Limits_Name="FractionLimits"
 )
 for i in range(24):
-    TEMP["Hour_{0:}".format(i+1)] = ZONE_CONDITIONS[
+    TEMP["Hour_{0:}".format(i + 1)] = ZONE_CONDITIONS[
         "equipment_profile_weekend"
-    ]["Hour_{0:}".format(i+1)]
+    ]["Hour_{0:}".format(i + 1)]
 
 # Set a daily Ventilation profile
 TEMP = idf.newidfobject(
@@ -318,18 +320,18 @@ TEMP = idf.newidfobject(
     Schedule_Type_Limits_Name="FractionLimits"
 )
 for i in range(24):
-    TEMP["Hour_{0:}".format(i+1)] = ZONE_CONDITIONS[
+    TEMP["Hour_{0:}".format(i + 1)] = ZONE_CONDITIONS[
         "ventilation_profile_weekday"
-    ]["Hour_{0:}".format(i+1)]
+    ]["Hour_{0:}".format(i + 1)]
 TEMP = idf.newidfobject(
     "SCHEDULE:DAY:HOURLY",
     Name="VentilationGainDayWeekend",
     Schedule_Type_Limits_Name="FractionLimits"
 )
 for i in range(24):
-    TEMP["Hour_{0:}".format(i+1)] = ZONE_CONDITIONS[
+    TEMP["Hour_{0:}".format(i + 1)] = ZONE_CONDITIONS[
         "ventilation_profile_weekend"
-    ]["Hour_{0:}".format(i+1)]
+    ]["Hour_{0:}".format(i + 1)]
 
 # Set a daily occupant activity level profile
 TEMP = idf.newidfobject(
@@ -337,9 +339,9 @@ TEMP = idf.newidfobject(
     Name="OccupantActivityLevelDay",
     Schedule_Type_Limits_Name="ActivityLevelLimits")
 for i in range(24):
-    TEMP["Hour_{0:}".format(i+1)] = ZONE_CONDITIONS[
+    TEMP["Hour_{0:}".format(i + 1)] = ZONE_CONDITIONS[
         "occupant_sensible_gain_watts_per_person"
-    ]+ZONE_CONDITIONS["occupant_latent_gain_watts_per_person"]
+    ] + ZONE_CONDITIONS["occupant_latent_gain_watts_per_person"]
 
 # Remove the current Weekly profiles and replace with compact weekly profiles
 idf.idfobjects["SCHEDULE:WEEK:DAILY"] = []
@@ -516,7 +518,7 @@ idf.newidfobject(
 idf.idfobjects["HVACTEMPLATE:THERMOSTAT"] = []
 [idf.newidfobject(
     "HVACTEMPLATE:THERMOSTAT",
-    Name=j+"_HVAC",
+    Name=j + "_HVAC",
     Heating_Setpoint_Schedule_Name="HeatingSetpointYear",
     Constant_Heating_Setpoint="",
     Cooling_Setpoint_Schedule_Name="CoolingSetpointYear",
@@ -537,9 +539,9 @@ idf.newidfobject(
         "occupant_sensible_gain_watts_per_person"
     ]) / float(sum([ZONE_CONDITIONS[
         "occupant_sensible_gain_watts_per_person"
-        ], ZONE_CONDITIONS[
-            "occupant_latent_gain_watts_per_person"
-        ]])
+    ], ZONE_CONDITIONS[
+        "occupant_latent_gain_watts_per_person"
+    ]])
     ),
     Activity_Level_Schedule_Name="OccupantActivityLevelYear"
 )
@@ -584,45 +586,42 @@ idf.newidfobject(
 )
 
 # Set ventilation rate for all zones
-idf.idfobjects["ZONEVENTILATION:DESIGNFLOWRATE"] = []
-idf.newidfobject(
-    "ZONEVENTILATION:DESIGNFLOWRATE",
-    Name="VentilationGain",
-    Zone_or_ZoneList_Name="AllZones",
-    Schedule_Name="VentilationYear",
-    Design_Flow_Rate_Calculation_Method="Flow/Person",
-    Flow_Rate_per_Person=ZONE_CONDITIONS[
-        "ventilation_litres_per_second_per_person"
-    ]*0.001
-)
+# idf.idfobjects["ZONEVENTILATION:DESIGNFLOWRATE"] = []
+# idf.newidfobject(
+#     "ZONEVENTILATION:DESIGNFLOWRATE",
+#     Name="VentilationGain",
+#     Zone_or_ZoneList_Name="AllZones",
+#     Schedule_Name="VentilationYear",
+#     Design_Flow_Rate_Calculation_Method="Flow/Person",
+#     Flow_Rate_per_Person=ZONE_CONDITIONS[
+#         "ventilation_litres_per_second_per_person"
+#     ] * 0.001
+# )
 
 # Set Ideal Loads Air System air supply based on internal TEMPlate
 idf.idfobjects["HVACTEMPLATE:ZONE:IDEALLOADSAIRSYSTEM"] = []
-# [idf.newidfobject(
-#     "HVACTEMPLATE:ZONE:IDEALLOADSAIRSYSTEM",
-#     Zone_Name=j,
-#     Template_Thermostat_Name=j+"_HVAC",
-#     Maximum_Heating_Supply_Air_Temperature=50,
-#     Minimum_Cooling_Supply_Air_Temperature=13,
-#     Maximum_Heating_Supply_Air_Humidity_Ratio=0.0156,
-#     Minimum_Cooling_Supply_Air_Humidity_Ratio=0.0077,
-#     Heating_Limit="NoLimit",
-#     Cooling_Limit="NoLimit",
-#     Dehumidification_Control_Type="ConstantSensibleHeatRatio",
-#     Cooling_Sensible_Heat_Ratio=0.7,
-#     Dehumidification_Setpoint=60,
-#     Humidification_Control_Type="None",
-#     Humidification_Setpoint=30,
-#     Outdoor_Air_Method="Flow/Person",
-#     Outdoor_Air_Flow_Rate_per_Person=internal_gains_library[zone_template][
-#    "ventilation_litres_per_second_per_person"
-# ]*0.001,
-#     Outdoor_Air_Economizer_Type="NoEconomizer",
-#     Heat_Recovery_Type="None",
-#     Sensible_Heat_Recovery_Effectiveness=0.7,
-#     Latent_Heat_Recovery_Effectiveness=0.65) for j in [
-#    i.Name for i in idf.idfobjects["ZONE"]
-# ]]
+for i in idf.idfobjects["ZONE"]:
+    idf.newidfobject(
+        "HVACTEMPLATE:ZONE:IDEALLOADSAIRSYSTEM",
+        Zone_Name=i.Name,
+        Template_Thermostat_Name=j+"_HVAC",
+        Maximum_Heating_Supply_Air_Temperature=50,
+        Minimum_Cooling_Supply_Air_Temperature=13,
+        Maximum_Heating_Supply_Air_Humidity_Ratio=0.0156,
+        Minimum_Cooling_Supply_Air_Humidity_Ratio=0.0077,
+        Heating_Limit="NoLimit",
+        Cooling_Limit="NoLimit",
+        Dehumidification_Control_Type="ConstantSensibleHeatRatio",
+        Cooling_Sensible_Heat_Ratio=0.7,
+        Dehumidification_Setpoint=60,
+        Humidification_Control_Type="None",
+        Humidification_Setpoint=30,
+        Outdoor_Air_Method="Flow/Person",
+        Outdoor_Air_Flow_Rate_per_Person=ZONE_CONDITIONS["ventilation_litres_per_second_per_person"]*0.001,
+        Outdoor_Air_Economizer_Type="NoEconomizer",
+        Heat_Recovery_Type="None",
+        Sensible_Heat_Recovery_Effectiveness=0.7,
+        Latent_Heat_Recovery_Effectiveness=0.65)
 
 # Remove the existing window materials
 idf.idfobjects["WINDOWMATERIAL:GLAZING"] = []
@@ -689,50 +688,50 @@ idf.newidfobject(
     "MATERIAL:NOMASS",
     Name="EXTERIOR WALL MATERIAL",
     Roughness="MediumRough",
-    Thermal_Resistance=1/CONFIG["exterior_wall_u_value"],
+    Thermal_Resistance=1 / CONFIG["exterior_wall_u_value"],
     Thermal_Absorptance=0.9,
     Solar_Absorptance=0.7,
-    Visible_Absorptance=1-CONFIG["wall_reflectivity"]
+    Visible_Absorptance=1 - CONFIG["wall_reflectivity"]
 )
 
 idf.newidfobject(
     "MATERIAL:NOMASS",
     Name="INTERIOR WALL MATERIAL",
     Roughness="MediumSmooth",
-    Thermal_Resistance=1/1.8,
+    Thermal_Resistance=1 / 1.8,
     Thermal_Absorptance=0.9,
     Solar_Absorptance=0.7,
-    Visible_Absorptance=1-CONFIG["wall_reflectivity"]
+    Visible_Absorptance=1 - CONFIG["wall_reflectivity"]
 )
 
 idf.newidfobject(
     "MATERIAL:NOMASS",
     Name="INTERIOR FLOOR MATERIAL",
     Roughness="MediumSmooth",
-    Thermal_Resistance=1/1.087,
+    Thermal_Resistance=1 / 1.087,
     Thermal_Absorptance=0.9,
     Solar_Absorptance=0.7,
-    Visible_Absorptance=1-CONFIG["floor_reflectivity"]
+    Visible_Absorptance=1 - CONFIG["floor_reflectivity"]
 )
 
 idf.newidfobject(
     "MATERIAL:NOMASS",
     Name="INTERIOR CEILING MATERIAL",
     Roughness="MediumSmooth",
-    Thermal_Resistance=1/1.087,
+    Thermal_Resistance=1 / 1.087,
     Thermal_Absorptance=0.9,
     Solar_Absorptance=0.7,
-    Visible_Absorptance=1-CONFIG["ceiling_reflectivity"]
+    Visible_Absorptance=1 - CONFIG["ceiling_reflectivity"]
 )
 
 idf.newidfobject(
     "MATERIAL:NOMASS",
     Name="EXTERIOR ROOF MATERIAL",
     Roughness="MediumRough",
-    Thermal_Resistance=1/CONFIG["exterior_roof_u_value"],
+    Thermal_Resistance=1 / CONFIG["exterior_roof_u_value"],
     Thermal_Absorptance=0.9,
     Solar_Absorptance=0.7,
-    Visible_Absorptance=1-CONFIG["ceiling_reflectivity"]
+    Visible_Absorptance=1 - CONFIG["ceiling_reflectivity"]
 )
 
 idf.newidfobject(
@@ -828,7 +827,7 @@ for i, j in list(zip([str(i.Name) for i in idf.idfobjects["ZONE"]], ZONE_WALL_AR
     if j != 0:
         idf.newidfobject(
             "INTERNALMASS",
-            Name=i+"_MASS",
+            Name=i + "_MASS",
             Construction_Name="THERMAL MASS",
             Zone_Name=i,
             Surface_Area=j
@@ -839,7 +838,7 @@ for i, j in list(zip([str(i.Name) for i in idf.idfobjects["ZONE"]], ZONE_WALL_AR
 # Create a list zones to be referenced for passing the internal gains setpoitns
 TEMP = idf.newidfobject("ZONELIST", Name="AllZones")
 for i, j in enumerate([str(i.Name) for i in idf.idfobjects["ZONE"]]):
-    TEMP["Zone_{0:}_Name".format(i+1)] = j
+    TEMP["Zone_{0:}_Name".format(i + 1)] = j
 
 # Output variables to report during simulation
 OUTPUT_VARIABLES = [

@@ -28,6 +28,6 @@
     "daylight_analysis_grid_edge_offset": 0.2,
     "daylight_analysis_grid_surface_offset": 0.85,
     "radiance_parameters": "",
-    "output_directory": "TESTTESTTEST",
+    "output_directory": "RADIANCE_TEST_INPUT",
     "analysis_zones": []
 }

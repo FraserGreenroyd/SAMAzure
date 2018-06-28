@@ -1,4 +1,4 @@
-#trying debian FROM ubuntu:14.04
+# trying debian FROM ubuntu:14.04
 FROM debian:latest
 
 MAINTAINER Tristan Gerrish <Tristan.Gerrish@BuroHappold.com>
