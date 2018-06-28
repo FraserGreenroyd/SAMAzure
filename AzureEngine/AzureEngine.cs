@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 using AzureEngine.AzureObjects;
 
+using Microsoft.Azure.Batch;
+
 namespace AzureEngine
 {
     public class AzureEngine
@@ -38,17 +40,19 @@ namespace AzureEngine
             messageContainer.AddInformationMessage("VM Instance created...");
         }
 
-        public void CreateBlobStorage(String blobConnectionString)
+        public void CreateBlobStorage(String blobConnectionString, String containerName)
         {
             messageContainer.AddInformationMessage("Creating blob storage...");
             blobStorage = new BlobStorage(blobConnectionString, messageContainer);
             messageContainer.AddInformationMessage("Blob storage created...");
+
+            blobStorage.CreateBlobStorage(containerName);
         }
 
         public void CreateBatchClient(String accountName, String accountKey, String accountURL, String poolID, String jobID, int poolNodeCount, String poolVMSize)
         {
             messageContainer.AddInformationMessage("Creating batch client...");
-            batchClient = new AzureBatchClient(accountName, accountKey, accountURL, blobStorage, poolID, jobID, poolNodeCount, poolVMSize);
+            batchClient = new AzureBatchClient(accountName, accountKey, accountURL, blobStorage, poolID, jobID, poolNodeCount, poolVMSize, messageContainer);
             messageContainer.AddInformationMessage("Batch client created...");
         }
 
@@ -86,18 +90,30 @@ namespace AzureEngine
 
         public void SwitchOff()
         {
+            if (virtualMachine == null) return;
             virtualMachine.SwitchOffVM();
         }
 
         public void AddTask(String command, String fileName = null)
         {
-            batchClient.AddTask(command, blobStorage.GenerateResourceFile(fileName));
+            //batchClient.AddTask(command, blobStorage.GenerateResourceFile(fileName));
+            AddTask(command, new List<String> { fileName });
+        }
+
+        public void AddTask(String command, List<String> fileNames = null)
+        {
+            List<ResourceFile> files = new List<ResourceFile>();
+            foreach (String s in fileNames)
+                files.Add(blobStorage.GenerateResourceFile(s));
+
+            batchClient.AddTask(command, files);
         }
 
         public void MoveCompletedTaskFiles()
         {
             if(batchClient.AwaitTaskCompletion())
             {
+                batchClient.MoveCompletedTaskResults();
                 messageContainer.AddInformationMessage("Tasks completed apparently...");
             }
         }
@@ -105,6 +121,12 @@ namespace AzureEngine
         public async Task SendFile(String filePath, String fileName)
         {
             await blobStorage.SendFile(filePath, fileName);
+        }
+
+        public void DeleteBlobStorage()
+        {
+            if (blobStorage != null)
+                blobStorage.DeleteBlob();
         }
     }
 }

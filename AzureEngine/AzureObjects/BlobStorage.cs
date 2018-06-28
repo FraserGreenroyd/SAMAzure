@@ -17,6 +17,7 @@ namespace AzureEngine.AzureObjects
     {
         private CloudStorageAccount storageAccount = null;
         private CloudBlobContainer blobContainer = null;
+        private CloudBlobClient blobClient = null;
         private SystemMessageContainer messageContainer = null;
 
         public BlobStorage(String connectionString = null, SystemMessageContainer container = null)
@@ -31,24 +32,30 @@ namespace AzureEngine.AzureObjects
                 messageContainer.AddErrorMessage("An error occurred in connecting to the storage account", "Attempted to use connection string: " + connectionString);
         }
 
+        public CloudBlobContainer Container { get { return blobContainer; } }
+        public CloudStorageAccount StorageAccount { get { return storageAccount; } }
+
+        public async Task CreateBlobStorage(String containerName)
+        {
+            messageContainer.AddInformationMessage("Creating Blob Client...");
+            blobClient = storageAccount.CreateCloudBlobClient();
+
+            messageContainer.AddInformationMessage("Creating Blob Container...");
+            blobContainer = blobClient.GetContainerReference(containerName);
+            await blobContainer.CreateIfNotExistsAsync();
+            messageContainer.AddInformationMessage("Blob Container " + blobContainer.Name + " created");
+
+            messageContainer.AddInformationMessage("Setting Blob Permissions...");
+            BlobContainerPermissions blobPermissions = new BlobContainerPermissions { PublicAccess = BlobContainerPublicAccessType.Blob };
+            await blobContainer.SetPermissionsAsync(blobPermissions);
+        }
+
         public async Task SendFile(String filePath, String fileName)
         {
-            if (storageAccount == null) return;
+            if (blobContainer == null) return;
 
             try
             {
-                messageContainer.AddInformationMessage("Creating Blob Client...");
-                CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
-
-                messageContainer.AddInformationMessage("Creating Blob Container...");
-                blobContainer = blobClient.GetContainerReference("enginetestblob" + Guid.NewGuid().ToString());
-                await blobContainer.CreateAsync();
-                messageContainer.AddInformationMessage("Blob Container " + blobContainer.Name + " created");
-
-                messageContainer.AddInformationMessage("Setting Blob Permissions...");
-                BlobContainerPermissions blobPermissions = new BlobContainerPermissions { PublicAccess = BlobContainerPublicAccessType.Blob };
-                await blobContainer.SetPermissionsAsync(blobPermissions);
-
                 String fullFile = filePath + fileName;
 
                 messageContainer.AddInformationMessage("Uploading file...");
@@ -96,7 +103,7 @@ namespace AzureEngine.AzureObjects
             SharedAccessBlobPolicy sasConstraints = new SharedAccessBlobPolicy
             {
                 SharedAccessExpiryTime = DateTime.UtcNow.AddHours(2),
-                Permissions = SharedAccessBlobPermissions.Read
+                Permissions = SharedAccessBlobPermissions.Read,
             };
 
             CloudBlockBlob blobBlock = blobContainer.GetBlockBlobReference(fileName);

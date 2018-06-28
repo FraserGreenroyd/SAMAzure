@@ -8,6 +8,10 @@ using Microsoft.Azure.Batch;
 using Microsoft.Azure.Batch.Auth;
 using Microsoft.Azure.Batch.Common;
 
+using Microsoft.Azure.Batch.Conventions.Files;
+
+using Microsoft.WindowsAzure.Storage.Blob;
+
 namespace AzureEngine.AzureObjects
 {
     public class AzureBatchClient
@@ -56,14 +60,45 @@ namespace AzureEngine.AzureObjects
             job = CreateJobIfNotExists(jobID, pool.Id);
         }
 
-        public void AddTask(String command = null, ResourceFile resourceFile = null)
+        public void AddTask(String command = null, List<ResourceFile> resourceFiles = null)
         {
             //if (resourceFile == null) throw new NullReferenceException("Please provide a valid resource file for this task to operate on");
             if (command == null) throw new NullReferenceException("Please provide a command for this task to run");
 
             CloudTask task = new CloudTask(Guid.NewGuid().ToString(), command);
-            if (resourceFile != null)
-                task.ResourceFiles = new List<ResourceFile> { resourceFile };
+            if (resourceFiles != null && resourceFiles.Count > 0)
+                task.ResourceFiles = resourceFiles;
+
+            String perm = blobStorage.Container.GetSharedAccessSignature(new SharedAccessBlobPolicy()
+            {
+                Permissions = SharedAccessBlobPermissions.Write,
+                SharedAccessExpiryTime = DateTimeOffset.UtcNow.AddDays(1)
+            });
+
+            String containerUrl = blobStorage.Container.Uri.AbsoluteUri + perm;
+
+            task.OutputFiles = new List<OutputFile> {
+                        new OutputFile( @"output.txt",
+                                            new OutputFileDestination(
+                                                new OutputFileBlobContainerDestination(containerUrl, task.Id + @"\output.txt")),
+                                            new OutputFileUploadOptions(OutputFileUploadCondition.TaskCompletion)),
+
+                        new OutputFile(
+                                filePattern: @"output.txt",
+                                destination: new OutputFileDestination(new OutputFileBlobContainerDestination(
+                                    containerUrl: containerUrl,
+                                    path: task.Id + @"\output.txt")),
+                                uploadOptions: new OutputFileUploadOptions(
+                                    uploadCondition: OutputFileUploadCondition.TaskCompletion)),
+
+            };
+
+            task.UserIdentity = new UserIdentity(
+                        new AutoUserSpecification(
+                            scope: AutoUserScope.Task,
+                            elevationLevel: ElevationLevel.Admin
+                        )
+                    );
 
             batchClient.JobOperations.AddTask(job.Id, task);
         }
@@ -73,7 +108,7 @@ namespace AzureEngine.AzureObjects
             messageContainer.AddInformationMessage("Configuring job...");
 
             CloudJob cJob = null;
-            try { cJob = batchClient.JobOperations.GetJob(jobID); } catch(Exception e) { messageContainer.AddErrorMessage("Who knows...", e.ToString()); }
+            try { cJob = batchClient.JobOperations.GetJob(jobID); } catch { }
 
             if(cJob == null)
             {
@@ -81,6 +116,7 @@ namespace AzureEngine.AzureObjects
                 cJob = batchClient.JobOperations.CreateJob();
                 cJob.Id = jobID;
                 cJob.PoolInformation = new PoolInformation { PoolId = poolID };
+                
                 cJob.Commit();
                 messageContainer.AddInformationMessage("Job created...");
             }
@@ -93,7 +129,7 @@ namespace AzureEngine.AzureObjects
         {
             messageContainer.AddInformationMessage("Configuring pool...");
             CloudPool cPool = null;
-            try { cPool = batchClient.PoolOperations.GetPool(poolID); } catch (Exception e) { messageContainer.AddErrorMessage("Who knows1...", e.ToString()); }
+            try { cPool = batchClient.PoolOperations.GetPool(poolID); } catch { }
 
             if (cPool == null)
             {
@@ -102,6 +138,12 @@ namespace AzureEngine.AzureObjects
 
                 messageContainer.AddInformationMessage("Creating pool...");
                 cPool = batchClient.PoolOperations.CreatePool(poolID, vmSize, vmConfig, computerNodes);
+                cPool.StartTask.UserIdentity = new UserIdentity(
+                        new AutoUserSpecification(
+                            scope: AutoUserScope.Pool,
+                            elevationLevel: ElevationLevel.Admin
+                        )
+                    );
                 cPool.Commit();
                 messageContainer.AddInformationMessage("Pool created...");
             }
@@ -142,7 +184,13 @@ namespace AzureEngine.AzureObjects
 
         public void MoveCompletedTaskResults()
         {
+            List<CloudTask> completedTasks = GetCompletedTasks();
 
+            foreach(CloudTask ct in completedTasks)
+            {
+                //NodeFile file = ct.GetNodeFile(ct.Id + @"\Output.txt");
+                //blobStorage.SendFile(file.Path, file.Name);
+            }
         }
 
         private List<CloudTask> GetCompletedTasks()

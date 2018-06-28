@@ -207,6 +207,7 @@ namespace AzureEngine.AzureObjects
 
         public void DeallocateVM()
         {
+            if (virtualMachine == null) return;
             virtualMachine.Deallocate();
         }
     }
