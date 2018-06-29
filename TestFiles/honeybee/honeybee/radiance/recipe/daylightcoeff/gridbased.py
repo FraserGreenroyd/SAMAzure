@@ -318,7 +318,8 @@ class DaylightCoeffGridBased(GenericGridBased):
             self.reuse_daylight_mtx, self.total_runs_count)
 
         self._result_files.extend(
-            os.path.join(project_folder, str(result)) for result in results
+            # os.path.join(project_folder, str(result)) for result in results
+            str(result) if project_folder in str(result) else os.path.join(project_folder, str(result)) for result in results
         )
 
         self._add_commands(skycommands, commands)

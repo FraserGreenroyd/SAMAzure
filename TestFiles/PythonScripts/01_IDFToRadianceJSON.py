@@ -1,6 +1,8 @@
 """
 Description:
-    Load an IDF file and generate the input/s for a Radiance simulation
+    Load an IDF file and generate the input/s for a Radiance simulation via Honeybee
+    To run enter the command:
+    python 01_IDFToRadianceJSON.py <path to IDF for modification> <path to config JSON file>
 Arguments:
     path [string]: JSON config file (and referenced IDF within that config file)
 Returns:
@@ -11,30 +13,30 @@ Annotations:
     TODO - Create ability to visualise surfaces and analsyis grids in context
     TODO - Add radiance parameters to the config.json to put into the generated recipes
     TODO - Add method interpreting results for SDA, DA, DF, UDI, UDILess, UDIMore
-    TODO - Check the fenestration surface normal is point teh right direction fro correct window angle for G value assignment
+    TODO - Check the fenestration surface normal is point teh right direction for correct window angle for G value assignment
 """
 
 # Load necessary packages
-import sys
-sys.path.insert(0, 'ladybug')
-sys.path.insert(0, 'honeybee')
-from honeybee.hbsurface import HBSurface
-from honeybee.hbfensurface import HBFenSurface
-from honeybee.radiance.analysisgrid import AnalysisGrid
-from honeybee.radiance.properties import RadianceProperties
-from honeybee.radiance.material.glass import Glass
-from honeybee.radiance.material.plastic import Plastic
-import matplotlib.patches as patches
-from honeybee.radiance.sky.skymatrix import SkyMatrix
-from honeybee.radiance.recipe.daylightfactor.gridbased import GridBased as GridBasedDF
-from honeybee.radiance.recipe.annual.gridbased import GridBased as GridBasedAnnual
 import os
-import eppy
 from eppy.modeleditor import IDF
 import json
 import numpy as np
 import platform
+import matplotlib.patches as patches
 from scipy.spatial import Delaunay
+import sys
+sys.path.insert(0, 'ladybug')
+sys.path.insert(0, 'honeybee')
+
+from honeybee.hbsurface import HBSurface
+# from honeybee.hbfensurface import HBFenSurface
+from honeybee.radiance.analysisgrid import AnalysisGrid
+from honeybee.radiance.material.glass import Glass
+from honeybee.radiance.material.plastic import Plastic
+from honeybee.radiance.properties import RadianceProperties
+# from honeybee.radiance.recipe.daylightfactor.gridbased import GridBased as GridBasedDF
+# from honeybee.radiance.recipe.annual.gridbased import GridBased as GridBasedAnnual
+from honeybee.radiance.sky.skymatrix import SkyMatrix
 
 
 def unit_vector(start, end):
@@ -155,44 +157,6 @@ def triangulate_3d_surfaces(parent_surface_vertices, child_surfaces_vertices):
     return np.array(triangulated_surface_vertices)
 
 
-def load_json(path):
-    """
-    Description:
-        Load a JSON file into a dictionary object
-    Arguments:
-        path [string]: The location of the JSON file being loaded
-    Returns:
-        dictionary [dict]: Dictionary containing contents of loaded JSON file
-    """
-    with open(path) as data_file:
-        return json.load(data_file)
-
-# Specify the config file to be referenced
-CONFIG = load_json("idf_config.json")
-print("\n{0:} loaded\n".format("idf_config.json"))
-
-# Load IDF ready for pre-processing and radaince case preparation
-IDF_FILE = CONFIG["source_idf"]
-if "win" in platform.platform().lower() and "dar" not in platform.platform().lower():
-    IDF.setiddname(CONFIG["idd_file_windows"])
-elif "linux" in platform.platform().lower():
-    IDF.setiddname(CONFIG["idd_file_linux"])
-elif "dar" in platform.platform().lower():
-    IDF.setiddname(CONFIG["idd_file_os"])
-
-EPW_FILE = CONFIG["weather_file"]
-print("{0:} loaded\n".format(CONFIG["weather_file"]))
-
-idf = IDF(IDF_FILE)
-print("{0:} loaded\n".format(IDF_FILE))
-
-# Set the "vector to north", so that wall orientation can be obtained
-north_angle_deg = idf.idfobjects["BUILDING"][0].North_Axis
-north_angle = np.radians(north_angle_deg)
-north_vector = (np.sin(north_angle), np.cos(north_angle), 0)
-print("North angle has been read as {0:}\n".format(north_angle))
-
-
 def unit_vector2(vector):
     """
     Description:
@@ -206,8 +170,8 @@ def unit_vector2(vector):
 
 
 def angle_between(vector_1, vector_2):
-    """ Returns the angle in radians between vectors 'vector_1' and 'vector_2'::
-
+    """
+    Returns the angle in radians between vectors 'vector_1' and 'vector_2'
             >>> angle_between((1, 0, 0), (0, 1, 0))
             1.5707963267948966
             >>> angle_between((1, 0, 0), (1, 0, 0))
@@ -232,6 +196,48 @@ def rotate(origin, point, angle):
     q_x = o_x + np.cos(angle) * (p_x - o_x) - np.sin(angle) * (p_y - o_y)
     q_y = o_y + np.sin(angle) * (p_x - o_x) + np.cos(angle) * (p_y - o_y)
     return q_x, q_y
+
+
+def load_json(path):
+    """
+    Description:
+        Load a JSON file into a dictionary object
+    Arguments:
+        path [string]: The location of the JSON file being loaded
+    Returns:
+        dictionary [dict]: Dictionary containing contents of loaded JSON file
+    """
+    with open(path) as data_file:
+        return json.load(data_file)
+
+IDF_FILEPATH = sys.argv[1]
+CONFIG_FILEPATH = sys.argv[2]
+
+# Load the setup configuration for this IDF modification
+with open(CONFIG_FILEPATH, "r") as f:
+    CONFIG = json.load(f)
+print("\nConfig loaded from {0:}\n".format(CONFIG_FILEPATH))
+
+# Load IDF ready for pre-processing and modification
+IDF_FILE = sys.argv[1]
+if "win" in platform.platform().lower() and "dar" not in platform.platform().lower():
+    IDF.setiddname(CONFIG["idd_file_windows"])
+elif "linux" in platform.platform().lower():
+    IDF.setiddname(CONFIG["idd_file_linux"])
+elif "dar" in platform.platform().lower():
+    IDF.setiddname(CONFIG["idd_file_os"])
+
+EPW_FILE = CONFIG["weather_file"]
+idf = IDF(IDF_FILE)
+
+print("IDF loaded from {0:}\n".format(IDF_FILEPATH))
+print("EPW loaded from {0:}\n".format(EPW_FILE))
+
+# Set the "vector to north", so that wall orientation can be obtained
+north_angle_deg = idf.idfobjects["BUILDING"][0].North_Axis
+north_angle = np.radians(north_angle_deg)
+north_vector = (np.sin(north_angle), np.cos(north_angle), 0)
+print("North angle has been read as {0:}\n".format(north_angle))
 
 # Define materials to be applied to surfaces
 glass_material_N = Glass(
@@ -268,10 +274,7 @@ glass_material_W = Glass(
 
 glass_material_interior = Glass(
     "GlassMaterialInternal",
-    r_transmittance=0.9,
-    g_transmittance=0.9,
-    b_transmittance=0.9,
-    refraction_index=1.52
+    r_transmittance=0.9, g_transmittance=0.9, b_transmittance=0.9, refraction_index=1.52
 )
 
 glass_material_skylight = Glass(
@@ -284,10 +287,7 @@ glass_material_skylight = Glass(
 
 air_wall_material = Glass(
     "AirWallMaterial",
-    r_transmittance=0,
-    g_transmittance=0,
-    b_transmittance=0,
-    refraction_index=1
+    r_transmittance=0, g_transmittance=0, b_transmittance=0, refraction_index=1
 )
 
 wall_material = Plastic(
@@ -295,8 +295,7 @@ wall_material = Plastic(
     r_reflectance=CONFIG["wall_reflectivity"],
     g_reflectance=CONFIG["wall_reflectivity"],
     b_reflectance=CONFIG["wall_reflectivity"],
-    specularity=0,
-    roughness=0
+    specularity=0, roughness=0
 )
 
 ceiling_material = Plastic(
@@ -304,8 +303,7 @@ ceiling_material = Plastic(
     r_reflectance=CONFIG["ceiling_reflectivity"],
     g_reflectance=CONFIG["ceiling_reflectivity"],
     b_reflectance=CONFIG["ceiling_reflectivity"],
-    specularity=0,
-    roughness=0
+    specularity=0, roughness=0
 )
 
 floor_material = Plastic(
@@ -313,16 +311,12 @@ floor_material = Plastic(
     r_reflectance=CONFIG["floor_reflectivity"],
     g_reflectance=CONFIG["floor_reflectivity"],
     b_reflectance=CONFIG["floor_reflectivity"],
-    specularity=0,
-    roughness=0
+    specularity=0, roughness=0
 )
 
-print("Materials defined from reflectivity and transmissivity in config file\n")
-
-print("Generating surfaces:")
+print("Materials defined from properties in {0:}\n".format(CONFIG_FILEPATH))
 
 FENESTRATION_SURFACES = []
-
 INTERIOR_WALL_SURFACES = []
 for wall_n, wall in enumerate([i for i in idf.idfobjects["BUILDINGSURFACE:DETAILED"] if i.Construction_Name == "Interior Wall"]):
     fen_coords = []
@@ -533,7 +527,7 @@ for context_n, context in enumerate([i for i in idf.idfobjects["SHADING:BUILDING
 
 print("{0:} shading surfaces generated".format(len(CONTEXT_SURFACES)))
 print("{0:} fenestration surfaces generated\n".format(len(FENESTRATION_SURFACES)))
-HB_OBJECTS = np.concatenate([EXTERIOR_WALL_SURFACES, INTERIOR_WALL_SURFACES, FLOOR_SURFACES, CEILING_SURFACES, CONTEXT_SURFACES, FENESTRATION_SURFACES]).tolist() # , AIRWALL_SURFACES
+HB_OBJECTS = np.concatenate([EXTERIOR_WALL_SURFACES, INTERIOR_WALL_SURFACES, FLOOR_SURFACES, CEILING_SURFACES, CONTEXT_SURFACES, FENESTRATION_SURFACES]).tolist()  # , AIRWALL_SURFACES
 
 # Define analysis grids for each zone for simulation in Radiance
 print("Generating analysis grids: ")
@@ -555,69 +549,66 @@ for floor_srf in [i for i in idf.idfobjects["BUILDINGSURFACE:DETAILED"] if ("Flo
     print("Analysis grid for {0:} generated ({1:} points)".format(floor_srf.Zone_Name, len(ANALYSIS_POINTS)))
 
 # Generate sky matrix for annual analysis
-print("\nGenerating sky matrix ...")
 SKY_MATRIX = SkyMatrix.from_epw_file(EPW_FILE, sky_density=2, north=north_angle_deg, hoys=range(0, 8760), mode=0, suffix="")
 print("Sky matrix ({0:}) generated\n".format(SKY_MATRIX))
 
-# Create output directory for HB radiance case files
-if not os.path.exists(CONFIG["output_directory"]):
-    os.makedirs(CONFIG["output_directory"])
-    os.makedirs("{0:}/analysis_grids".format(CONFIG["output_directory"]))
+# Generate an output directory to store the JSON recipe constituent parts
+OUTPUT_DIR = "HoneybeeRecipeJSONs"
+if not os.path.exists(OUTPUT_DIR):
+    os.makedirs(OUTPUT_DIR)
+    os.makedirs("{0:}/AnalysisGrids".format(OUTPUT_DIR))
 
 # Write the sky matrix for annual simulation to file
-SKY_MTX_PATH = "{0:}/sky_mtx.json".format(CONFIG["output_directory"])
+SKY_MTX_PATH = "{0:}/sky_mtx.json".format("HoneybeeRecipeJSONs")
 with open(SKY_MTX_PATH, "w") as f:
     json.dump({"sky_mtx": SKY_MATRIX.to_json()}, f)
-
 print("Sky matrix written to {0:}\n".format(SKY_MTX_PATH))
 
 for HB_ANALYSIS_GRID in HB_ANALYSIS_GRIDS:
-    ANALYSIS_GRID_PATH = "{0:}/analysis_grids/{1:}.json".format(CONFIG["output_directory"], HB_ANALYSIS_GRID.name)
+    ANALYSIS_GRID_PATH = "{0:}/AnalysisGrids/{1:}.json".format(OUTPUT_DIR, HB_ANALYSIS_GRID.name)
     with open(ANALYSIS_GRID_PATH, "w") as f:
         json.dump({"analysis_grids": [HB_ANALYSIS_GRID.to_json()]}, f)
-
-    print("Analysis grid for {0:} written to {1:}\n".format(HB_ANALYSIS_GRID.name, ANALYSIS_GRID_PATH))
+    print("Analysis grid for {0:} written to {1:}".format(HB_ANALYSIS_GRID.name, ANALYSIS_GRID_PATH))
 
 # Write the context geometry (surfaces) around the analysis grids
-SURFACES_PATH = "{0:}/surfaces.json".format(CONFIG["output_directory"])
+SURFACES_PATH = "{0:}/surfaces.json".format(OUTPUT_DIR)
 with open(SURFACES_PATH, "w") as f:
     f.write(repr({"surfaces": [i.to_json() for i in HB_OBJECTS]}).replace("'", '"').replace("(", '[').replace(")", ']'))
+print("\nSurfaces written to {0:}\n".format(SURFACES_PATH))
 
-print("Surfaces written to {0:}\n".format(SURFACES_PATH))
+# # print(HB_ANALYSIS_GRIDS[0].to_json())
 
-# print(HB_ANALYSIS_GRIDS[0].to_json())
+# # Create the analysis recipes for each IDF zone
+# # print("Generating analysis grids ...")
+# # for HB_ANALYSIS_GRID in HB_ANALYSIS_GRIDS:
 
-# Create the analysis recipes for each IDF zone
-# print("Generating analysis grids ...")
-# for HB_ANALYSIS_GRID in HB_ANALYSIS_GRIDS:
+# #     # Create a directory in which to save the DF recipe/s
+# #     DF_RECIPE_DIR = "{0:}/{1:}/daylight_factor".format(CONFIG["output_directory"], HB_ANALYSIS_GRID.name)
+# #     if not os.path.exists(DF_RECIPE_DIR):
+# #         os.makedirs(DF_RECIPE_DIR)
 
-#     # Create a directory in which to save the DF recipe/s
-#     DF_RECIPE_DIR = "{0:}/{1:}/daylight_factor".format(CONFIG["output_directory"], HB_ANALYSIS_GRID.name)
-#     if not os.path.exists(DF_RECIPE_DIR):
-#         os.makedirs(DF_RECIPE_DIR)
+# #     # Generate a DF recipe as JSON and save [WITHOUT CONTEXT GEOMETRY]
+# #     with open("{0:}/df_recipe.json".format(DF_RECIPE_DIR), "w") as f:
+# #         json.dump(GridBasedDF(analysis_grids=[HB_ANALYSIS_GRID], hb_objects=[]).to_json(), f)
+# #     print("{0:} daylight factor analysis grid written to {1:}/df_recipe.json\n".format(HB_ANALYSIS_GRID.name, DF_RECIPE_DIR))
 
-#     # Generate a DF recipe as JSON and save [WITHOUT CONTEXT GEOMETRY]
-#     with open("{0:}/df_recipe.json".format(DF_RECIPE_DIR), "w") as f:
-#         json.dump(GridBasedDF(analysis_grids=[HB_ANALYSIS_GRID], hb_objects=[]).to_json(), f)
-#     print("{0:} daylight factor analysis grid written to {1:}/df_recipe.json\n".format(HB_ANALYSIS_GRID.name, DF_RECIPE_DIR))
+# #     # Create a directory in which to save the Annual recipe/s
+# #     ANNUAL_RECIPE_DIR = "{0:}/{1:}/annual".format(CONFIG["output_directory"], HB_ANALYSIS_GRID.name)
+# #     if not os.path.exists(ANNUAL_RECIPE_DIR):
+# #         os.makedirs(ANNUAL_RECIPE_DIR)
 
-#     # Create a directory in which to save the Annual recipe/s
-#     ANNUAL_RECIPE_DIR = "{0:}/{1:}/annual".format(CONFIG["output_directory"], HB_ANALYSIS_GRID.name)
-#     if not os.path.exists(ANNUAL_RECIPE_DIR):
-#         os.makedirs(ANNUAL_RECIPE_DIR)
+# #     # Generate an ANNUAL recipe as JSON and save [WITHOUT CONTEXT GEOMETRY]
+# #     with open("{0:}/annual_recipe.json".format(ANNUAL_RECIPE_DIR), "w") as f:
+# #         # Remove sky matrix from the Annual recipe and assign to variable
+# #         json.dump(GridBasedAnnual(SKY_MATRIX, analysis_grids=[HB_ANALYSIS_GRID], hb_objects=[]).to_json(), f)
+# #     print("{0:} annual analysis grid written to {1:}/annual_recipe.json\n".format(HB_ANALYSIS_GRID.name, ANNUAL_RECIPE_DIR))
 
-#     # Generate an ANNUAL recipe as JSON and save [WITHOUT CONTEXT GEOMETRY]
-#     with open("{0:}/annual_recipe.json".format(ANNUAL_RECIPE_DIR), "w") as f:
-#         # Remove sky matrix from the Annual recipe and assign to variable
-#         json.dump(GridBasedAnnual(SKY_MATRIX, analysis_grids=[HB_ANALYSIS_GRID], hb_objects=[]).to_json(), f)
-#     print("{0:} annual analysis grid written to {1:}/annual_recipe.json\n".format(HB_ANALYSIS_GRID.name, ANNUAL_RECIPE_DIR))
+# # # Write the context geometry to a seperate file
+# # with open(CONFIG["output_directory"]+"/geometry.json", "w") as f:
+# #     f.write(repr({"surfaces": [i.to_json() for i in HB_OBJECTS]}).replace("'", '"').replace("(", '[').replace(")", ']'))
+# # print("Geometry written to {0:}\n".format(CONFIG["output_directory"]+"/geometry.json"))
 
-# # Write the context geometry to a seperate file
-# with open(CONFIG["output_directory"]+"/geometry.json", "w") as f:
-#     f.write(repr({"surfaces": [i.to_json() for i in HB_OBJECTS]}).replace("'", '"').replace("(", '[').replace(")", ']'))
-# print("Geometry written to {0:}\n".format(CONFIG["output_directory"]+"/geometry.json"))
-
-# # Write the sky matrix to a seperate file
-# with open(CONFIG["output_directory"]+"/sky_matrix.json", "w") as f:
-#     json.dump(sky_matrix_json, f)
-# print("Annual sky matrix written to {0:}\n".format(CONFIG["output_directory"]+"/sky_matrix.json"))
+# # # Write the sky matrix to a seperate file
+# # with open(CONFIG["output_directory"]+"/sky_matrix.json", "w") as f:
+# #     json.dump(sky_matrix_json, f)
+# # print("Annual sky matrix written to {0:}\n".format(CONFIG["output_directory"]+"/sky_matrix.json"))

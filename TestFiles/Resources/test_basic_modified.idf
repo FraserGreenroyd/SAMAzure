@@ -161,7 +161,7 @@ SCHEDULE:DAY:HOURLY,
     100,                      !- Hour 16
     100,                      !- Hour 17
     100,                      !- Hour 18
-    100,                      !- Hour 19
+    24,                       !- Hour 19
     24,                       !- Hour 20
     24,                       !- Hour 21
     24,                       !- Hour 22
@@ -261,23 +261,23 @@ SCHEDULE:DAY:HOURLY,
     0,                        !- Hour 4
     0,                        !- Hour 5
     0,                        !- Hour 6
-    0,                        !- Hour 7
-    0,                        !- Hour 8
-    0,                        !- Hour 9
-    0.75,                     !- Hour 10
+    0.25,                     !- Hour 7
+    0.25,                     !- Hour 8
+    1,                        !- Hour 9
+    1,                        !- Hour 10
     1,                        !- Hour 11
-    1,                        !- Hour 12
+    0.75,                     !- Hour 12
     0.75,                     !- Hour 13
-    0.75,                     !- Hour 14
+    1,                        !- Hour 14
     1,                        !- Hour 15
     1,                        !- Hour 16
-    1,                        !- Hour 17
-    0.75,                     !- Hour 18
-    0.75,                     !- Hour 19
-    0.75,                     !- Hour 20
-    0.75,                     !- Hour 21
-    0.5,                      !- Hour 22
-    0.5,                      !- Hour 23
+    0.5,                      !- Hour 17
+    0.25,                     !- Hour 18
+    0,                        !- Hour 19
+    0,                        !- Hour 20
+    0,                        !- Hour 21
+    0,                        !- Hour 22
+    0,                        !- Hour 23
     0;                        !- Hour 24
 
 SCHEDULE:DAY:HOURLY,
@@ -292,20 +292,20 @@ SCHEDULE:DAY:HOURLY,
     0,                        !- Hour 7
     0,                        !- Hour 8
     0,                        !- Hour 9
-    0.75,                     !- Hour 10
-    1,                        !- Hour 11
-    1,                        !- Hour 12
-    0.75,                     !- Hour 13
-    0.75,                     !- Hour 14
-    1,                        !- Hour 15
-    1,                        !- Hour 16
-    1,                        !- Hour 17
-    0.75,                     !- Hour 18
-    0.75,                     !- Hour 19
-    0.75,                     !- Hour 20
-    0.75,                     !- Hour 21
-    0.5,                      !- Hour 22
-    0.5,                      !- Hour 23
+    0,                        !- Hour 10
+    0,                        !- Hour 11
+    0,                        !- Hour 12
+    0,                        !- Hour 13
+    0,                        !- Hour 14
+    0,                        !- Hour 15
+    0,                        !- Hour 16
+    0,                        !- Hour 17
+    0,                        !- Hour 18
+    0,                        !- Hour 19
+    0,                        !- Hour 20
+    0,                        !- Hour 21
+    0,                        !- Hour 22
+    0,                        !- Hour 23
     0;                        !- Hour 24
 
 SCHEDULE:DAY:HOURLY,
@@ -318,8 +318,8 @@ SCHEDULE:DAY:HOURLY,
     0,                        !- Hour 5
     0,                        !- Hour 6
     0,                        !- Hour 7
-    0,                        !- Hour 8
-    0,                        !- Hour 9
+    1,                        !- Hour 8
+    1,                        !- Hour 9
     1,                        !- Hour 10
     1,                        !- Hour 11
     1,                        !- Hour 12
@@ -330,10 +330,10 @@ SCHEDULE:DAY:HOURLY,
     1,                        !- Hour 17
     1,                        !- Hour 18
     1,                        !- Hour 19
-    1,                        !- Hour 20
-    1,                        !- Hour 21
-    1,                        !- Hour 22
-    1,                        !- Hour 23
+    0,                        !- Hour 20
+    0,                        !- Hour 21
+    0,                        !- Hour 22
+    0,                        !- Hour 23
     0;                        !- Hour 24
 
 SCHEDULE:DAY:HOURLY,
@@ -348,32 +348,32 @@ SCHEDULE:DAY:HOURLY,
     0,                        !- Hour 7
     0,                        !- Hour 8
     0,                        !- Hour 9
-    1,                        !- Hour 10
-    1,                        !- Hour 11
-    1,                        !- Hour 12
-    1,                        !- Hour 13
-    1,                        !- Hour 14
-    1,                        !- Hour 15
-    1,                        !- Hour 16
-    1,                        !- Hour 17
-    1,                        !- Hour 18
-    1,                        !- Hour 19
-    1,                        !- Hour 20
-    1,                        !- Hour 21
-    1,                        !- Hour 22
-    1,                        !- Hour 23
+    0,                        !- Hour 10
+    0,                        !- Hour 11
+    0,                        !- Hour 12
+    0,                        !- Hour 13
+    0,                        !- Hour 14
+    0,                        !- Hour 15
+    0,                        !- Hour 16
+    0,                        !- Hour 17
+    0,                        !- Hour 18
+    0,                        !- Hour 19
+    0,                        !- Hour 20
+    0,                        !- Hour 21
+    0,                        !- Hour 22
+    0,                        !- Hour 23
     0;                        !- Hour 24
 
 SCHEDULE:DAY:HOURLY,
     EquipmentGainDayWeekday,    !- Name
     FractionLimits,           !- Schedule Type Limits Name
-    0.054,                    !- Hour 1
-    0.054,                    !- Hour 2
-    0.054,                    !- Hour 3
-    0.054,                    !- Hour 4
-    0.054,                    !- Hour 5
-    0.054,                    !- Hour 6
-    0.054,                    !- Hour 7
+    0,                        !- Hour 1
+    0,                        !- Hour 2
+    0,                        !- Hour 3
+    0,                        !- Hour 4
+    0,                        !- Hour 5
+    0,                        !- Hour 6
+    0,                        !- Hour 7
     1,                        !- Hour 8
     1,                        !- Hour 9
     1,                        !- Hour 10
@@ -387,38 +387,38 @@ SCHEDULE:DAY:HOURLY,
     1,                        !- Hour 18
     1,                        !- Hour 19
     1,                        !- Hour 20
-    0.054,                    !- Hour 21
-    0.054,                    !- Hour 22
-    0.054,                    !- Hour 23
-    0.054;                    !- Hour 24
+    0,                        !- Hour 21
+    0,                        !- Hour 22
+    0,                        !- Hour 23
+    0;                        !- Hour 24
 
 SCHEDULE:DAY:HOURLY,
     EquipmentGainDayWeekend,    !- Name
     FractionLimits,           !- Schedule Type Limits Name
-    0.054,                    !- Hour 1
-    0.054,                    !- Hour 2
-    0.054,                    !- Hour 3
-    0.054,                    !- Hour 4
-    0.054,                    !- Hour 5
-    0.054,                    !- Hour 6
-    0.054,                    !- Hour 7
-    1,                        !- Hour 8
-    1,                        !- Hour 9
-    1,                        !- Hour 10
-    1,                        !- Hour 11
-    1,                        !- Hour 12
-    1,                        !- Hour 13
-    1,                        !- Hour 14
-    1,                        !- Hour 15
-    1,                        !- Hour 16
-    1,                        !- Hour 17
-    1,                        !- Hour 18
-    1,                        !- Hour 19
-    1,                        !- Hour 20
-    0.054,                    !- Hour 21
-    0.054,                    !- Hour 22
-    0.054,                    !- Hour 23
-    0.054;                    !- Hour 24
+    0,                        !- Hour 1
+    0,                        !- Hour 2
+    0,                        !- Hour 3
+    0,                        !- Hour 4
+    0,                        !- Hour 5
+    0,                        !- Hour 6
+    0,                        !- Hour 7
+    0,                        !- Hour 8
+    0,                        !- Hour 9
+    0,                        !- Hour 10
+    0,                        !- Hour 11
+    0,                        !- Hour 12
+    0,                        !- Hour 13
+    0,                        !- Hour 14
+    0,                        !- Hour 15
+    0,                        !- Hour 16
+    0,                        !- Hour 17
+    0,                        !- Hour 18
+    0,                        !- Hour 19
+    0,                        !- Hour 20
+    0,                        !- Hour 21
+    0,                        !- Hour 22
+    0,                        !- Hour 23
+    0;                        !- Hour 24
 
 SCHEDULE:DAY:HOURLY,
     VentilationGainDayWeekday,    !- Name
@@ -2745,7 +2745,7 @@ PEOPLE,
     Area/Person,              !- Number of People Calculation Method
     ,                         !- Number of People
     ,                         !- People per Zone Floor Area
-    6.5,                      !- Zone Floor Area per Person
+    2,                        !- Zone Floor Area per Person
     0.3,                      !- Fraction Radiant
     0.576923076923,           !- Sensible Heat Fraction
     OccupantActivityLevelYear,    !- Activity Level Schedule Name
@@ -2779,7 +2779,7 @@ ELECTRICEQUIPMENT,
     EquipmentGainYear,        !- Schedule Name
     Watts/Area,               !- Design Level Calculation Method
     ,                         !- Design Level
-    42,                       !- Watts per Zone Floor Area
+    12,                       !- Watts per Zone Floor Area
     ,                         !- Watts per Person
     0.85,                     !- Fraction Latent
     0.15,                     !- Fraction Radiant

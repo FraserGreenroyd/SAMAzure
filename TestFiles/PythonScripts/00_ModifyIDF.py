@@ -1,6 +1,8 @@
 """
 Description:
     Load an IDF file and modify according to settings in a config file
+    To run enter the command:
+    python 00_ModifyIDF.py <path to IDF for modification> <path to config JSON file>
 Arguments:
     path [string]: JSON config file (and referenced zone_conditions_library within that config file)
 Returns:
@@ -29,14 +31,17 @@ def load_json(path):
     with open(path) as data_file:
         return json.load(data_file)
 
+
+IDF_FILEPATH = sys.argv[1]
+CONFIG_FILEPATH = sys.argv[2]
+
 # Load the setup configuration for this IDF modification
-# with open(sys.argv[1], "r") as f:
-#     CONFIG = json.load(f)
-with open("idf_config.json", "r") as f:
+with open(CONFIG_FILEPATH, "r") as f:
     CONFIG = json.load(f)
+print("\nConfig loaded from {0:}\n".format(CONFIG_FILEPATH))
 
 # Load IDF ready for pre-processing and modification
-IDF_FILE = CONFIG["source_idf"]
+IDF_FILE = sys.argv[1]
 if "win" in platform.platform().lower() and "dar" not in platform.platform().lower():
     IDF.setiddname(CONFIG["idd_file_windows"])
 elif "linux" in platform.platform().lower():
@@ -47,16 +52,17 @@ elif "dar" in platform.platform().lower():
 EPW_FILE = CONFIG["weather_file"]
 idf = IDF(IDF_FILE)
 
+print("IDF loaded from {0:}\n".format(IDF_FILEPATH))
+print("EPW loaded from {0:}\n".format(EPW_FILE))
+
 # Load the JSON file containing internal gains, schedules and setpoints
-ZONE_CONDITIONS = load_json(
-    CONFIG["zone_conditions_library"]
-)[CONFIG["zone_template"]]
+ZONE_CONDITIONS = load_json(CONFIG["zone_conditions_library"])[CONFIG["zone_template"]]
+print("Zone conditions set to {0:} and loaded from {1:}\n".format(CONFIG["zone_template"], CONFIG["zone_conditions_library"]))
 
 # Load the EPW file to get the location variables and store in the IDF object
 with open(EPW_FILE, "r") as f:
-    A, B, C, D, E, F, G, H, I, J = f.readlines()[0].replace(
-        "\n", ""
-    ).split(",")
+    A, B, C, D, E, F, G, H, I, J = f.readlines()[0].replace("\n", "").split(",")
+
 idf.idfobjects["SITE:LOCATION"] = []
 idf.newidfobject(
     "SITE:LOCATION",
@@ -66,6 +72,7 @@ idf.newidfobject(
     Time_Zone=float(I),
     Elevation=float(J)
 )
+print("SITE:LOCATION modified")
 
 # Set version number
 idf.idfobjects["VERSION"] = []
@@ -73,21 +80,27 @@ idf.newidfobject(
     "VERSION",
     Version_Identifier="8.8.0"
 )
+print("VERSION modified")
 
 # Remove Design Day sizing periods
 idf.idfobjects["SIZINGPERIOD:DESIGNDAY"] = []
+print("SIZINGPERIOD:DESIGNDAY removed")
 
 # Remove surface output (to save on simulation time and results size)
 idf.idfobjects["OUTPUT:SURFACES:LIST"] = []
+print("OUTPUT:SURFACES:LIST removed")
 
 # Remove table style output to save on results file size
 idf.idfobjects["OUTPUTCONTROL:TABLE:STYLE"] = []
+print("OUTPUTCONTROL:TABLE:STYLE removed")
 
 # Set/remove sizing parameters
 idf.idfobjects["SIZING:PARAMETERS"] = []
+print("SIZING:PARAMETERS removed")
 
 # Remove the HVAC objects provifing fresh air from outside
 idf.idfobjects["DESIGNSPECIFICATION:OUTDOORAIR"] = []
+print("DESIGNSPECIFICATION:OUTDOORAIR removed")
 
 # Set simulation to run only for annual period corresponding with weatherfile
 idf.idfobjects["SIMULATIONCONTROL"] = []
@@ -99,6 +112,7 @@ idf.newidfobject(
     Run_Simulation_for_Sizing_Periods="No",
     Run_Simulation_for_Weather_File_Run_Periods="Yes"
 )
+print("SIMULATIONCONTROL modified")
 
 # Set simulation run period (including start day of year)
 idf.idfobjects["RUNPERIOD"] = []
@@ -116,9 +130,11 @@ idf.newidfobject(
     Use_Weather_File_Rain_Indicators="Yes",
     Use_Weather_File_Snow_Indicators="Yes"
 )
+print("RUNPERIOD modified")
 
 # Remove output variable dictionary
 idf.idfobjects["OUTPUT:VARIABLEDICTIONARY"] = []
+print("OUTPUT:VARIABLEDICTIONARY removed")
 
 # Set general building parameters (including North angle)
 idf.idfobjects["BUILDING"] = []
@@ -131,6 +147,7 @@ idf.newidfobject(
     Maximum_Number_of_Warmup_Days=25,
     Minimum_Number_of_Warmup_Days=6
 )
+print("BUILDING modified")
 
 # Set number of timesteps per hour in simulation
 idf.idfobjects["TIMESTEP"] = []
@@ -138,6 +155,7 @@ idf.newidfobject(
     "TIMESTEP",
     Number_of_Timesteps_per_Hour=6
 )
+print("TIMESTEP modified")
 
 # Set shadow calculation method
 idf.idfobjects["SHADOWCALCULATION"] = []
@@ -147,6 +165,7 @@ idf.newidfobject(
     Calculation_Frequency=20,
     Maximum_Figures_in_Shadow_Overlap_Calculations=1000
 )
+print("SHADOWCALCULATION modified")
 
 # Set schedule type limits
 idf.idfobjects["SCHEDULETYPELIMITS"] = []
@@ -184,11 +203,13 @@ idf.newidfobject(
     Numeric_Type="Continuous",
     Unit_Type="Dimensionless"
 )
+print("SCHEDULETYPELIMITS modified")
 
 # Set daily profiles from the internal gains TEMPlates
 idf.idfobjects["SCHEDULE:DAY:INTERVAL"] = []
-idf.idfobjects["SCHEDULE:DAY:HOURLY"] = []
+print("SCHEDULE:DAY:INTERVAL removed")
 
+idf.idfobjects["SCHEDULE:DAY:HOURLY"] = []
 # Set a daily Always On profile
 TEMP = idf.newidfobject(
     "SCHEDULE:DAY:HOURLY",
@@ -342,9 +363,12 @@ for i in range(24):
     TEMP["Hour_{0:}".format(i + 1)] = ZONE_CONDITIONS[
         "occupant_sensible_gain_watts_per_person"
     ] + ZONE_CONDITIONS["occupant_latent_gain_watts_per_person"]
+print("SCHEDULE:DAY:HOURLY modified")
 
 # Remove the current Weekly profiles and replace with compact weekly profiles
 idf.idfobjects["SCHEDULE:WEEK:DAILY"] = []
+print("SCHEDULE:WEEK:DAILY removed")
+
 idf.idfobjects["SCHEDULE:WEEK:COMPACT"] = []
 idf.newidfobject(
     "SCHEDULE:WEEK:COMPACT",
@@ -412,6 +436,7 @@ idf.newidfobject(
     Name="AlwaysOnWeek",
     DayType_List_1="AllDays",
     ScheduleDay_Name_1="AlwaysOnDay")
+print("SCHEDULE:WEEK:COMPACT modified")
 
 # Set annual profiles
 idf.idfobjects["SCHEDULE:YEAR"] = []
@@ -513,6 +538,7 @@ idf.newidfobject(
     End_Month_1=12,
     End_Day_1=31
 )
+print("SCHEDULE:YEAR modified")
 
 # Set heating and cooling setpoints from profile loaded in TEMPlate JSON
 idf.idfobjects["HVACTEMPLATE:THERMOSTAT"] = []
@@ -524,6 +550,7 @@ idf.idfobjects["HVACTEMPLATE:THERMOSTAT"] = []
     Cooling_Setpoint_Schedule_Name="CoolingSetpointYear",
     Constant_Cooling_Setpoint=""
 ) for j in [i.Name for i in idf.idfobjects["ZONE"]]]
+print("HVACTEMPLATE:THERMOSTAT modified")
 
 # Set the people gains for all spaces
 idf.idfobjects["PEOPLE"] = []
@@ -545,6 +572,7 @@ idf.newidfobject(
     ),
     Activity_Level_Schedule_Name="OccupantActivityLevelYear"
 )
+print("PEOPLE modified")
 
 # Set the lighting gains for all spaces
 idf.idfobjects["LIGHTS"] = []
@@ -559,6 +587,7 @@ idf.newidfobject(
     Fraction_Visible=0.5,
     Lighting_Level=ZONE_CONDITIONS["design_illuminance_lux"]
 )
+print("LIGHTS modified")
 
 # Set the equipment gains for all spaces
 idf.idfobjects["ELECTRICEQUIPMENT"] = []
@@ -573,6 +602,7 @@ idf.newidfobject(
     Fraction_Latent=0.85,
     Fraction_Lost=0
 )
+print("ELECTRICEQUIPMENT modified")
 
 # Set infiltration rate for all zones
 idf.idfobjects["ZONEINFILTRATION:DESIGNFLOWRATE"] = []
@@ -584,6 +614,7 @@ idf.newidfobject(
     Design_Flow_Rate_Calculation_Method="Flow/Area",
     Flow_per_Zone_Floor_Area=ZONE_CONDITIONS["infiltration_m3_per_second_m2"]
 )
+print("ZONEINFILTRATION:DESIGNFLOWRATE modified")
 
 # Set ventilation rate for all zones
 # idf.idfobjects["ZONEVENTILATION:DESIGNFLOWRATE"] = []
@@ -597,6 +628,7 @@ idf.newidfobject(
 #         "ventilation_litres_per_second_per_person"
 #     ] * 0.001
 # )
+# print("ZONEVENTILATION:DESIGNFLOWRATE modified")
 
 # Set Ideal Loads Air System air supply based on internal TEMPlate
 idf.idfobjects["HVACTEMPLATE:ZONE:IDEALLOADSAIRSYSTEM"] = []
@@ -622,14 +654,21 @@ for i in idf.idfobjects["ZONE"]:
         Heat_Recovery_Type="None",
         Sensible_Heat_Recovery_Effectiveness=0.7,
         Latent_Heat_Recovery_Effectiveness=0.65)
+print("HVACTEMPLATE:ZONE:IDEALLOADSAIRSYSTEM modified")
 
 # Remove the existing window materials
 idf.idfobjects["WINDOWMATERIAL:GLAZING"] = []
+print("WINDOWMATERIAL:GLAZING removed")
+
 idf.idfobjects["WINDOWMATERIAL:GAS"] = []
+print("WINDOWMATERIAL:GAS removed")
 
 # Remove the existing materials
 idf.idfobjects["MATERIAL:AIRGAP"] = []
+print("MATERIAL:AIRGAP removed")
+
 idf.idfobjects["MATERIAL"] = []
+print("MATERIAL removed")
 
 # Create single layer window material for glazing transmittance/g-value
 idf.idfobjects["WINDOWMATERIAL:SIMPLEGLAZINGSYSTEM"] = []
@@ -681,6 +720,7 @@ idf.newidfobject(
     Solar_Heat_Gain_Coefficient=0.9,
     Visible_Transmittance=0.9
 )
+print("WINDOWMATERIAL:SIMPLEGLAZINGSYSTEM modified")
 
 # Create basic single layer materials with no mass for easy U-Value attribution
 idf.idfobjects["MATERIAL:NOMASS"] = []
@@ -743,6 +783,7 @@ idf.newidfobject(
     Solar_Absorptance=0.001,
     Visible_Absorptance=0.001
 )
+print("MATERIAL:NOMASS modified")
 
 idf.newidfobject(
     "MATERIAL",
@@ -756,6 +797,7 @@ idf.newidfobject(
     Solar_Absorptance=0.7,
     Visible_Absorptance=0.7
 )
+print("MATERIAL modified")
 
 # Set the constructions for the whole building
 idf.idfobjects["CONSTRUCTION"] = []
@@ -812,6 +854,7 @@ idf.newidfobject(
     Name="THERMAL MASS",
     Outside_Layer="THERMAL MASS MATERIAL"
 )
+print("CONSTRUCTION modified")
 
 # Get external surface areas for each zone and assign internal mass
 ZONE_WALL_AREA = []
@@ -834,11 +877,13 @@ for i, j in list(zip([str(i.Name) for i in idf.idfobjects["ZONE"]], ZONE_WALL_AR
         )
     else:
         pass
+print("INTERNALMASS modified")
 
-# Create a list zones to be referenced for passing the internal gains setpoitns
+# Create a list zones to be referenced for passing the internal gains setpoints
 TEMP = idf.newidfobject("ZONELIST", Name="AllZones")
 for i, j in enumerate([str(i.Name) for i in idf.idfobjects["ZONE"]]):
     TEMP["Zone_{0:}_Name".format(i + 1)] = j
+print("ZONELIST modified")
 
 # Output variables to report during simulation
 OUTPUT_VARIABLES = [
@@ -864,27 +909,28 @@ idf.idfobjects["OUTPUT:VARIABLE"] = []
         Reporting_Frequency="hourly"
     ) for i in OUTPUT_VARIABLES
 ]
+print("OUTPUT_VARIABLES modified")
 
-# Diagnostics/testing
-"""
-The following section adds a bunch of diagnostics toools that can be used for checking how well the simulation has run
-This includes:
-    A list of potential output variables possible from the completed/failed simulation
-    A list of the constructions in the completed/failed simulation - including U-values and thermal mass
-    An SQLite format output result from the completed/failed simulation - this is probably better than using ReadVarsESO, but needs some further work]
-    A detailed output diagnostics file indicatign any major issues in the completed/failed simulation
-"""
-# idf.idfobjects["OUTPUT:VARIABLEDICTIONARY"] = []
-# idf.newidfobject("OUTPUT:VARIABLEDICTIONARY", Key_Field="regular")
+# # Diagnostics/testing
+# """
+# The following section adds a bunch of diagnostics toools that can be used for checking how well the simulation has run
+# This includes:
+#     A list of potential output variables possible from the completed/failed simulation
+#     A list of the constructions in the completed/failed simulation - including U-values and thermal mass
+#     An SQLite format output result from the completed/failed simulation - this is probably better than using ReadVarsESO, but needs some further work]
+#     A detailed output diagnostics file indicatign any major issues in the completed/failed simulation
+# """
+# # idf.idfobjects["OUTPUT:VARIABLEDICTIONARY"] = []
+# # idf.newidfobject("OUTPUT:VARIABLEDICTIONARY", Key_Field="regular")
 
-# idf.idfobjects["OUTPUT:CONSTRUCTIONS"] = []
-# idf.newidfobject("OUTPUT:CONSTRUCTIONS", Details_Type_1="Constructions")
+# # idf.idfobjects["OUTPUT:CONSTRUCTIONS"] = []
+# # idf.newidfobject("OUTPUT:CONSTRUCTIONS", Details_Type_1="Constructions")
 
-# idf.idfobjects["OUTPUT:SQLITE"] = []
-# idf.newidfobject("OUTPUT:SQLITE", Option_Type="Simple")
+# # idf.idfobjects["OUTPUT:SQLITE"] = []
+# # idf.newidfobject("OUTPUT:SQLITE", Option_Type="Simple")
 
-# idf.idfobjects["OUTPUT:DIAGNOSTICS"] = []
-# idf.newidfobject("OUTPUT:DIAGNOSTICS", Key_1="DisplayExtraWarnings", Key_2="DisplayUnusedSchedules")
+# # idf.idfobjects["OUTPUT:DIAGNOSTICS"] = []
+# # idf.newidfobject("OUTPUT:DIAGNOSTICS", Key_1="DisplayExtraWarnings", Key_2="DisplayUnusedSchedules")
 
 # Save the idf to a new file
-idf.saveas(CONFIG["target_idf"])
+idf.saveas(IDF_FILEPATH.replace(".idf", "_modified.idf"))

@@ -176,6 +176,7 @@ class AnalysisGrid(object):
 
     def add_result_files(self, file_path, hoys, start_line=None, is_direct=False,
                          header=True, mode=0):
+        print("XXXXXXXXXX" + str(file_path))
         """Add new result files to grid.
 
         Use this methods if you want to get annual metrics without loading the values
