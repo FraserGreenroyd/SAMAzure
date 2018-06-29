@@ -12,6 +12,8 @@ using Microsoft.Azure.Batch.Conventions.Files;
 
 using Microsoft.WindowsAzure.Storage.Blob;
 
+using AzureEngine.Utilities;
+
 namespace AzureEngine.AzureObjects
 {
     public class AzureBatchClient
@@ -30,7 +32,6 @@ namespace AzureEngine.AzureObjects
         //Pool, Job, and Task data
         CloudPool pool = null;
         CloudJob job = null;
-        List<CloudTask> tasks = null;
 
         public AzureBatchClient(String accountName = null, String accountKey = null, String accountURL = null, BlobStorage storage = null, String poolID = null, String jobID = null, int poolNodeCount = 2, String poolVMSize = null, SystemMessageContainer container = null)
         {
@@ -44,8 +45,8 @@ namespace AzureEngine.AzureObjects
             batchAccountURL = accountURL;
             blobStorage = storage;
 
-            poolID = (poolID == null ? "azureAutoEngine_BatchPool" : poolID);
-            jobID = (jobID == null ? "azureAutoEngine_BatchJob" : jobID);
+            poolID = (poolID == null ? AzureConnectionUtility.BuildProjectNameReference() + "-pool" : poolID);
+            jobID = (jobID == null ? AzureConnectionUtility.BuildProjectNameReference() + "-job" : jobID);
             poolVMSize = (poolVMSize == null ? "Basic_A1" : poolVMSize);
 
             messageContainer = (container == null ? new SystemMessageContainer() : container);
@@ -138,12 +139,15 @@ namespace AzureEngine.AzureObjects
 
                 messageContainer.AddInformationMessage("Creating pool...");
                 cPool = batchClient.PoolOperations.CreatePool(poolID, vmSize, vmConfig, computerNodes);
+               /* if(cPool.StartTask == null)
+                    cPool.StartTask = new StartTask();
+
                 cPool.StartTask.UserIdentity = new UserIdentity(
                         new AutoUserSpecification(
                             scope: AutoUserScope.Pool,
                             elevationLevel: ElevationLevel.Admin
                         )
-                    );
+                    );*/
                 cPool.Commit();
                 messageContainer.AddInformationMessage("Pool created...");
             }
@@ -176,7 +180,7 @@ namespace AzureEngine.AzureObjects
 
         public bool AwaitTaskCompletion()
         {
-            TimeSpan timeout = TimeSpan.FromMinutes(5);
+            TimeSpan timeout = TimeSpan.FromMinutes(30);
             batchClient.Utilities.CreateTaskStateMonitor().WaitAll(batchClient.JobOperations.ListTasks(job.Id), TaskState.Completed, timeout);
 
             return true;
@@ -196,6 +200,15 @@ namespace AzureEngine.AzureObjects
         private List<CloudTask> GetCompletedTasks()
         {
             return batchClient.JobOperations.ListTasks(job.Id).ToList();
+        }
+
+        public void InstallEnergyPlus(String epCommand)
+        {
+            //Run the automatic script for installing EnergyPlus on the machine
+            messageContainer.AddInformationMessage("Starting installation of EnergyPlus on batch " + batchClient.ToString() + "...");
+            AddTask(epCommand);
+            if (AwaitTaskCompletion())
+                messageContainer.AddInformationMessage("EnergyPlus successfully installed...");
         }
     }
 }

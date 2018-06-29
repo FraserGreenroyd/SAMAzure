@@ -21,15 +21,16 @@ namespace AzureEngine
             systemMessages = new SystemMessageContainer();
             systemMessages.MessagesUpdated += SystemMessages_MessagesUpdated;
 
-            AzureEngine ae = new AzureEngine(systemMessages);
+            /*AzureEngine ae = new AzureEngine(systemMessages);
             ae.CreateAzureConnection(@"C:\Users\fgreenro\Documents\Repo Code\SAM\AzureEngine\AzureEngine\azureauth.properties", "azureAutoTest", "West Europe");
             ae.CreateBlobStorage(@"DefaultEndpointsProtocol=https;AccountName=azureenginetest123;AccountKey=CHR1QTB2tqY21biqzn+UKSn3yNqmSWFAT2lZK9eJ1vGnP9Q6tvafRZgOlbTOu6lgqW+0OBxf5wPxPq8XWRAtTg==;EndpointSuffix=core.windows.net", "azurebatchtestfgtg123");
             ae.CreateBatchClient("enginebatchtest123", @"xTQl3xJIJ/D6mZDoEysL0R3q9ko1y0vX6awmQzrPmyZcP7xJT/OioXGvqMpRF6736OxYSE+B/aJ/moOf+WXIlQ==", "https://enginebatchtest123.westeurope.batch.azure.com", "azureBatchPoolTest", "azureBatchJobTest", 2, "Basic_A1");
 
             //Send the ep install script, IDF file and Weather file
-            ae.SendFile(@"C:\Users\fgreenro\Documents\Repo Code\Test Files & Scripts\", "ep.sh");
-            ae.SendFile(@"C:\Users\fgreenro\Documents\Repo Code\Test Files & Scripts\", "ep.epw");
-            ae.SendFile(@"C:\Users\fgreenro\Documents\Repo Code\Test Files & Scripts\", "ep2.idf");
+            //ae.SendFile(@"C:\Users\fgreenro\Documents\Repo Code\Test Files & Scripts\", "ep.sh");
+            //ae.SendFile(@"C:\Users\fgreenro\Documents\Repo Code\Test Files & Scripts\", "ep.epw");
+            //ae.SendFile(@"C:\Users\fgreenro\Documents\Repo Code\Test Files & Scripts\", "ep2.idf");
+            ae.InstallEnergyPlus(@"C:\Users\fgreenro\Documents\Repo Code\Test Files & Scripts\ep.sh");
 
             //Create a task to run the sh file...
             Console.WriteLine("Wait for file upload - press k when ready to continue");
@@ -79,7 +80,7 @@ namespace AzureEngine
             ae.DeleteBlob().GetAwaiter().GetResult();*/
 
             //ae.SpinUpVM();
-            Console.WriteLine("Press D to delete the VM and associated resources");
+            /*Console.WriteLine("Press D to delete the VM and associated resources");
             if (Console.ReadLine().ToUpper() == "D")
             {
                 ae.DeallocateVM();
@@ -90,7 +91,7 @@ namespace AzureEngine
                 Console.WriteLine("Powering down VM...");
                 ae.SwitchOff();
                 ae.DeleteBlobStorage();
-            }
+            }*/
 
             Console.WriteLine("Press any key to exit...");
             Console.ReadLine();

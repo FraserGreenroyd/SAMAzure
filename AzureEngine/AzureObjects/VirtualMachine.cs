@@ -8,6 +8,8 @@ using Microsoft.Azure.Management.Compute.Fluent;
 using Microsoft.Azure.Management.Compute.Fluent.Models;
 using Microsoft.Azure.Management.Network.Fluent;
 
+using AzureEngine.Utilities;
+
 namespace AzureEngine.AzureObjects
 {
     public class VirtualMachine
@@ -30,8 +32,8 @@ namespace AzureEngine.AzureObjects
 
         public void CreateVM()
         {
-            String region = azureConnection.Region;
-            String resourceGroup = azureConnection.ResourceGroup;
+            String region = AzureConnectionUtility.Region;
+            String resourceGroup = AzureConnectionUtility.ResourceGroup;
 
             IAvailabilitySet availabilitySet = CreateAvailabilitySetIfNotExists();
             IPublicIPAddress publicIPAddress = CreateIPIfNotExists();
@@ -40,14 +42,14 @@ namespace AzureEngine.AzureObjects
             
             messageContainer.AddInformationMessage("Configuring virtual machine...");
             String machineName = "azureAutoEngine_VM";
-            virtualMachine = azureConnection.AzureLink.VirtualMachines.GetByResourceGroup(azureConnection.ResourceGroup, machineName);
+            virtualMachine = azureConnection.AzureLink.VirtualMachines.GetByResourceGroup(AzureConnectionUtility.ResourceGroup, machineName);
 
             if(virtualMachine == null)
             {
                 messageContainer.AddInformationMessage("Creating virtual machine...");
                 virtualMachine = azureConnection.AzureLink.VirtualMachines.Define(machineName)
-                                            .WithRegion(azureConnection.Region)
-                                            .WithExistingResourceGroup(azureConnection.ResourceGroup)
+                                            .WithRegion(AzureConnectionUtility.Region)
+                                            .WithExistingResourceGroup(AzureConnectionUtility.ResourceGroup)
                                             .WithExistingPrimaryNetworkInterface(networkInterface)
                                             .WithLatestLinuxImage("credativ", "Debian", "8")
                                             .WithRootUsername("azureUser")
@@ -70,15 +72,15 @@ namespace AzureEngine.AzureObjects
             messageContainer.AddInformationMessage("Configuring availability set...");
 
             String setName = "azureAutoEngine_AvailabilitySet";
-            IAvailabilitySet availabilitySet = azureConnection.AzureLink.AvailabilitySets.GetByResourceGroup(azureConnection.ResourceGroup, setName);
+            IAvailabilitySet availabilitySet = azureConnection.AzureLink.AvailabilitySets.GetByResourceGroup(AzureConnectionUtility.ResourceGroup, setName);
 
             if (availabilitySet == null)
             {
                 messageContainer.AddInformationMessage("Creating availability set...");
 
                 availabilitySet = azureConnection.AzureLink.AvailabilitySets.Define(setName)
-                                            .WithRegion(azureConnection.Region)
-                                            .WithExistingResourceGroup(azureConnection.ResourceGroup)
+                                            .WithRegion(AzureConnectionUtility.Region)
+                                            .WithExistingResourceGroup(AzureConnectionUtility.ResourceGroup)
                                             .WithSku(AvailabilitySetSkuTypes.Managed)
                                             .Create();
 
@@ -95,14 +97,14 @@ namespace AzureEngine.AzureObjects
             messageContainer.AddInformationMessage("Configuring IP...");
 
             String ipName = "azureAutoEngine_IPAddress";
-            IPublicIPAddress publicIPAddress = azureConnection.AzureLink.PublicIPAddresses.GetByResourceGroup(azureConnection.ResourceGroup, ipName);
+            IPublicIPAddress publicIPAddress = azureConnection.AzureLink.PublicIPAddresses.GetByResourceGroup(AzureConnectionUtility.ResourceGroup, ipName);
 
             if(publicIPAddress == null)
             {
                 messageContainer.AddInformationMessage("Creating public IP...");
                 publicIPAddress = azureConnection.AzureLink.PublicIPAddresses.Define(ipName)
-                                            .WithRegion(azureConnection.Region)
-                                            .WithExistingResourceGroup(azureConnection.ResourceGroup)
+                                            .WithRegion(AzureConnectionUtility.Region)
+                                            .WithExistingResourceGroup(AzureConnectionUtility.ResourceGroup)
                                             .WithDynamicIP()
                                             .Create();
 
@@ -119,14 +121,14 @@ namespace AzureEngine.AzureObjects
             messageContainer.AddInformationMessage("Configuring virtual network...");
 
             String networkName = "azureAutoEngine_Network";
-            INetwork network = azureConnection.AzureLink.Networks.GetByResourceGroup(azureConnection.ResourceGroup, networkName);
+            INetwork network = azureConnection.AzureLink.Networks.GetByResourceGroup(AzureConnectionUtility.ResourceGroup, networkName);
 
             if(network == null)
             {
                 messageContainer.AddInformationMessage("Creating virtual network...");
                 network = azureConnection.AzureLink.Networks.Define(networkName)
-                                            .WithRegion(azureConnection.Region)
-                                            .WithExistingResourceGroup(azureConnection.ResourceGroup)
+                                            .WithRegion(AzureConnectionUtility.Region)
+                                            .WithExistingResourceGroup(AzureConnectionUtility.ResourceGroup)
                                             .WithAddressSpace("10.0.0.0/16")
                                             .WithSubnet("azureAutoEngine_Subnet", "10.0.0.0/24")
                                             .Create();
@@ -144,14 +146,14 @@ namespace AzureEngine.AzureObjects
             messageContainer.AddInformationMessage("Configuring network interface...");
 
             String interfaceName = "azureAutoEngine_NetworkInterface";
-            INetworkInterface networkInterface = azureConnection.AzureLink.NetworkInterfaces.GetByResourceGroup(azureConnection.ResourceGroup, interfaceName);
+            INetworkInterface networkInterface = azureConnection.AzureLink.NetworkInterfaces.GetByResourceGroup(AzureConnectionUtility.ResourceGroup, interfaceName);
 
             if(networkInterface == null)
             {
                 messageContainer.AddInformationMessage("Creating network interface...");
                 networkInterface = azureConnection.AzureLink.NetworkInterfaces.Define("azureAutoEngine_NetworkInterface")
-                                            .WithRegion(azureConnection.Region)
-                                            .WithExistingResourceGroup(azureConnection.ResourceGroup)
+                                            .WithRegion(AzureConnectionUtility.Region)
+                                            .WithExistingResourceGroup(AzureConnectionUtility.ResourceGroup)
                                             .WithExistingPrimaryNetwork(network)
                                             .WithSubnet("azureAutoEngine_Subnet")
                                             .WithPrimaryPrivateIPAddressDynamic()
