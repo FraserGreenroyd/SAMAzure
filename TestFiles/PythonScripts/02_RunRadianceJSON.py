@@ -49,7 +49,8 @@ SURFACES = load_json(SURFACES_PATH)
 print("Surfaces (context geometry) loaded from {0:}\n".format(SURFACES_PATH))
 
 ANALYSIS_GRID = load_json(ANALYSIS_GRID_PATH)
-print("Analysis grid loaded from {0:}\n".format(ANALYSIS_GRID_PATH))
+ZONE_NAME = ANALYSIS_GRID["analysis_grids"][0]["name"]
+print("Analysis grid for {0:} loaded from {1:}\n".format(ZONE_NAME, ANALYSIS_GRID_PATH))
 
 # Define configurations for the Annual and DF simulations
 ANNUAL_CONFIG = {
@@ -75,102 +76,84 @@ DF_CONFIG = {
 DF_RECIPE_JSON = {k: v for d in [DF_CONFIG, ANALYSIS_GRID, SURFACES] for k, v in d.items()}
 ANNUAL_RECIPE_JSON = {k: v for d in [ANNUAL_CONFIG, ANALYSIS_GRID, SURFACES, SKY_MTX] for k, v in d.items()}
 
-# Create recipe from JSON origin string
+# Create Daylight Factor recipe from JSON origin string
 DF_RECIPE = GridBasedDF.from_json(DF_RECIPE_JSON)
 print("Daylight Factor recipe prepared\n")
 
-ANNUAL_RECIPE = GridBasedAnnual.from_json(ANNUAL_RECIPE_JSON)
-print("Annual recipe prepared\n")
-
-# Generate bat and sh files
+# Generate Daylight Factor bat and sh files
 DF_BAT_FILE = DF_RECIPE.write("HoneybeeRecipeJSONs", str(DF_RECIPE.analysis_grids[0].name))
 DF_SHELL_FILE = bat_to_sh(DF_BAT_FILE)
 print("Daylight Factor recipe converted to Radiance case\n")
 
-ANNUAL_BAT_FILE = ANNUAL_RECIPE.write("HoneybeeRecipeJSONs", str(ANNUAL_RECIPE.analysis_grids[0].name))
-ANNUAL_SHELL_FILE = bat_to_sh(ANNUAL_BAT_FILE)
-print("Annual recipe converted to Radiance case\n")
-
-
+# Run the Daylight Factor calculation
 print("Running Daylight Factor simulation...\n")
 if os.name == 'nt':
     DF_RECIPE.run(DF_BAT_FILE)
 else:
     DF_RECIPE.run(DF_SHELL_FILE)
-print("Daylight Factor simulation complete\n")
-
-print("Running Annual simulation...\n")
-if os.name == 'nt':
-    ANNUAL_RECIPE.run(ANNUAL_BAT_FILE)
-else:
-    ANNUAL_RECIPE.run(ANNUAL_SHELL_FILE)
-print("Annual simulation complete\n")
-
-# Post process the results and prepare a single results file for the zone analysed
+print("Daylight Factor simulation complete!\n")
 
 # Get the X, Y, Z coordinates for the analysis points
-x, y, z = list(zip(*[i["location"] for i in DF_RECIPE.results()[0].to_json()["analysis_points"]]))
+X, Y, Z = list(zip(*[i["location"] for i in DF_RECIPE.results()[0].to_json()["analysis_points"]]))
 
 # Get the Daylight Factor values corresponding with the analysis points
-df = [point["values"][0][0][6324][0] for point in DF_RECIPE.results()[0].to_json()["analysis_points"]]
+DF = [point["values"][0][0][6324][0] for point in DF_RECIPE.results()[0].to_json()["analysis_points"]]
 
-# Get the annual metrics from the annual results
-OCCUPANCY_SCHEDULE = Schedule.from_workday_hours(occ_hours=(8, 17), off_hours=(12, 13), weekend=(6, 7), default_value=1)
+################################################
+################################################
+# # THIS IS A TEMPORARY SECTION TO CHECK DF RESULTS
+RESULTS = {
+    "ZONE": ZONE_NAME,
+    "X": X,
+    "Y": Y,
+    "Z": Z,
+    "DF": DF
+}
+with open("{0:}/{1:}_results.json".format("HoneybeeRecipeJSONs", str(DF_RECIPE.analysis_grids[0].name)), "w") as f:
+    json.dump(RESULTS, f)
+print("Temporary results written to {0:}_results.json".format(os.path.abspath(str(DF_RECIPE.analysis_grids[0].name)+".json")))
+################################################
+################################################
 
-grid = ANNUAL_RECIPE.results()[0]
-da, cda, udi, udiless, udimore = grid.annual_metrics(300, (100, 2000), None, OCCUPANCY_SCHEDULE)
+# # Create Annual recipe from JSON origin string
+# ANNUAL_RECIPE = GridBasedAnnual.from_json(ANNUAL_RECIPE_JSON)
+# print("Annual recipe prepared\n")
 
-print("X")
-print(x)
-print("Y")
-print(y)
-print("Z")
-print(z)
-print("DaylightFactor")
-print(df)
-print("DaylightAutuonmy > 300lux")
-print(da)
-print("ContinuousDaylightAutuonmy > 300lux")
-print(cda)
-print("UsefulDaylight Iluumincnace < 100lux")
-print(udiless)
-print("UsefulDaylight Iluumincnace > 100lux && < 2000lux")
-print(udi)
-print("UsefulDaylight Iluumincnace > 2000lux")
-print(udimore)
+# # Generate Annual bat and sh files
+# ANNUAL_BAT_FILE = ANNUAL_RECIPE.write("HoneybeeRecipeJSONs", str(ANNUAL_RECIPE.analysis_grids[0].name))
+# ANNUAL_SHELL_FILE = bat_to_sh(ANNUAL_BAT_FILE)
+# print("Annual recipe converted to Radiance case\n")
 
-# # Load the recipe
-# ZONE = "CM2_S_Outer"
-# RECIPE_PATH = "TESTTESTTEST/zone2/daylight_factor/recipe.json"
-# RECIPE = load_json(RECIPE_PATH)
-
-# # Load the geometry
-# GEOMETRY_PATH = "TESTTESTTEST/geometry.json"
-# GEOMETRY = load_json(GEOMETRY_PATH)["surfaces"]
-
-# # Update recipe to include geometry
-# RECIPE["surfaces"] = GEOMETRY
-
-# # Generate the Radiance case from the reconstituted recipe
-# RECIPE = GridBasedDF.from_json(RECIPE)
-
-# # Generate bat file
-# BAT_FILE = RECIPE.write("TESTTESTTEST", "DF_TEMP")
-# # Convert bat to sh
-# SHELL_FILE = bat_to_sh(BAT_FILE)
-
-# # Fix the -dr issue
-# for file in [SHELL_FILE, BAT_FILE]:
-#     with open(file, "r") as f:
-#         dr_fix = re.sub("-dr (.*?) -", "-dr 3 -", f.read())
-#     with open(file, "w") as f:
-#         f.write(dr_fix)
-
-# # Run the case using command prompts generated by Honeybee
+# # Run the Daylight Factor calculation
+# print("Running Annual simulation...\n")
 # if os.name == 'nt':
-#     success = RECIPE.run(BAT_FILE)
+#     ANNUAL_RECIPE.run(ANNUAL_BAT_FILE)
 # else:
-#     success = RECIPE.run(SHELL_FILE)
-# # Process the results to give actual bona-fide analysis data as JSON outputs for ease of processing later on!
+#     ANNUAL_RECIPE.run(ANNUAL_SHELL_FILE)
+# print("Annual simulation complete!\n")
 
-# # Update from teh Testing notebook for radiance file! - reconstituting from the various recipe parts
+# # Generate an occupancy schedule for the annual metrics calculation
+# OCCUPANCY_SCHEDULE = Schedule.from_workday_hours(occ_hours=(8, 17), off_hours=(12, 13), weekend=(6, 7), default_value=1)
+
+# # Get the annual metrics from the annual simulation
+# DA, CDA, UDI, UDI_LESS, UDI_MORE = ANNUAL_RECIPE.results()[0].annual_metrics(300, (100, 2000), None, OCCUPANCY_SCHEDULE)
+# print("Daylight autonomy metrics calculated\n")
+
+# # Write the results to a single JSON file
+# RESULTS = {
+#     "ZONE": ZONE_NAME,
+#     "X": X,
+#     "Y": Y,
+#     "Z": Z,
+#     "DF": DF,
+#     "DA": DA,
+#     "CDA": CDA,
+#     "UDI_LESS": UDI_LESS,
+#     "UDI": UDI,
+#     "UDI_MORE": UDI_MORE,
+# }
+
+# # Write results to single summary file
+# with open("{0:}_results.json".format(ZONE_NAME), "w") as f:
+#     json.dump(RESULTS, f)
+# print("Results written to {0:}_results.json".format(str(ANNUAL_RECIPE.analysis_grids[0].name)))
