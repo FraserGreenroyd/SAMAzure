@@ -2,7 +2,7 @@
 Description:
     Load an IDF file and generate the input/s for a Radiance simulation via Honeybee
     To run enter the command:
-    python 01_IDFToRadianceJSON.py <path to IDF for modification> <path to config JSON file>
+    python 01_IDFToRadianceJSON.py <path to IDF to run> <path to config JSON file>
 Arguments:
     path [string]: JSON config file (and referenced IDF within that config file)
 Returns:
