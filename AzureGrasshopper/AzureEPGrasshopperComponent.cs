@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace AzureGrasshopper
 {
-    public class AzureGrasshopperComponent : GH_Component
+    public class AzureEPGrasshopperComponent : GH_Component
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public 
@@ -25,8 +25,8 @@ namespace AzureGrasshopper
         /// Subcategory the panel. If you use non-existing tab or panel names, 
         /// new tabs/panels will automatically be created.
         /// </summary>
-        public AzureGrasshopperComponent()
-          : base("AzureGrasshopper", "SAPAzure_EP",
+        public AzureEPGrasshopperComponent()
+          : base("AzureEPGrasshopper", "SAPAzure_EP",
               "Run EnergyPlus simulations on Azure",
               "SAP", "Azure")
         {
@@ -98,6 +98,11 @@ namespace AzureGrasshopper
             aEngine.CreateBatchClients(idfFiles.Count);
 
             aEngine.InstallEnergyPlus();
+
+            while(!aEngine.TrueWhenTasksComplete())
+            {
+                //Wait until the install is complete...
+            }
 
             aEngine.UploadFile(epwFile);
             aEngine.UploadFiles(idfFiles);

@@ -202,13 +202,24 @@ namespace AzureEngine.AzureObjects
             return batchClient.JobOperations.ListTasks(job.Id).ToList();
         }
 
-        public void InstallEnergyPlus(String epCommand)
+        public void InstallEnergyPlus(ResourceFile epInstallFile)
         {
             //Run the automatic script for installing EnergyPlus on the machine
             messageContainer.AddInformationMessage("Starting installation of EnergyPlus on batch " + batchClient.ToString() + "...");
-            AddTask(epCommand);
+            AddTask("sudo /bin/sh -c ./epInstall.sh", new List<ResourceFile> { epInstallFile });
             if (AwaitTaskCompletion())
                 messageContainer.AddInformationMessage("EnergyPlus successfully installed...");
+        }
+
+        public void InstallRadiance(ResourceFile rdZip, ResourceFile rdInstallFile)
+        {
+            messageContainer.AddInformationMessage("Starting installation of Radiance on batch " + batchClient.ToString() + "...");
+            //AddTask("sudo /bin/sh -c ./radInstall.sh", new List<ResourceFile> { rdZip, rdInstallFile });
+            AddTask("sudo apt-get -y install radiance");
+            AddTask("sudo apt-get install unzip");
+
+            if (AwaitTaskCompletion())
+                messageContainer.AddInformationMessage("Radiance successfully installed...");
         }
     }
 }

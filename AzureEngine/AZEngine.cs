@@ -19,6 +19,7 @@ namespace AzureEngine
         private AzureConnection azureConnection = null;
         private VirtualMachine virtualMachineContainer = null;
         private BlobStorage blobContainer = null;
+        private BlobStorage masterBlobContainer = null;
         private List<AzureBatchClient> batchContainer = null;
 
         public AZEngine(String projectNumber, String projectName, String credentialsFile = null, String resourceGroup = null, String region = null, String blobConnectionString = null, String batchAccountName = null, String batchAccountKey = null, String batchAccountURL = null, String poolVMSize = null)
@@ -43,6 +44,15 @@ namespace AzureEngine
             batchContainer = new List<AzureBatchClient>();
 
             CreateAzureConnection(); //Create the connection to Azure on creation as we will want this for pretty much everything else
+            CreateMasterBlobStorage();
+        }
+
+        public async Task CreateMasterBlobStorage()
+        {
+            messageContainer.AddInformationMessage("Creating master blob storage connection...");
+            masterBlobContainer = new BlobStorage(AzureConnectionUtility.BlobConnectionString, messageContainer);
+            await masterBlobContainer.CreateBlobStorage("masterblob");
+            messageContainer.AddStatusMessage("Master blob container created!");
         }
 
         public void CreateAzureConnection()
@@ -92,10 +102,23 @@ namespace AzureEngine
         public void InstallEnergyPlus()
         {
             messageContainer.AddInformationMessage("Installing EnergyPlus on all Batch Clients");
+            blobContainer.SendFile(System.IO.Path.GetDirectoryName(EnergyPlusUtility.ShellFile) + @"\", System.IO.Path.GetFileName(EnergyPlusUtility.ShellFile));
+
             foreach (AzureBatchClient client in batchContainer)
-                client.InstallEnergyPlus(EnergyPlusUtility.CompileEPInstallCommand());
+                client.InstallEnergyPlus(blobContainer.GenerateResourceFile("epInstall.sh"));
 
             messageContainer.AddStatusMessage("EnergyPlus successfully installed on all Batch Clients!");
+        }
+
+        public void InstallRadiance()
+        {
+            messageContainer.AddInformationMessage("Installing Radiance on all Batch Clients");
+            blobContainer.SendFile(System.IO.Path.GetDirectoryName(RadianceUtility.ShellFile) + @"\", System.IO.Path.GetFileName(RadianceUtility.ShellFile));
+
+            foreach (AzureBatchClient client in batchContainer)
+                client.InstallRadiance(masterBlobContainer.GenerateResourceFile("rad5R1all.tar.gz"), blobContainer.GenerateResourceFile("radInstall.sh"));
+
+            messageContainer.AddStatusMessage("Radiance successfully installed on all Batch Clients!");
         }
 
         public async Task UploadFile(String fileToUploadToBlob)
@@ -115,7 +138,7 @@ namespace AzureEngine
         {
             epwFile = System.IO.Path.GetFileName(epwFile); //Protection in case the epwFile is a full path
 
-            String mainCommand = "\"/usr/local/EnergyPlus-8-8-0/energyplus-8.8.0\" -a -x -r -w \"" + epwFile + "\" \" "; //Main command - add the file to task after
+            String mainCommand = "\"/usr/local/EnergyPlus-8-8-0/energyplus-8.8.0\" -a -x -r -w \"" + epwFile + "\" \""; //Main command - add the file to task after
             // ep2.idf\"";
 
             for(int x = 0; x < filesToTask.Count; x++)
@@ -125,8 +148,26 @@ namespace AzureEngine
 
                 int batchIndex = (int)Math.Floor((double)x / 100);
 
-                batchContainer[batchIndex].AddTask(fullCommand, new List<ResourceFile> { blobContainer.GenerateResourceFile(file) });
+                batchContainer[batchIndex].AddTask(fullCommand, new List<ResourceFile> { blobContainer.GenerateResourceFile(epwFile), blobContainer.GenerateResourceFile(file) });
             }         
+        }
+
+        public void RunRadiance(String folderName, List<String> zoneFolderNames)
+        {
+            //Transfer the zip folder to the task, unzip it, and go into the folder(s) provided by the users to run 'commands.sh'
+            String unzipCommand = "sudo unzip " + System.IO.Path.GetFileName(folderName);
+            String folder = System.IO.Path.GetFileNameWithoutExtension(folderName);
+
+            for(int x = 0; x < zoneFolderNames.Count; x++)
+            {
+                batchContainer[x].AddTask(unzipCommand, new List<ResourceFile> { blobContainer.GenerateResourceFile(folderName) });
+
+                String nextCommand = "cd " + folder + " && sudo /bin/sh -c ./commands.sh";
+                batchContainer[x].AddTask(nextCommand);
+            }
+
+            //String fullCommand = "";
+            //batchContainer[0].AddTask(fullCommand, new List<ResourceFile> { blobContainer.GenerateResourceFile(zoneFolder) });
         }
 
         public bool TrueWhenTasksComplete()

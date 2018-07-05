@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace AzureEngine.Utilities
 {
-    public static class EnergyPlusUtility
+    public static class RadianceUtility
     {
-        private static String shellFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Grasshopper\Libraries\Azure\epInstall.sh";
+        private static String shellFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Grasshopper\Libraries\Azure\radInstall.sh";
         public static String ShellFile { get { return shellFile; } set { shellFile = value; } }
     }
 }

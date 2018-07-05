@@ -62,8 +62,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AzureGrasshopperComponent.cs" />
-    <Compile Include="AzureGrasshopperInfo.cs" />
+    <Compile Include="AzureEPGrasshopperComponent.cs" />
+    <Compile Include="AzureEPGrasshopperInfo.cs" />
+    <Compile Include="AzureRadGrasshopperComponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

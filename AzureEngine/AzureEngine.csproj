@@ -160,6 +160,7 @@
     <Compile Include="SystemMessageContainer.cs" />
     <Compile Include="Utilities\AzureConnectionUtility.cs" />
     <Compile Include="Utilities\EnergyPlusUtility.cs" />
+    <Compile Include="Utilities\RadianceUtility.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -4,7 +4,7 @@ using Grasshopper.Kernel;
 
 namespace AzureGrasshopper
 {
-    public class AzureGrasshopperInfo : GH_AssemblyInfo
+    public class AzureEPGrasshopperInfo : GH_AssemblyInfo
     {
         public override string Name
         {
