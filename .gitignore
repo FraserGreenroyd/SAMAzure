@@ -2,6 +2,7 @@
 *.suo
 *.user
 *.sln.docstates
+HoneybeeRecipeJSONs/
 
 # Rhino/Grasshopper and backup files
 *.3dm

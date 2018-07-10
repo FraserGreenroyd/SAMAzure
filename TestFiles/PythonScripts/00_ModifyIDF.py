@@ -11,6 +11,10 @@ Returns:
 Annotations:
     TODO - Add exposed floor and roof materials
     TODO - Fix the glazing solar heat gain assignment from the config file for different orientations
+    TODO - Add air supply as infiltration to the zones - using the zone area and people per area to define the air supply rate
+    OR
+    TODO - Add ventilation as ZONEVENTILATION:DESIGNFLOWRATE
+    TODO - Remove the HVAC supply air in EnergyPlus
 """
 
 import json
@@ -94,14 +98,6 @@ print("OUTPUT:SURFACES:LIST removed")
 idf.idfobjects["OUTPUTCONTROL:TABLE:STYLE"] = []
 print("OUTPUTCONTROL:TABLE:STYLE removed")
 
-# Set/remove sizing parameters
-idf.idfobjects["SIZING:PARAMETERS"] = []
-print("SIZING:PARAMETERS removed")
-
-# Remove the HVAC objects provifing fresh air from outside
-idf.idfobjects["DESIGNSPECIFICATION:OUTDOORAIR"] = []
-print("DESIGNSPECIFICATION:OUTDOORAIR removed")
-
 # Set simulation to run only for annual period corresponding with weatherfile
 idf.idfobjects["SIMULATIONCONTROL"] = []
 idf.newidfobject(
@@ -143,7 +139,7 @@ idf.newidfobject(
     Name="IDF Name",
     North_Axis=0,
     Terrain="City",
-    Solar_Distribution="FullExteriorWithReflections",
+    Solar_Distribution="FullInteriorAndExteriorWithReflections",
     Maximum_Number_of_Warmup_Days=25,
     Minimum_Number_of_Warmup_Days=6
 )
@@ -163,7 +159,11 @@ idf.newidfobject(
     "SHADOWCALCULATION",
     Calculation_Method="AverageOverDaysInFrequency",
     Calculation_Frequency=20,
-    Maximum_Figures_in_Shadow_Overlap_Calculations=1000
+    Maximum_Figures_in_Shadow_Overlap_Calculations=15000,
+    Polygon_Clipping_Algorithm="SutherlandHodgman",
+    Sky_Diffuse_Modeling_Algorithm="SimpleSkyDiffuseModeling",
+    External_Shading_Calculation_Method="InternalCalculation",
+    Output_External_Shading_Calculation_Results="No"
 )
 print("SHADOWCALCULATION modified")
 
@@ -241,7 +241,7 @@ TEMP = idf.newidfobject(
 for i in range(24):
     TEMP["Hour_{0:}".format(i + 1)] = setpoint if ZONE_CONDITIONS[
         "cooling_setpoint_weekday"
-    ]["Hour_{0:}".format(i + 1)] == 0 else setback
+    ]["Hour_{0:}".format(i + 1)] != 0 else setback
 TEMP = idf.newidfobject(
     "SCHEDULE:DAY:HOURLY",
     Name="CoolingSetpointDayWeekend",
@@ -250,7 +250,7 @@ TEMP = idf.newidfobject(
 for i in range(24):
     TEMP["Hour_{0:}".format(i + 1)] = setpoint if ZONE_CONDITIONS[
         "cooling_setpoint_weekend"
-    ]["Hour_{0:}".format(i + 1)] == 0 else setback
+    ]["Hour_{0:}".format(i + 1)] != 0 else setback
 
 # Set daily heating profile from JSON
 setpoint = ZONE_CONDITIONS["heating_setpoint"]
@@ -263,7 +263,7 @@ TEMP = idf.newidfobject(
 for i in range(24):
     TEMP["Hour_{0:}".format(i + 1)] = setpoint if ZONE_CONDITIONS[
         "heating_setpoint_weekday"
-    ]["Hour_{0:}".format(i + 1)] == 0 else setback
+    ]["Hour_{0:}".format(i + 1)] != 0 else setback
 TEMP = idf.newidfobject(
     "SCHEDULE:DAY:HOURLY",
     Name="HeatingSetpointDayWeekend",
@@ -272,7 +272,7 @@ TEMP = idf.newidfobject(
 for i in range(24):
     TEMP["Hour_{0:}".format(i + 1)] = setpoint if ZONE_CONDITIONS[
         "heating_setpoint_weekend"
-    ]["Hour_{0:}".format(i + 1)] == 0 else setback
+    ]["Hour_{0:}".format(i + 1)] != 0 else setback
 
 # Set a daily Occupant profile
 TEMP = idf.newidfobject(
@@ -360,9 +360,7 @@ TEMP = idf.newidfobject(
     Name="OccupantActivityLevelDay",
     Schedule_Type_Limits_Name="ActivityLevelLimits")
 for i in range(24):
-    TEMP["Hour_{0:}".format(i + 1)] = ZONE_CONDITIONS[
-        "occupant_sensible_gain_watts_per_person"
-    ] + ZONE_CONDITIONS["occupant_latent_gain_watts_per_person"]
+    TEMP["Hour_{0:}".format(i + 1)] = ZONE_CONDITIONS["occupant_sensible_gain_watts_per_person"]  # + ZONE_CONDITIONS["occupant_latent_gain_watts_per_person"]
 print("SCHEDULE:DAY:HOURLY modified")
 
 # Remove the current Weekly profiles and replace with compact weekly profiles
@@ -540,18 +538,6 @@ idf.newidfobject(
 )
 print("SCHEDULE:YEAR modified")
 
-# Set heating and cooling setpoints from profile loaded in TEMPlate JSON
-idf.idfobjects["HVACTEMPLATE:THERMOSTAT"] = []
-[idf.newidfobject(
-    "HVACTEMPLATE:THERMOSTAT",
-    Name=j + "_HVAC",
-    Heating_Setpoint_Schedule_Name="HeatingSetpointYear",
-    Constant_Heating_Setpoint="",
-    Cooling_Setpoint_Schedule_Name="CoolingSetpointYear",
-    Constant_Cooling_Setpoint=""
-) for j in [i.Name for i in idf.idfobjects["ZONE"]]]
-print("HVACTEMPLATE:THERMOSTAT modified")
-
 # Set the people gains for all spaces
 idf.idfobjects["PEOPLE"] = []
 idf.newidfobject(
@@ -606,29 +592,54 @@ print("ELECTRICEQUIPMENT modified")
 
 # Set infiltration rate for all zones
 idf.idfobjects["ZONEINFILTRATION:DESIGNFLOWRATE"] = []
+# idf.newidfobject(
+#     "ZONEINFILTRATION:DESIGNFLOWRATE",
+#     Name="InfiltrationGain",
+#     Zone_or_ZoneList_Name="AllZones",
+#     Schedule_Name="InfiltrationYear",
+#     Design_Flow_Rate_Calculation_Method="Flow/Area",
+#     Flow_per_Zone_Floor_Area=0.000227,
+#     Constant_Term_Coefficient=1,
+#     Temperature_Term_Coefficient=0,
+#     Velocity_Term_Coefficient=0,
+#     Velocity_Squared_Term_Coefficient=0
+# )
+idf.idfobjects["ZONEVENTILATION:DESIGNFLOWRATE"] = []
 idf.newidfobject(
-    "ZONEINFILTRATION:DESIGNFLOWRATE",
-    Name="InfiltrationGain",
+    "ZONEVENTILATION:DESIGNFLOWRATE",
+    Name="Infiltration",
     Zone_or_ZoneList_Name="AllZones",
     Schedule_Name="InfiltrationYear",
     Design_Flow_Rate_Calculation_Method="Flow/Area",
-    Flow_per_Zone_Floor_Area=ZONE_CONDITIONS["infiltration_m3_per_second_m2"]
+    Flow_Rate_per_Zone_Floor_Area=0.000227,
+    Ventilation_Type="Natural"
 )
 print("ZONEINFILTRATION:DESIGNFLOWRATE modified")
 
 # Set ventilation rate for all zones
 # idf.idfobjects["ZONEVENTILATION:DESIGNFLOWRATE"] = []
-# idf.newidfobject(
-#     "ZONEVENTILATION:DESIGNFLOWRATE",
-#     Name="VentilationGain",
-#     Zone_or_ZoneList_Name="AllZones",
-#     Schedule_Name="VentilationYear",
-#     Design_Flow_Rate_Calculation_Method="Flow/Person",
-#     Flow_Rate_per_Person=ZONE_CONDITIONS[
-#         "ventilation_litres_per_second_per_person"
-#     ] * 0.001
-# )
-# print("ZONEVENTILATION:DESIGNFLOWRATE modified")
+idf.newidfobject(
+    "ZONEVENTILATION:DESIGNFLOWRATE",
+    Name="Ventilation",
+    Zone_or_ZoneList_Name="AllZones",
+    Schedule_Name="VentilationYear",
+    Design_Flow_Rate_Calculation_Method="Flow/Person",
+    Flow_Rate_per_Person=ZONE_CONDITIONS["ventilation_litres_per_second_per_person"],
+    Ventilation_Type="Natural"
+)
+print("ZONEVENTILATION:DESIGNFLOWRATE modified")
+
+# Set heating and cooling setpoints from profile loaded in TEMPlate JSON
+idf.idfobjects["HVACTEMPLATE:THERMOSTAT"] = []
+[idf.newidfobject(
+    "HVACTEMPLATE:THERMOSTAT",
+    Name=j + "_HVAC",
+    Heating_Setpoint_Schedule_Name="HeatingSetpointYear",
+    Constant_Heating_Setpoint="",
+    Cooling_Setpoint_Schedule_Name="CoolingSetpointYear",
+    Constant_Cooling_Setpoint=""
+) for j in [i.Name for i in idf.idfobjects["ZONE"]]]
+print("HVACTEMPLATE:THERMOSTAT modified")
 
 # Set Ideal Loads Air System air supply based on internal TEMPlate
 idf.idfobjects["HVACTEMPLATE:ZONE:IDEALLOADSAIRSYSTEM"] = []
@@ -637,24 +648,56 @@ for i in idf.idfobjects["ZONE"]:
         "HVACTEMPLATE:ZONE:IDEALLOADSAIRSYSTEM",
         Zone_Name=i.Name,
         Template_Thermostat_Name=j+"_HVAC",
+        System_Availability_Schedule_Name="",
         Maximum_Heating_Supply_Air_Temperature=50,
         Minimum_Cooling_Supply_Air_Temperature=13,
         Maximum_Heating_Supply_Air_Humidity_Ratio=0.0156,
         Minimum_Cooling_Supply_Air_Humidity_Ratio=0.0077,
-        Heating_Limit="NoLimit",
+        Heating_Limit="",
+        Maximum_Heating_Air_Flow_Rate="",
+        Maximum_Sensible_Heating_Capacity="",
         Cooling_Limit="NoLimit",
-        Dehumidification_Control_Type="ConstantSensibleHeatRatio",
-        Cooling_Sensible_Heat_Ratio=0.7,
-        Dehumidification_Setpoint=60,
+        Maximum_Cooling_Air_Flow_Rate=0,
+        Maximum_Total_Cooling_Capacity="",
+        Heating_Availability_Schedule_Name="",
+        Cooling_Availability_Schedule_Name="",
+        Dehumidification_Control_Type="None",
+        Cooling_Sensible_Heat_Ratio="",
+        Dehumidification_Setpoint="",
         Humidification_Control_Type="None",
-        Humidification_Setpoint=30,
-        Outdoor_Air_Method="Flow/Person",
-        Outdoor_Air_Flow_Rate_per_Person=ZONE_CONDITIONS["ventilation_litres_per_second_per_person"]*0.001,
+        Humidification_Setpoint="",
+        Outdoor_Air_Method="DetailedSpecification",
+        Outdoor_Air_Flow_Rate_per_Person="",
+        Outdoor_Air_Flow_Rate_per_Zone_Floor_Area="",
+        Outdoor_Air_Flow_Rate_per_Zone="",
+        Design_Specification_Outdoor_Air_Object_Name="ZoneOutdoorAir",
+        Demand_Controlled_Ventilation_Type="",
         Outdoor_Air_Economizer_Type="NoEconomizer",
         Heat_Recovery_Type="None",
-        Sensible_Heat_Recovery_Effectiveness=0.7,
-        Latent_Heat_Recovery_Effectiveness=0.65)
+        Sensible_Heat_Recovery_Effectiveness="",
+        Latent_Heat_Recovery_Effectiveness="")
 print("HVACTEMPLATE:ZONE:IDEALLOADSAIRSYSTEM modified")
+
+# Remove the HVAC objects provifing fresh air from outside
+idf.idfobjects["DESIGNSPECIFICATION:OUTDOORAIR"] = []
+idf.newidfobject(
+    "DESIGNSPECIFICATION:OUTDOORAIR",
+    Name="ZoneOutdoorAir",
+    Outdoor_Air_Method="Flow/Person",
+    Outdoor_Air_Flow_per_Person=float(ZONE_CONDITIONS["ventilation_litres_per_second_per_person"]) / 1000,
+    Outdoor_Air_Schedule_Name="VentilationYear"
+)
+print("DESIGNSPECIFICATION:OUTDOORAIR modified")
+
+
+# Set/remove sizing parameters
+idf.idfobjects["SIZING:PARAMETERS"] = []
+idf.newidfobject(
+    "SIZING:PARAMETERS",
+    Heating_Sizing_Factor=1.25,
+    Cooling_Sizing_Factor=1.15
+)
+print("SIZING:PARAMETERS modified")
 
 # Remove the existing window materials
 idf.idfobjects["WINDOWMATERIAL:GLAZING"] = []
@@ -729,8 +772,8 @@ idf.newidfobject(
     Name="EXTERIOR WALL MATERIAL",
     Roughness="MediumRough",
     Thermal_Resistance=1 / CONFIG["exterior_wall_u_value"],
-    Thermal_Absorptance=0.9,
-    Solar_Absorptance=0.7,
+    Thermal_Absorptance=0.5,
+    Solar_Absorptance=0.5,
     Visible_Absorptance=1 - CONFIG["wall_reflectivity"]
 )
 
@@ -738,9 +781,9 @@ idf.newidfobject(
     "MATERIAL:NOMASS",
     Name="INTERIOR WALL MATERIAL",
     Roughness="MediumSmooth",
-    Thermal_Resistance=1 / 1.8,
-    Thermal_Absorptance=0.9,
-    Solar_Absorptance=0.7,
+    Thermal_Resistance=1.8,
+    Thermal_Absorptance=0.5,
+    Solar_Absorptance=0.5,
     Visible_Absorptance=1 - CONFIG["wall_reflectivity"]
 )
 
@@ -748,9 +791,9 @@ idf.newidfobject(
     "MATERIAL:NOMASS",
     Name="INTERIOR FLOOR MATERIAL",
     Roughness="MediumSmooth",
-    Thermal_Resistance=1 / 1.087,
-    Thermal_Absorptance=0.9,
-    Solar_Absorptance=0.7,
+    Thermal_Resistance=1,
+    Thermal_Absorptance=0.5,
+    Solar_Absorptance=0.5,
     Visible_Absorptance=1 - CONFIG["floor_reflectivity"]
 )
 
@@ -758,9 +801,9 @@ idf.newidfobject(
     "MATERIAL:NOMASS",
     Name="INTERIOR CEILING MATERIAL",
     Roughness="MediumSmooth",
-    Thermal_Resistance=1 / 1.087,
-    Thermal_Absorptance=0.9,
-    Solar_Absorptance=0.7,
+    Thermal_Resistance=1,
+    Thermal_Absorptance=0.5,
+    Solar_Absorptance=0.5,
     Visible_Absorptance=1 - CONFIG["ceiling_reflectivity"]
 )
 
@@ -769,8 +812,8 @@ idf.newidfobject(
     Name="EXTERIOR ROOF MATERIAL",
     Roughness="MediumRough",
     Thermal_Resistance=1 / CONFIG["exterior_roof_u_value"],
-    Thermal_Absorptance=0.9,
-    Solar_Absorptance=0.7,
+    Thermal_Absorptance=0.5,
+    Solar_Absorptance=0.5,
     Visible_Absorptance=1 - CONFIG["ceiling_reflectivity"]
 )
 
@@ -789,11 +832,11 @@ idf.newidfobject(
     "MATERIAL",
     Name="THERMAL MASS MATERIAL",
     Roughness="MediumRough",
-    Thickness=1,
+    Thickness=0.3,
     Conductivity=2,
-    Density=2000,
+    Density=1500,
     Specific_Heat=900,
-    Thermal_Absorptance=0.9,
+    Thermal_Absorptance=0.5,
     Solar_Absorptance=0.7,
     Visible_Absorptance=0.7
 )
@@ -873,7 +916,7 @@ for i, j in list(zip([str(i.Name) for i in idf.idfobjects["ZONE"]], ZONE_WALL_AR
             Name=i + "_MASS",
             Construction_Name="THERMAL MASS",
             Zone_Name=i,
-            Surface_Area=j
+            Surface_Area=j*0.8
         )
     else:
         pass
@@ -886,20 +929,228 @@ for i, j in enumerate([str(i.Name) for i in idf.idfobjects["ZONE"]]):
 print("ZONELIST modified")
 
 # Output variables to report during simulation
+# NOTE - Lots of variables commented out here - these are all the possible outputs, but we only really need the ones that aren't commented
 OUTPUT_VARIABLES = [
+    # "Electric Equipment Convective Heating Energy",
+    # "Electric Equipment Convective Heating Rate",
+    # "Electric Equipment Electric Energy",
+    # "Electric Equipment Electric Power",
+    # "Electric Equipment Latent Gain Energy",
+    # "Electric Equipment Latent Gain Rate",
+    # "Electric Equipment Lost Heat Energy",
+    # "Electric Equipment Lost Heat Rate",
+    # "Electric Equipment Radiant Heating Energy",
+    # "Electric Equipment Radiant Heating Rate",
+    # "Electric Equipment Total Heating Energy",
+    # "Electric Equipment Total Heating Rate",
+    # "Lights Convective Heating Energy",
+    # "Lights Convective Heating Rate",
+    # "Lights Electric Energy",
+    # "Lights Electric Power",
+    # "Lights Radiant Heating Energy",
+    # "Lights Radiant Heating Rate",
+    # "Lights Return Air Heating Energy",
+    # "Lights Return Air Heating Rate",
+    # "Lights Total Heating Energy",
+    # "Lights Total Heating Rate",
+    # "Lights Visible Radiation Heating Energy",
+    # "Lights Visible Radiation Heating Rate",
+    # "People Air Relative Humidity",
+    # "People Air Temperature",
+    # "People Convective Heating Energy",
+    # "People Convective Heating Rate",
+    # "People Latent Gain Energy",
+    # "People Latent Gain Rate",
+    # "People Occupant Count",
+    # "People Radiant Heating Energy",
+    # "People Radiant Heating Rate",
+    # "People Sensible Heating Energy",
+    # "People Sensible Heating Rate",
+    # "People Total Heating Energy",
+    # "People Total Heating Rate",
+    # "Zone Air Heat Balance Air Energy Storage Rate",
+    # "Zone Air Heat Balance Internal Convective Heat Gain Rate",
+    # "Zone Air Heat Balance Interzone Air Transfer Rate",
+    # "Zone Air Heat Balance Outdoor Air Transfer Rate",
+    # "Zone Air Heat Balance Surface Convection Rate",
+    # "Zone Air Heat Balance System Air Transfer Rate",
+    # "Zone Air Heat Balance System Convective Heat Gain Rate",
+    # "Zone Air Humidity Ratio",
+    "Zone Air Relative Humidity",
+    # "Zone Air System Sensible Cooling Energy",
+    # "Zone Air System Sensible Cooling Rate",
+    # "Zone Air System Sensible Heating Energy",
+    # "Zone Air System Sensible Heating Rate",
+    "Zone Air Temperature",
+    # "Zone Electric Equipment Convective Heating Energy",
+    # "Zone Electric Equipment Convective Heating Rate",
+    # "Zone Electric Equipment Electric Energy",
+    # "Zone Electric Equipment Electric Power",
+    # "Zone Electric Equipment Latent Gain Energy",
+    # "Zone Electric Equipment Latent Gain Rate",
+    # "Zone Electric Equipment Lost Heat Energy",
+    # "Zone Electric Equipment Lost Heat Rate",
+    # "Zone Electric Equipment Radiant Heating Energy",
+    # "Zone Electric Equipment Radiant Heating Rate",
+    "Zone Electric Equipment Total Heating Energy",
+    # "Zone Electric Equipment Total Heating Rate",
+    # "Zone Exterior Windows Total Transmitted Beam Solar Radiation Energy",
+    # "Zone Exterior Windows Total Transmitted Beam Solar Radiation Rate",
+    # "Zone Exterior Windows Total Transmitted Diffuse Solar Radiation Energy",
+    # "Zone Exterior Windows Total Transmitted Diffuse Solar Radiation Rate",
+    # "Zone Ideal Loads Economizer Active Time [hr]",
+    # "Zone Ideal Loads Heat Recovery Active Time [hr]",
+    # "Zone Ideal Loads Heat Recovery Latent Cooling Energy",
+    # "Zone Ideal Loads Heat Recovery Latent Cooling Rate",
+    # "Zone Ideal Loads Heat Recovery Latent Heating Energy",
+    # "Zone Ideal Loads Heat Recovery Latent Heating Rate",
+    # "Zone Ideal Loads Heat Recovery Sensible Cooling Energy",
+    # "Zone Ideal Loads Heat Recovery Sensible Cooling Rate",
+    # "Zone Ideal Loads Heat Recovery Sensible Heating Energy",
+    # "Zone Ideal Loads Heat Recovery Sensible Heating Rate",
+    # "Zone Ideal Loads Heat Recovery Total Cooling Energy",
+    # "Zone Ideal Loads Heat Recovery Total Cooling Rate",
+    # "Zone Ideal Loads Heat Recovery Total Heating Energy",
+    # "Zone Ideal Loads Heat Recovery Total Heating Rate",
+    # "Zone Ideal Loads Hybrid Ventilation Available Status",
+    # "Zone Ideal Loads Outdoor Air Latent Cooling Energy",
+    # "Zone Ideal Loads Outdoor Air Latent Cooling Rate",
+    # "Zone Ideal Loads Outdoor Air Latent Heating Energy",
+    # "Zone Ideal Loads Outdoor Air Latent Heating Rate",
+    # "Zone Ideal Loads Outdoor Air Mass Flow Rate",
+    # "Zone Ideal Loads Outdoor Air Sensible Cooling Energy",
+    # "Zone Ideal Loads Outdoor Air Sensible Cooling Rate",
+    # "Zone Ideal Loads Outdoor Air Sensible Heating Energy",
+    # "Zone Ideal Loads Outdoor Air Sensible Heating Rate",
+    # "Zone Ideal Loads Outdoor Air Standard Density Volume Flow Rate",
+    "Zone Ideal Loads Outdoor Air Sensible Cooling Energy",
+    # "Zone Ideal Loads Outdoor Air Total Cooling Rate",
+    "Zone Ideal Loads Outdoor Air Sensible Heating Energy",
+    # "Zone Ideal Loads Outdoor Air Total Heating Rate",
+    # "Zone Ideal Loads Supply Air Latent Cooling Energy",
+    # "Zone Ideal Loads Supply Air Latent Cooling Rate",
+    # "Zone Ideal Loads Supply Air Latent Heating Energy",
+    # "Zone Ideal Loads Supply Air Latent Heating Rate",
+    # "Zone Ideal Loads Supply Air Mass Flow Rate",
+    # "Zone Ideal Loads Supply Air Sensible Cooling Energy",
+    # "Zone Ideal Loads Supply Air Sensible Cooling Rate",
+    # "Zone Ideal Loads Supply Air Sensible Heating Energy",
+    # "Zone Ideal Loads Supply Air Sensible Heating Rate",
+    # "Zone Ideal Loads Supply Air Standard Density Volume Flow Rate",
+    # "Zone Ideal Loads Supply Air Total Cooling Energy",
+    # "Zone Ideal Loads Supply Air Total Cooling Rate",
+    # "Zone Ideal Loads Supply Air Total Heating Energy",
+    # "Zone Ideal Loads Supply Air Total Heating Rate",
+    # "Zone Ideal Loads Zone Latent Cooling Energy",
+    # "Zone Ideal Loads Zone Latent Cooling Rate",
+    # "Zone Ideal Loads Zone Latent Heating Energy",
+    # "Zone Ideal Loads Zone Latent Heating Rate",
+    # "Zone Ideal Loads Zone Sensible Cooling Energy",
+    # "Zone Ideal Loads Zone Sensible Cooling Rate",
+    # "Zone Ideal Loads Zone Sensible Heating Energy",
+    # "Zone Ideal Loads Zone Sensible Heating Rate",
+    # "Zone Ideal Loads Zone Total Cooling Energy",
+    # "Zone Ideal Loads Zone Total Cooling Rate",
+    # "Zone Ideal Loads Zone Total Heating Energy",
+    # "Zone Ideal Loads Zone Total Heating Rate",
+    # "Zone Infiltration Air Change Rate",
+    # "Zone Infiltration Current Density Volume Flow Rate",
+    # "Zone Infiltration Current Density Volume",
+    # "Zone Infiltration Latent Heat Gain Energy",
+    # "Zone Infiltration Latent Heat Loss Energy",
+    # "Zone Infiltration Mass Flow Rate",
+    # "Zone Infiltration Mass",
+    # "Zone Infiltration Sensible Heat Gain Energy",
+    # "Zone Infiltration Sensible Heat Loss Energy",
+    # "Zone Infiltration Standard Density Volume Flow Rate",
+    # "Zone Infiltration Standard Density Volume",
+    # "Zone Infiltration Total Heat Gain Energy",
+    # "Zone Infiltration Total Heat Loss Energy",
+    # "Zone Interior Windows Total Transmitted Beam Solar Radiation Energy",
+    # "Zone Interior Windows Total Transmitted Beam Solar Radiation Rate",
+    # "Zone Interior Windows Total Transmitted Diffuse Solar Radiation Energy",
+    # "Zone Interior Windows Total Transmitted Diffuse Solar Radiation Rate",
+    # "Zone Lights Convective Heating Energy",
+    # "Zone Lights Convective Heating Rate",
+    # "Zone Lights Electric Energy",
+    # "Zone Lights Electric Power",
+    # "Zone Lights Radiant Heating Energy",
+    # "Zone Lights Radiant Heating Rate",
+    # "Zone Lights Return Air Heating Energy",
+    # "Zone Lights Return Air Heating Rate",
+    "Zone Lights Total Heating Energy",
+    # "Zone Lights Total Heating Rate",
+    # "Zone Lights Visible Radiation Heating Energy",
+    # "Zone Lights Visible Radiation Heating Rate",
+    "Zone Mean Air Dewpoint Temperature",
+    # "Zone Mean Air Humidity Ratio",
     "Zone Mean Air Temperature",
     "Zone Mean Radiant Temperature",
-    "Zone Air Relative Humidity",
-    "Zone Operative Temperature",
+    # "Zone Mechanical Ventilation Air Changes per Hour",
+    # "Zone Mechanical Ventilation Cooling Load Decrease Energy",
+    # "Zone Mechanical Ventilation Cooling Load Increase Due to Overheating Energy",
+    # "Zone Mechanical Ventilation Cooling Load Increase Energy",
+    "Zone Mechanical Ventilation Current Density Volume Flow Rate",
+    # "Zone Mechanical Ventilation Current Density Volume",
+    # "Zone Mechanical Ventilation Heating Load Decrease Energy",
+    # "Zone Mechanical Ventilation Heating Load Increase Due to Overcooling Energy",
+    # "Zone Mechanical Ventilation Heating Load Increase Energy",
+    # "Zone Mechanical Ventilation Mass Flow Rate",
+    # "Zone Mechanical Ventilation Mass",
+    # "Zone Mechanical Ventilation No Load Heat Addition Energy",
+    # "Zone Mechanical Ventilation No Load Heat Removal Energy",
+    # "Zone Mechanical Ventilation Standard Density Volume Flow Rate",
+    # "Zone Mechanical Ventilation Standard Density Volume",
+    # "Zone Mixing Current Density Volume Flow Rate",
+    # "Zone Mixing Latent Heat Gain Energy",
+    # "Zone Mixing Latent Heat Loss Energy",
+    # "Zone Mixing Mass Flow Rate",
+    # "Zone Mixing Mass",
+    # "Zone Mixing Sensible Heat Gain Energy",
+    # "Zone Mixing Sensible Heat Loss Energy",
+    # "Zone Mixing Standard Density Volume Flow Rate",
+    # "Zone Mixing Total Heat Gain Energy",
+    # "Zone Mixing Total Heat Loss Energy",
+    # "Zone Mixing Volume",
+    # "Zone Operative Temperature",
+    # "Zone Outdoor Air Drybulb Temperature",
+    # "Zone Outdoor Air Wetbulb Temperature",
+    # "Zone Outdoor Air Wind Direction",
+    # "Zone Outdoor Air Wind Speed",
+    # "Zone People Convective Heating Energy",
+    # "Zone People Convective Heating Rate",
+    # "Zone People Latent Gain Energy",
+    # "Zone People Latent Gain Rate",
+    "Zone People Occupant Count",
+    # "Zone People Radiant Heating Energy",
+    # "Zone People Radiant Heating Rate",
+    # "Zone People Sensible Heating Energy",
+    # "Zone People Sensible Heating Rate",
     "Zone People Total Heating Energy",
-    "Zone Lights Electric Energy",
-    "Zone Electric Equipment Electric Energy",
+    # "Zone People Total Heating Rate",
+    # "Zone Thermostat Air Temperature",
+    # "Zone Thermostat Control Type",
+    "Zone Thermostat Cooling Setpoint Temperature",
+    "Zone Thermostat Heating Setpoint Temperature",
+    # "Zone Total Internal Convective Heating Energy",
+    # "Zone Total Internal Convective Heating Rate",
+    # "Zone Total Internal Latent Gain Energy",
+    # "Zone Total Internal Latent Gain Rate",
+    # "Zone Total Internal Radiant Heating Energy",
+    # "Zone Total Internal Radiant Heating Rate",
+    "Zone Total Internal Total Heating Energy",
+    # "Zone Total Internal Total Heating Rate",
+    # "Zone Total Internal Visible Radiation Heating Energy",
+    # "Zone Total Internal Visible Radiation Heating Rate",
+    # "Zone Windows Total Heat Gain Energy",
+    # "Zone Windows Total Heat Gain Rate",
+    # "Zone Windows Total Heat Loss Energy",
+    # "Zone Windows Total Heat Loss Rate",
     "Zone Windows Total Transmitted Solar Radiation Energy",
-    "Zone Air System Sensible Heating Energy",
-    "Zone Air System Sensible Cooling Energy",
+    # "Zone Windows Total Transmitted Solar Radiation Rate",
 ]
 
-# Set the list of outputs to be generated fromt eh EnergyPLus simulation
+# Set the list of outputs to be generated from the EnergyPLus simulation
 idf.idfobjects["OUTPUT:VARIABLE"] = []
 [
     idf.newidfobject(
@@ -909,7 +1160,7 @@ idf.idfobjects["OUTPUT:VARIABLE"] = []
         Reporting_Frequency="hourly"
     ) for i in OUTPUT_VARIABLES
 ]
-print("OUTPUT_VARIABLES modified")
+print("OUTPUT:VARIABLE modified")
 
 # # Diagnostics/testing
 # """
@@ -920,8 +1171,9 @@ print("OUTPUT_VARIABLES modified")
 #     An SQLite format output result from the completed/failed simulation - this is probably better than using ReadVarsESO, but needs some further work]
 #     A detailed output diagnostics file indicatign any major issues in the completed/failed simulation
 # """
-# # idf.idfobjects["OUTPUT:VARIABLEDICTIONARY"] = []
-# # idf.newidfobject("OUTPUT:VARIABLEDICTIONARY", Key_Field="regular")
+idf.idfobjects["OUTPUT:VARIABLEDICTIONARY"] = []
+idf.newidfobject("OUTPUT:VARIABLEDICTIONARY", Key_Field="regular")
+print("OUTPUT:VARIABLEDICTIONARY modified")
 
 # # idf.idfobjects["OUTPUT:CONSTRUCTIONS"] = []
 # # idf.newidfobject("OUTPUT:CONSTRUCTIONS", Details_Type_1="Constructions")
@@ -934,3 +1186,4 @@ print("OUTPUT_VARIABLES modified")
 
 # Save the idf to a new file
 idf.saveas(IDF_FILEPATH.replace(".idf", "_modified.idf"))
+print("\nIDF file modified and saved to {0:}".format(IDF_FILEPATH.replace(".idf", "_modified.idf")))

@@ -37,7 +37,7 @@ TIMESTEP,
 SITE:LOCATION,
     CARDIFF,                  !- Name
     51.48,                    !- Latitude
-    3.18,                     !- Longitude
+    -3.18,                    !- Longitude
     0.0,                      !- Time Zone
     10.0;                     !- Elevation
 
@@ -143,39 +143,11 @@ SCHEDULE:DAY:HOURLY,
 SCHEDULE:DAY:HOURLY,
     CoolingSetpointDayWeekday,    !- Name
     TemperatureSetpointLimits,    !- Schedule Type Limits Name
-    24,                       !- Hour 1
-    24,                       !- Hour 2
-    24,                       !- Hour 3
-    24,                       !- Hour 4
-    24,                       !- Hour 5
-    100,                      !- Hour 6
-    100,                      !- Hour 7
-    100,                      !- Hour 8
-    100,                      !- Hour 9
-    100,                      !- Hour 10
-    100,                      !- Hour 11
-    100,                      !- Hour 12
-    100,                      !- Hour 13
-    100,                      !- Hour 14
-    100,                      !- Hour 15
-    100,                      !- Hour 16
-    100,                      !- Hour 17
-    100,                      !- Hour 18
-    24,                       !- Hour 19
-    24,                       !- Hour 20
-    24,                       !- Hour 21
-    24,                       !- Hour 22
-    24,                       !- Hour 23
-    24;                       !- Hour 24
-
-SCHEDULE:DAY:HOURLY,
-    CoolingSetpointDayWeekend,    !- Name
-    TemperatureSetpointLimits,    !- Schedule Type Limits Name
-    24,                       !- Hour 1
-    24,                       !- Hour 2
-    24,                       !- Hour 3
-    24,                       !- Hour 4
-    24,                       !- Hour 5
+    100,                      !- Hour 1
+    100,                      !- Hour 2
+    100,                      !- Hour 3
+    100,                      !- Hour 4
+    100,                      !- Hour 5
     24,                       !- Hour 6
     24,                       !- Hour 7
     24,                       !- Hour 8
@@ -189,49 +161,49 @@ SCHEDULE:DAY:HOURLY,
     24,                       !- Hour 16
     24,                       !- Hour 17
     24,                       !- Hour 18
-    24,                       !- Hour 19
-    24,                       !- Hour 20
-    24,                       !- Hour 21
-    24,                       !- Hour 22
-    24,                       !- Hour 23
-    24;                       !- Hour 24
+    100,                      !- Hour 19
+    100,                      !- Hour 20
+    100,                      !- Hour 21
+    100,                      !- Hour 22
+    100,                      !- Hour 23
+    100;                      !- Hour 24
+
+SCHEDULE:DAY:HOURLY,
+    CoolingSetpointDayWeekend,    !- Name
+    TemperatureSetpointLimits,    !- Schedule Type Limits Name
+    100,                      !- Hour 1
+    100,                      !- Hour 2
+    100,                      !- Hour 3
+    100,                      !- Hour 4
+    100,                      !- Hour 5
+    100,                      !- Hour 6
+    100,                      !- Hour 7
+    100,                      !- Hour 8
+    100,                      !- Hour 9
+    100,                      !- Hour 10
+    100,                      !- Hour 11
+    100,                      !- Hour 12
+    100,                      !- Hour 13
+    100,                      !- Hour 14
+    100,                      !- Hour 15
+    100,                      !- Hour 16
+    100,                      !- Hour 17
+    100,                      !- Hour 18
+    100,                      !- Hour 19
+    100,                      !- Hour 20
+    100,                      !- Hour 21
+    100,                      !- Hour 22
+    100,                      !- Hour 23
+    100;                      !- Hour 24
 
 SCHEDULE:DAY:HOURLY,
     HeatingSetpointDayWeekday,    !- Name
     TemperatureSetpointLimits,    !- Schedule Type Limits Name
-    20,                       !- Hour 1
-    20,                       !- Hour 2
-    20,                       !- Hour 3
-    20,                       !- Hour 4
-    20,                       !- Hour 5
-    16,                       !- Hour 6
-    16,                       !- Hour 7
-    16,                       !- Hour 8
-    16,                       !- Hour 9
-    16,                       !- Hour 10
-    16,                       !- Hour 11
-    16,                       !- Hour 12
-    16,                       !- Hour 13
-    16,                       !- Hour 14
-    16,                       !- Hour 15
-    16,                       !- Hour 16
-    16,                       !- Hour 17
-    16,                       !- Hour 18
-    20,                       !- Hour 19
-    20,                       !- Hour 20
-    20,                       !- Hour 21
-    20,                       !- Hour 22
-    20,                       !- Hour 23
-    20;                       !- Hour 24
-
-SCHEDULE:DAY:HOURLY,
-    HeatingSetpointDayWeekend,    !- Name
-    TemperatureSetpointLimits,    !- Schedule Type Limits Name
-    20,                       !- Hour 1
-    20,                       !- Hour 2
-    20,                       !- Hour 3
-    20,                       !- Hour 4
-    20,                       !- Hour 5
+    16,                       !- Hour 1
+    16,                       !- Hour 2
+    16,                       !- Hour 3
+    16,                       !- Hour 4
+    16,                       !- Hour 5
     20,                       !- Hour 6
     20,                       !- Hour 7
     20,                       !- Hour 8
@@ -245,12 +217,40 @@ SCHEDULE:DAY:HOURLY,
     20,                       !- Hour 16
     20,                       !- Hour 17
     20,                       !- Hour 18
-    20,                       !- Hour 19
-    20,                       !- Hour 20
-    20,                       !- Hour 21
-    20,                       !- Hour 22
-    20,                       !- Hour 23
-    20;                       !- Hour 24
+    16,                       !- Hour 19
+    16,                       !- Hour 20
+    16,                       !- Hour 21
+    16,                       !- Hour 22
+    16,                       !- Hour 23
+    16;                       !- Hour 24
+
+SCHEDULE:DAY:HOURLY,
+    HeatingSetpointDayWeekend,    !- Name
+    TemperatureSetpointLimits,    !- Schedule Type Limits Name
+    16,                       !- Hour 1
+    16,                       !- Hour 2
+    16,                       !- Hour 3
+    16,                       !- Hour 4
+    16,                       !- Hour 5
+    16,                       !- Hour 6
+    16,                       !- Hour 7
+    16,                       !- Hour 8
+    16,                       !- Hour 9
+    16,                       !- Hour 10
+    16,                       !- Hour 11
+    16,                       !- Hour 12
+    16,                       !- Hour 13
+    16,                       !- Hour 14
+    16,                       !- Hour 15
+    16,                       !- Hour 16
+    16,                       !- Hour 17
+    16,                       !- Hour 18
+    16,                       !- Hour 19
+    16,                       !- Hour 20
+    16,                       !- Hour 21
+    16,                       !- Hour 22
+    16,                       !- Hour 23
+    16;                       !- Hour 24
 
 SCHEDULE:DAY:HOURLY,
     OccupantGainDayWeekday,    !- Name
@@ -479,30 +479,30 @@ SCHEDULE:DAY:HOURLY,
 SCHEDULE:DAY:HOURLY,
     OccupantActivityLevelDay,    !- Name
     ActivityLevelLimits,      !- Schedule Type Limits Name
-    130,                      !- Hour 1
-    130,                      !- Hour 2
-    130,                      !- Hour 3
-    130,                      !- Hour 4
-    130,                      !- Hour 5
-    130,                      !- Hour 6
-    130,                      !- Hour 7
-    130,                      !- Hour 8
-    130,                      !- Hour 9
-    130,                      !- Hour 10
-    130,                      !- Hour 11
-    130,                      !- Hour 12
-    130,                      !- Hour 13
-    130,                      !- Hour 14
-    130,                      !- Hour 15
-    130,                      !- Hour 16
-    130,                      !- Hour 17
-    130,                      !- Hour 18
-    130,                      !- Hour 19
-    130,                      !- Hour 20
-    130,                      !- Hour 21
-    130,                      !- Hour 22
-    130,                      !- Hour 23
-    130;                      !- Hour 24
+    75,                       !- Hour 1
+    75,                       !- Hour 2
+    75,                       !- Hour 3
+    75,                       !- Hour 4
+    75,                       !- Hour 5
+    75,                       !- Hour 6
+    75,                       !- Hour 7
+    75,                       !- Hour 8
+    75,                       !- Hour 9
+    75,                       !- Hour 10
+    75,                       !- Hour 11
+    75,                       !- Hour 12
+    75,                       !- Hour 13
+    75,                       !- Hour 14
+    75,                       !- Hour 15
+    75,                       !- Hour 16
+    75,                       !- Hour 17
+    75,                       !- Hour 18
+    75,                       !- Hour 19
+    75,                       !- Hour 20
+    75,                       !- Hour 21
+    75,                       !- Hour 22
+    75,                       !- Hour 23
+    75;                       !- Hour 24
 
 SCHEDULE:WEEK:COMPACT,
     OccupantGainWeek,         !- Name
@@ -659,7 +659,7 @@ MATERIAL:NOMASS,
 MATERIAL:NOMASS,
     INTERIOR WALL MATERIAL,    !- Name
     MediumSmooth,             !- Roughness
-    0.555555555556,           !- Thermal Resistance
+    1.8,                      !- Thermal Resistance
     0.9,                      !- Thermal Absorptance
     0.7,                      !- Solar Absorptance
     0.5;                      !- Visible Absorptance
@@ -667,7 +667,7 @@ MATERIAL:NOMASS,
 MATERIAL:NOMASS,
     INTERIOR FLOOR MATERIAL,    !- Name
     MediumSmooth,             !- Roughness
-    0.919963201472,           !- Thermal Resistance
+    1,                        !- Thermal Resistance
     0.9,                      !- Thermal Absorptance
     0.7,                      !- Solar Absorptance
     0.8;                      !- Visible Absorptance
@@ -675,7 +675,7 @@ MATERIAL:NOMASS,
 MATERIAL:NOMASS,
     INTERIOR CEILING MATERIAL,    !- Name
     MediumSmooth,             !- Roughness
-    0.919963201472,           !- Thermal Resistance
+    1,                        !- Thermal Resistance
     0.9,                      !- Thermal Absorptance
     0.7,                      !- Solar Absorptance
     0.3;                      !- Visible Absorptance
@@ -3032,6 +3032,9 @@ HVACTEMPLATE:ZONE:IDEALLOADSAIRSYSTEM,
     0.7,                      !- Sensible Heat Recovery Effectiveness
     0.65;                     !- Latent Heat Recovery Effectiveness
 
+OUTPUT:VARIABLEDICTIONARY,
+    regular;                  !- Key Field
+
 OUTPUT:VARIABLE,
     *,                        !- Key Value
     Zone Mean Air Temperature,    !- Variable Name
@@ -3045,11 +3048,6 @@ OUTPUT:VARIABLE,
 OUTPUT:VARIABLE,
     *,                        !- Key Value
     Zone Air Relative Humidity,    !- Variable Name
-    hourly;                   !- Reporting Frequency
-
-OUTPUT:VARIABLE,
-    *,                        !- Key Value
-    Zone Operative Temperature,    !- Variable Name
     hourly;                   !- Reporting Frequency
 
 OUTPUT:VARIABLE,
