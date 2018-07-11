@@ -21,6 +21,7 @@ import json
 import sys
 from eppy.modeleditor import IDF
 import platform
+from scipy import interpolate
 
 
 def load_json(path):
@@ -800,6 +801,29 @@ idf.newidfobject(
 )
 print("MATERIAL:AIRGAP modified")
 
+# The following describes a relationship between the input Solar Heat Transmittance and overal window SHGC. It is used for converting teh users input SHGC into a corresponding value equivalnt to the overall window g-Value that is intended
+userinput_g_value = [0.01, 0.05684211, 0.10368421, 0.15052632, 0.19736842, 0.24421053, 0.29105263, 0.33789474, 0.38473684, 0.43157895, 0.47842105, 0.52526316, 0.57210526, 0.61894737, 0.66578947, 0.71263158, 0.75947368, 0.80631579, 0.85315789, 0.9]
+resultant_g_value = [0.2, 0.221, 0.243, 0.267, 0.292, 0.318, 0.346, 0.375, 0.406, 0.438, 0.471, 0.506, 0.542, 0.579, 0.615, 0.656, 0.697, 0.74 ,0.785, 0.832]
+f_gvalue = interpolate.interp1d(resultant_g_value, userinput_g_value)
+if CONFIG["glass_solar_heat_gain_coefficient"] > 0.832:
+    glassGValue = f_gvalue(0.832)
+elif CONFIG["glass_solar_heat_gain_coefficient"] < 0.2:
+    glassGValue = f_gvalue(0.2)
+else:
+    glassGValue = f_gvalue(CONFIG["glass_solar_heat_gain_coefficient"])
+
+# The following describes a relationship between the input Glazing U Value and glass conductivity. It is used for converting the users input Glazing U Value into a corresponding value in the glass conductivity field equivalnt to the overall window U-Value that is intended
+
+userinput_conduct = [0.001, 0.00621053, 0.01142105, 0.01663158, 0.02184211, 0.02705263, 0.03226316, 0.03747368, 0.04268421, 0.04789474, 0.05310526, 0.05831579, 0.06352632, 0.06873684, 0.07394737, 0.07915789, 0.08436842, 0.08957895, 0.09478947, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
+resultant_ufactor = [0.157, 0.748, 1.118, 1.373, 1.559, 1.702, 1.814, 1.905, 1.98, 2.043, 2.096, 2.143, 2.183, 2.218, 2.25, 2.278, 2.303, 2.326, 2.347, 2.365, 2.552, 2.621, 2.657, 2.68, 2.695, 2.705, 2.714, 2.72, 2.725]
+f_ufactor = interpolate.interp1d(resultant_ufactor, userinput_conduct)
+if CONFIG["glass_u_value"] > 2.725:
+    glassConductivity = f_ufactor(2.725)
+elif CONFIG["glass_u_value"] < 0.157:
+    glassConductivity = f_ufactor(0.157)
+else:
+    glassConductivity = f_ufactor(CONFIG["glass_u_value"])
+
 # Modify the existing window materials
 idf.idfobjects["WINDOWMATERIAL:GLAZING"] = []
 idf.newidfobject(
@@ -807,16 +831,16 @@ idf.newidfobject(
     Name="CLEAR 3MM",
     Optical_Data_Type="SpectralAverage",
     Thickness=0.003,
-    Solar_Transmittance_at_Normal_Incidence=0.837,
+    Solar_Transmittance_at_Normal_Incidence=glassGValue,  # glassGValue,  # This was determined by running the IDF with a ranger of inputs and determining the relationship between input g-value and overall g-value for the computed glazing
     Front_Side_Solar_Reflectance_at_Normal_Incidence=0.075,
     Back_Side_Solar_Reflectance_at_Normal_Incidence=0,
-    Visible_Transmittance_at_Normal_Incidence=0.898,
+    Visible_Transmittance_at_Normal_Incidence=CONFIG["glass_visible_transmittance"],
     Front_Side_Visible_Reflectance_at_Normal_Incidence=0.081,
     Back_Side_Visible_Reflectance_at_Normal_Incidence=0,
     Infrared_Transmittance_at_Normal_Incidence=0,
     Front_Side_Infrared_Hemispherical_Emissivity=0.84,
     Back_Side_Infrared_Hemispherical_Emissivity=0.84,
-    Conductivity=0.9,
+    Conductivity=glassConductivity,
     Dirt_Correction_Factor_for_Solar_and_Visible_Transmittance=1,
     Solar_Diffusing="No"
 )
@@ -828,7 +852,7 @@ idf.newidfobject(
     "WINDOWMATERIAL:GAS",
     Name="AIR 13MM",
     Gas_Type="Air",
-    Thickness=0.0127,
+    Thickness=0.0127
 )
 print("WINDOWMATERIAL:GAS modified")
 
@@ -1320,16 +1344,16 @@ OUTPUT_VARIABLES = [
     # "Zone Windows Total Transmitted Solar Radiation Rate",
 ]
 
-# Set the list of outputs to be generated from the EnergyPLus simulation
+# Set the list of outputs to be generated from the EnergyPLus simulation  # NOTE - Uncomment these for actual outputs in table - not bere for testig purposes currently
 idf.idfobjects["OUTPUT:VARIABLE"] = []
-[
-    idf.newidfobject(
-        "OUTPUT:VARIABLE",
-        Key_Value="*",
-        Variable_Name=i,
-        Reporting_Frequency="hourly"
-    ) for i in OUTPUT_VARIABLES
-]
+# [
+#     idf.newidfobject(
+#         "OUTPUT:VARIABLE",
+#         Key_Value="*",
+#         Variable_Name=i,
+#         Reporting_Frequency="hourly"
+#     ) for i in OUTPUT_VARIABLES
+# ]
 print("OUTPUT:VARIABLE modified")
 
 # # Diagnostics/testing
@@ -1341,9 +1365,9 @@ print("OUTPUT:VARIABLE modified")
 #     An SQLite format output result from the completed/failed simulation - this is probably better than using ReadVarsESO, but needs some further work]
 #     A detailed output diagnostics file indicatign any major issues in the completed/failed simulation
 # """
-idf.idfobjects["OUTPUT:VARIABLEDICTIONARY"] = []
-idf.newidfobject("OUTPUT:VARIABLEDICTIONARY", Key_Field="regular")
-print("OUTPUT:VARIABLEDICTIONARY modified")
+# idf.idfobjects["OUTPUT:VARIABLEDICTIONARY"] = []
+# idf.newidfobject("OUTPUT:VARIABLEDICTIONARY", Key_Field="regular")
+# print("OUTPUT:VARIABLEDICTIONARY modified")
 
 
 # Outputs for Michal - TAS test

@@ -242,33 +242,33 @@ print("North angle has been read as {0:}\n".format(north_angle))
 # Define materials to be applied to surfaces
 glass_material_N = Glass(
     "GlassMaterialN",
-    r_transmittance=CONFIG["glass_visible_transmittance_N"],
-    g_transmittance=CONFIG["glass_visible_transmittance_N"],
-    b_transmittance=CONFIG["glass_visible_transmittance_N"],
+    r_transmittance=CONFIG["glass_visible_transmittance"],
+    g_transmittance=CONFIG["glass_visible_transmittance"],
+    b_transmittance=CONFIG["glass_visible_transmittance"],
     refraction_index=1.52
     )
 
 glass_material_S = Glass(
     "GlassMaterialS",
-    r_transmittance=CONFIG["glass_visible_transmittance_S"],
-    g_transmittance=CONFIG["glass_visible_transmittance_S"],
-    b_transmittance=CONFIG["glass_visible_transmittance_S"],
+    r_transmittance=CONFIG["glass_visible_transmittance"],
+    g_transmittance=CONFIG["glass_visible_transmittance"],
+    b_transmittance=CONFIG["glass_visible_transmittance"],
     refraction_index=1.52
 )
 
 glass_material_E = Glass(
     "GlassMaterialE",
-    r_transmittance=CONFIG["glass_visible_transmittance_E"],
-    g_transmittance=CONFIG["glass_visible_transmittance_E"],
-    b_transmittance=CONFIG["glass_visible_transmittance_E"],
+    r_transmittance=CONFIG["glass_visible_transmittance"],
+    g_transmittance=CONFIG["glass_visible_transmittance"],
+    b_transmittance=CONFIG["glass_visible_transmittance"],
     refraction_index=1.52
 )
 
 glass_material_W = Glass(
     "GlassMaterialW",
-    r_transmittance=CONFIG["glass_visible_transmittance_W"],
-    g_transmittance=CONFIG["glass_visible_transmittance_W"],
-    b_transmittance=CONFIG["glass_visible_transmittance_W"],
+    r_transmittance=CONFIG["glass_visible_transmittance"],
+    g_transmittance=CONFIG["glass_visible_transmittance"],
+    b_transmittance=CONFIG["glass_visible_transmittance"],
     refraction_index=1.52
 )
 
@@ -279,9 +279,9 @@ glass_material_interior = Glass(
 
 glass_material_skylight = Glass(
     "GlassMaterialSkylight",
-    r_transmittance=CONFIG["glass_visible_transmittance_skylight"],
-    g_transmittance=CONFIG["glass_visible_transmittance_skylight"],
-    b_transmittance=CONFIG["glass_visible_transmittance_skylight"],
+    r_transmittance=CONFIG["glass_visible_transmittance"],
+    g_transmittance=CONFIG["glass_visible_transmittance"],
+    b_transmittance=CONFIG["glass_visible_transmittance"],
     refraction_index=1.52
 )
 

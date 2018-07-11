@@ -138,7 +138,7 @@ class GenericGridBased(AnalysisRecipe):
             ValueError if target_dir doesn't exist and mkdir is False.
         """
         if merge:
-            file_name = file_name or random_name()
+            file_name = str(file_name) or str(random_name())  # Forced these to be a string to bypass the wierd error on Frasers machine
             assert isinstance(file_name, str), 'file_name should be a string.'
             file_name = file_name if file_name.lower().endswith('.pts') \
                 else file_name + '.pts'
