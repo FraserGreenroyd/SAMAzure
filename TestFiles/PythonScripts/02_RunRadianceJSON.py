@@ -86,19 +86,19 @@ DF_BAT_FILE = DF_RECIPE.write("HoneybeeRecipeJSONs", str(DF_RECIPE.analysis_grid
 DF_SHELL_FILE = bat_to_sh(DF_BAT_FILE)
 print("Daylight Factor recipe converted to Radiance case\n")
 
-# # Run the Daylight Factor calculation
-# print("Running Daylight Factor simulation...\n")
-# if os.name == 'nt':
-#     DF_RECIPE.run(DF_BAT_FILE)
-# else:
-#     DF_RECIPE.run(DF_SHELL_FILE)
-# print("Daylight Factor simulation complete!\n")
+# Run the Daylight Factor calculation
+print("Running Daylight Factor simulation...\n")
+if os.name == 'nt':
+    DF_RECIPE.run(DF_BAT_FILE)
+else:
+    DF_RECIPE.run(DF_SHELL_FILE)
+print("Daylight Factor simulation complete!\n")
 
-# # Get the X, Y, Z coordinates for the analysis points
-# X, Y, Z = list(zip(*[i["location"] for i in DF_RECIPE.results()[0].to_json()["analysis_points"]]))
+# Get the X, Y, Z coordinates for the analysis points
+X, Y, Z = list(zip(*[i["location"] for i in DF_RECIPE.results()[0].to_json()["analysis_points"]]))
 
-# # Get the Daylight Factor values corresponding with the analysis points
-# DF = [point["values"][0][0][6324][0] for point in DF_RECIPE.results()[0].to_json()["analysis_points"]]
+# Get the Daylight Factor values corresponding with the analysis points
+DF = [point["values"][0][0][6324][0] for point in DF_RECIPE.results()[0].to_json()["analysis_points"]]
 
 # ################################################
 # ################################################
@@ -116,45 +116,45 @@ print("Daylight Factor recipe converted to Radiance case\n")
 # ################################################
 # ################################################
 
-# # Create Annual recipe from JSON origin string
-# ANNUAL_RECIPE = GridBasedAnnual.from_json(ANNUAL_RECIPE_JSON)
-# print("Annual recipe prepared\n")
+# Create Annual recipe from JSON origin string
+ANNUAL_RECIPE = GridBasedAnnual.from_json(ANNUAL_RECIPE_JSON)
+print("Annual recipe prepared\n")
 
-# # Generate Annual bat and sh files
-# ANNUAL_BAT_FILE = ANNUAL_RECIPE.write("HoneybeeRecipeJSONs", ZONE_NAME)
-# ANNUAL_SHELL_FILE = bat_to_sh(ANNUAL_BAT_FILE)
-# print("Annual recipe converted to Radiance case\n")
+# Generate Annual bat and sh files
+ANNUAL_BAT_FILE = ANNUAL_RECIPE.write("HoneybeeRecipeJSONs", ZONE_NAME)
+ANNUAL_SHELL_FILE = bat_to_sh(ANNUAL_BAT_FILE)
+print("Annual recipe converted to Radiance case\n")
 
-# # Run the Daylight Factor calculation
-# print("Running Annual simulation...\n")
-# if os.name == 'nt':
-#     ANNUAL_RECIPE.run(ANNUAL_BAT_FILE)
-# else:
-#     ANNUAL_RECIPE.run(ANNUAL_SHELL_FILE)
-# print("Annual simulation complete!\n")
+# Run the Daylight Factor calculation
+print("Running Annual simulation...\n")
+if os.name == 'nt':
+    ANNUAL_RECIPE.run(ANNUAL_BAT_FILE)
+else:
+    ANNUAL_RECIPE.run(ANNUAL_SHELL_FILE)
+print("Annual simulation complete!\n")
 
-# # Generate an occupancy schedule for the annual metrics calculation
-# OCCUPANCY_SCHEDULE = Schedule.from_workday_hours(occ_hours=(8, 17), off_hours=(12, 13), weekend=(6, 7), default_value=1)
+# Generate an occupancy schedule for the annual metrics calculation
+OCCUPANCY_SCHEDULE = Schedule.from_workday_hours(occ_hours=(8, 17), off_hours=(12, 13), weekend=(6, 7), default_value=1)
 
-# # Get the annual metrics from the annual simulation
-# DA, CDA, UDI, UDI_LESS, UDI_MORE = ANNUAL_RECIPE.results()[0].annual_metrics(300, (100, 2000), None, OCCUPANCY_SCHEDULE)
-# print("Daylight autonomy metrics calculated\n")
+# Get the annual metrics from the annual simulation
+DA, CDA, UDI, UDI_LESS, UDI_MORE = ANNUAL_RECIPE.results()[0].annual_metrics(300, (100, 2000), None, OCCUPANCY_SCHEDULE)
+print("Daylight autonomy metrics calculated\n")
 
-# # Write the results to a single JSON file
-# RESULTS = {
-#     "ZONE": ZONE_NAME,
-#     "X": X,
-#     "Y": Y,
-#     "Z": Z,
-#     "DF": DF,
-#     "DA": DA,
-#     "CDA": CDA,
-#     "UDI_LESS": UDI_LESS,
-#     "UDI": UDI,
-#     "UDI_MORE": UDI_MORE,
-# }
+# Write the results to a single JSON file
+RESULTS = {
+    "ZONE": ZONE_NAME,
+    "X": X,
+    "Y": Y,
+    "Z": Z,
+    "DF": DF,
+    "DA": DA,
+    "CDA": CDA,
+    "UDI_LESS": UDI_LESS,
+    "UDI": UDI,
+    "UDI_MORE": UDI_MORE,
+}
 
-# # Write results to single summary file
-# with open("{0:}_results.json".format(ZONE_NAME), "w") as f:
-#     json.dump(RESULTS, f)
-# print("Results written to {0:}_results.json".format(ZONE_NAME))
+# Write results to single summary file
+with open("{0:}_results.json".format(ZONE_NAME), "w") as f:
+    json.dump(RESULTS, f)
+print("Results written to {0:}_results.json".format(ZONE_NAME))

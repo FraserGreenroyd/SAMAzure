@@ -163,7 +163,7 @@ idf.newidfobject(
     Polygon_Clipping_Algorithm="SutherlandHodgman",
     Sky_Diffuse_Modeling_Algorithm="SimpleSkyDiffuseModeling",
     External_Shading_Calculation_Method="InternalCalculation",
-    Output_External_Shading_Calculation_Results="No"
+    Output_External_Shading_Calculation_Results="No"  # NOTE - Remove this for final version - this is used for testing export to TAS
 )
 print("SHADOWCALCULATION modified")
 
@@ -689,7 +689,6 @@ idf.newidfobject(
 )
 print("DESIGNSPECIFICATION:OUTDOORAIR modified")
 
-
 # Set/remove sizing parameters
 idf.idfobjects["SIZING:PARAMETERS"] = []
 idf.newidfobject(
@@ -699,228 +698,399 @@ idf.newidfobject(
 )
 print("SIZING:PARAMETERS modified")
 
-# Remove the existing window materials
-idf.idfobjects["WINDOWMATERIAL:GLAZING"] = []
-print("WINDOWMATERIAL:GLAZING removed")
-
-idf.idfobjects["WINDOWMATERIAL:GAS"] = []
-print("WINDOWMATERIAL:GAS removed")
-
-# Remove the existing materials
-idf.idfobjects["MATERIAL:AIRGAP"] = []
-print("MATERIAL:AIRGAP removed")
-
+# Modify existing materials
 idf.idfobjects["MATERIAL"] = []
-print("MATERIAL removed")
-
-# Create single layer window material for glazing transmittance/g-value
-idf.idfobjects["WINDOWMATERIAL:SIMPLEGLAZINGSYSTEM"] = []
-
-idf.newidfobject(
-    "WINDOWMATERIAL:SIMPLEGLAZINGSYSTEM",
-    Name="EXTERIOR GLAZING MATERIAL_X",
-    UFactor=CONFIG["glass_u_value"],
-    Solar_Heat_Gain_Coefficient=CONFIG["glass_solar_heat_gain_coefficient_X"],
-    Visible_Transmittance=CONFIG["glass_visible_transmittance_X"]
-)
-
-idf.newidfobject(
-    "WINDOWMATERIAL:SIMPLEGLAZINGSYSTEM",
-    Name="EXTERIOR GLAZING MATERIAL_N",
-    UFactor=CONFIG["glass_u_value"],
-    Solar_Heat_Gain_Coefficient=CONFIG["glass_solar_heat_gain_coefficient_N"],
-    Visible_Transmittance=CONFIG["glass_visible_transmittance_N"]
-)
-
-idf.newidfobject(
-    "WINDOWMATERIAL:SIMPLEGLAZINGSYSTEM",
-    Name="EXTERIOR GLAZING MATERIAL_E",
-    UFactor=CONFIG["glass_u_value"],
-    Solar_Heat_Gain_Coefficient=CONFIG["glass_solar_heat_gain_coefficient_E"],
-    Visible_Transmittance=CONFIG["glass_visible_transmittance_N"]
-)
-
-idf.newidfobject(
-    "WINDOWMATERIAL:SIMPLEGLAZINGSYSTEM",
-    Name="EXTERIOR GLAZING MATERIAL_S",
-    UFactor=CONFIG["glass_u_value"],
-    Solar_Heat_Gain_Coefficient=CONFIG["glass_solar_heat_gain_coefficient_S"],
-    Visible_Transmittance=CONFIG["glass_visible_transmittance_N"]
-)
-
-idf.newidfobject(
-    "WINDOWMATERIAL:SIMPLEGLAZINGSYSTEM",
-    Name="EXTERIOR GLAZING MATERIAL_W",
-    UFactor=CONFIG["glass_u_value"],
-    Solar_Heat_Gain_Coefficient=CONFIG["glass_solar_heat_gain_coefficient_W"],
-    Visible_Transmittance=CONFIG["glass_visible_transmittance_N"]
-)
-
-idf.newidfobject(
-    "WINDOWMATERIAL:SIMPLEGLAZINGSYSTEM",
-    Name="INTERIOR GLAZING MATERIAL",
-    UFactor=0.8,
-    Solar_Heat_Gain_Coefficient=0.9,
-    Visible_Transmittance=0.9
-)
-print("WINDOWMATERIAL:SIMPLEGLAZINGSYSTEM modified")
-
-# Create basic single layer materials with no mass for easy U-Value attribution
-idf.idfobjects["MATERIAL:NOMASS"] = []
-idf.newidfobject(
-    "MATERIAL:NOMASS",
-    Name="EXTERIOR WALL MATERIAL",
-    Roughness="MediumRough",
-    Thermal_Resistance=1 / CONFIG["exterior_wall_u_value"],
-    Thermal_Absorptance=0.5,
-    Solar_Absorptance=0.5,
-    Visible_Absorptance=1 - CONFIG["wall_reflectivity"]
-)
-
-idf.newidfobject(
-    "MATERIAL:NOMASS",
-    Name="INTERIOR WALL MATERIAL",
-    Roughness="MediumSmooth",
-    Thermal_Resistance=1.8,
-    Thermal_Absorptance=0.5,
-    Solar_Absorptance=0.5,
-    Visible_Absorptance=1 - CONFIG["wall_reflectivity"]
-)
-
-idf.newidfobject(
-    "MATERIAL:NOMASS",
-    Name="INTERIOR FLOOR MATERIAL",
-    Roughness="MediumSmooth",
-    Thermal_Resistance=1,
-    Thermal_Absorptance=0.5,
-    Solar_Absorptance=0.5,
-    Visible_Absorptance=1 - CONFIG["floor_reflectivity"]
-)
-
-idf.newidfobject(
-    "MATERIAL:NOMASS",
-    Name="INTERIOR CEILING MATERIAL",
-    Roughness="MediumSmooth",
-    Thermal_Resistance=1,
-    Thermal_Absorptance=0.5,
-    Solar_Absorptance=0.5,
-    Visible_Absorptance=1 - CONFIG["ceiling_reflectivity"]
-)
-
-idf.newidfobject(
-    "MATERIAL:NOMASS",
-    Name="EXTERIOR ROOF MATERIAL",
-    Roughness="MediumRough",
-    Thermal_Resistance=1 / CONFIG["exterior_roof_u_value"],
-    Thermal_Absorptance=0.5,
-    Solar_Absorptance=0.5,
-    Visible_Absorptance=1 - CONFIG["ceiling_reflectivity"]
-)
-
-idf.newidfobject(
-    "MATERIAL:NOMASS",
-    Name="AIR WALL MATERIAL",
-    Roughness="MediumRough",
-    Thermal_Resistance=0.001,
-    Thermal_Absorptance=0.001,
-    Solar_Absorptance=0.001,
-    Visible_Absorptance=0.001
-)
-print("MATERIAL:NOMASS modified")
-
 idf.newidfobject(
     "MATERIAL",
-    Name="THERMAL MASS MATERIAL",
+    Name="G01A 19MM GYPSUM BOARD",
+    Roughness="MediumSmooth",
+    Thickness=0.019,
+    Conductivity=0.16,
+    Density=800,
+    Specific_Heat=1090,
+    Thermal_Absorptance=0.9,
+    Solar_Absorptance=0.4,
+    Visible_Absorptance=0.4
+)
+idf.newidfobject(
+    "MATERIAL",
+    Name="M11 100MM LIGHTWEIGHT CONCRETE",
     Roughness="MediumRough",
-    Thickness=0.3,
-    Conductivity=2,
-    Density=1500,
+    Thickness=0.1016,
+    Conductivity=0.53,
+    Density=1280,
+    Specific_Heat=840,
+    Thermal_Absorptance=0.9,
+    Solar_Absorptance=0.5,
+    Visible_Absorptance=0.5
+)
+idf.newidfobject(
+    "MATERIAL",
+    Name="F16 ACOUSTIC TILE",
+    Roughness="MediumSmooth",
+    Thickness=0.0191,
+    Conductivity=0.06,
+    Density=368,
+    Specific_Heat=590,
+    Thermal_Absorptance=0.9,
+    Solar_Absorptance=0.3,
+    Visible_Absorptance=0.3
+)
+idf.newidfobject(
+    "MATERIAL",
+    Name="AIR WALL MATERIAL",
+    Roughness="MediumSmooth",
+    Thickness=0.01,
+    Conductivity=0.6,
+    Density=800,
+    Specific_Heat=1000,
+    Thermal_Absorptance=0.95,
+    Solar_Absorptance=0.7,
+    Visible_Absorptance=0.7
+)
+idf.newidfobject(
+    "MATERIAL",
+    Name="M01 100MM BRICK",
+    Roughness="MediumRough",
+    Thickness=0.1016,
+    Conductivity=0.89,
+    Density=1920,
+    Specific_Heat=790,
+    Thermal_Absorptance=0.9,
+    Solar_Absorptance=0.7,
+    Visible_Absorptance=0.7
+)
+idf.newidfobject(
+    "MATERIAL",
+    Name="M15 200MM HEAVYWEIGHT CONCRETE",
+    Roughness="MediumRough",
+    Thickness=0.2032,
+    Conductivity=1.95,
+    Density=2240,
     Specific_Heat=900,
-    Thermal_Absorptance=0.5,
+    Thermal_Absorptance=0.9,
+    Solar_Absorptance=0.7,
+    Visible_Absorptance=0.7
+)
+idf.newidfobject(
+    "MATERIAL",
+    Name="I02 50MM INSULATION BOARD",
+    Roughness="MediumRough",
+    Thickness=0.0508,
+    Conductivity=0.03,
+    Density=43,
+    Specific_Heat=1210,
+    Thermal_Absorptance=0.9,
     Solar_Absorptance=0.7,
     Visible_Absorptance=0.7
 )
 print("MATERIAL modified")
 
-# Set the constructions for the whole building
+# Modify existing air gap materials
+idf.idfobjects["MATERIAL:AIRGAP"] = []
+idf.newidfobject(
+    "MATERIAL:AIRGAP",
+    Name="F04 WALL AIR SPACE RESISTANCE",
+    Thermal_Resistance=0.15
+)
+idf.newidfobject(
+    "MATERIAL:AIRGAP",
+    Name="F05 CEILING AIR SPACE RESISTANCE",
+    Thermal_Resistance=0.18
+)
+print("MATERIAL:AIRGAP modified")
+
+# Modify the existing window materials
+idf.idfobjects["WINDOWMATERIAL:GLAZING"] = []
+idf.newidfobject(
+    "WINDOWMATERIAL:GLAZING",
+    Name="CLEAR 3MM",
+    Optical_Data_Type="SpectralAverage",
+    Thickness=0.003,
+    Solar_Transmittance_at_Normal_Incidence=0.837,
+    Front_Side_Solar_Reflectance_at_Normal_Incidence=0.075,
+    Back_Side_Solar_Reflectance_at_Normal_Incidence=0,
+    Visible_Transmittance_at_Normal_Incidence=0.898,
+    Front_Side_Visible_Reflectance_at_Normal_Incidence=0.081,
+    Back_Side_Visible_Reflectance_at_Normal_Incidence=0,
+    Infrared_Transmittance_at_Normal_Incidence=0,
+    Front_Side_Infrared_Hemispherical_Emissivity=0.84,
+    Back_Side_Infrared_Hemispherical_Emissivity=0.84,
+    Conductivity=0.9,
+    Dirt_Correction_Factor_for_Solar_and_Visible_Transmittance=1,
+    Solar_Diffusing="No"
+)
+print("WINDOWMATERIAL:GLAZING modified")
+
+# Modify the existing Window Material Gas materials
+idf.idfobjects["WINDOWMATERIAL:GAS"] = []
+idf.newidfobject(
+    "WINDOWMATERIAL:GAS",
+    Name="AIR 13MM",
+    Gas_Type="Air",
+    Thickness=0.0127,
+)
+print("WINDOWMATERIAL:GAS modified")
+
+# Modify Construction objects
 idf.idfobjects["CONSTRUCTION"] = []
 idf.newidfobject(
     "CONSTRUCTION",
-    Name="EXTERIOR WALL",
-    Outside_Layer="EXTERIOR WALL MATERIAL"
-)
-
-idf.newidfobject(
-    "CONSTRUCTION",
     Name="INTERIOR WALL",
-    Outside_Layer="INTERIOR WALL MATERIAL"
+    Outside_Layer="G01A 19MM GYPSUM BOARD",
+    Layer_2="F04 WALL AIR SPACE RESISTANCE",
+    Layer_3="G01A 19MM GYPSUM BOARD",
 )
-
 idf.newidfobject(
     "CONSTRUCTION",
-    Name="INTERIOR FLOOR",
-    Outside_Layer="INTERIOR FLOOR MATERIAL"
+    Name="INTERIOR WINDOW",
+    Outside_Layer="CLEAR 3MM"
 )
-
-idf.newidfobject(
-    "CONSTRUCTION",
-    Name="INTERIOR CEILING",
-    Outside_Layer="INTERIOR CEILING MATERIAL"
-)
-
 idf.newidfobject(
     "CONSTRUCTION",
     Name="EXTERIOR ROOF",
-    Outside_Layer="EXTERIOR ROOF MATERIAL"
+    Outside_Layer="M11 100MM LIGHTWEIGHT CONCRETE",
+    Layer_2="F05 CEILING AIR SPACE RESISTANCE",
+    Layer_3="F16 ACOUSTIC TILE",
 )
-
+idf.newidfobject(
+    "CONSTRUCTION",
+    Name="INTERIOR FLOOR",
+    Outside_Layer="F16 ACOUSTIC TILE",
+    Layer_2="F05 CEILING AIR SPACE RESISTANCE",
+    Layer_3="M11 100MM LIGHTWEIGHT CONCRETE",
+)
 idf.newidfobject(
     "CONSTRUCTION",
     Name="AIR WALL",
     Outside_Layer="AIR WALL MATERIAL"
 )
-
+idf.newidfobject(
+    "CONSTRUCTION",
+    Name="EXTERIOR WALL",
+    Outside_Layer="M01 100MM BRICK",
+    Layer_2="M15 200MM HEAVYWEIGHT CONCRETE",
+    Layer_3="I02 50MM INSULATION BOARD",
+    Layer_4="F04 WALL AIR SPACE RESISTANCE",
+    Layer_5="G01A 19MM GYPSUM BOARD",
+)
 idf.newidfobject(
     "CONSTRUCTION",
     Name="EXTERIOR WINDOW",
-    Outside_Layer="EXTERIOR GLAZING MATERIAL_X"
-)
-
-idf.newidfobject(
-    "CONSTRUCTION",
-    Name="INTERIOR WINDOW",
-    Outside_Layer="INTERIOR GLAZING MATERIAL"
-)
-
-idf.newidfobject(
-    "CONSTRUCTION",
-    Name="THERMAL MASS",
-    Outside_Layer="THERMAL MASS MATERIAL"
+    Outside_Layer="CLEAR 3MM",
+    Layer_2="AIR 13MM",
+    Layer_3="CLEAR 3MM",
 )
 print("CONSTRUCTION modified")
 
-# Get external surface areas for each zone and assign internal mass
-ZONE_WALL_AREA = []
-for zone in [str(i.Name) for i in idf.idfobjects["ZONE"]]:
-    area = 0
-    for surface in idf.idfobjects["BUILDINGSURFACE:DETAILED"]:
-        if (surface.Zone_Name == zone) & (str(surface.Sun_Exposure) == "SunExposed"):
-            area += surface.area
-    ZONE_WALL_AREA.append(area)
+# # Create single layer window material for glazing transmittance/g-value
+# idf.idfobjects["WINDOWMATERIAL:SIMPLEGLAZINGSYSTEM"] = []
 
-idf.idfobjects["INTERNALMASS"] = []
-for i, j in list(zip([str(i.Name) for i in idf.idfobjects["ZONE"]], ZONE_WALL_AREA)):
-    if j != 0:
-        idf.newidfobject(
-            "INTERNALMASS",
-            Name=i + "_MASS",
-            Construction_Name="THERMAL MASS",
-            Zone_Name=i,
-            Surface_Area=j*0.8
-        )
-    else:
-        pass
-print("INTERNALMASS modified")
+# idf.newidfobject(
+#     "WINDOWMATERIAL:SIMPLEGLAZINGSYSTEM",
+#     Name="EXTERIOR GLAZING MATERIAL_X",
+#     UFactor=CONFIG["glass_u_value"],
+#     Solar_Heat_Gain_Coefficient=CONFIG["glass_solar_heat_gain_coefficient_X"],
+#     Visible_Transmittance=CONFIG["glass_visible_transmittance_X"]
+# )
+
+# idf.newidfobject(
+#     "WINDOWMATERIAL:SIMPLEGLAZINGSYSTEM",
+#     Name="EXTERIOR GLAZING MATERIAL_N",
+#     UFactor=CONFIG["glass_u_value"],
+#     Solar_Heat_Gain_Coefficient=CONFIG["glass_solar_heat_gain_coefficient_N"],
+#     Visible_Transmittance=CONFIG["glass_visible_transmittance_N"]
+# )
+
+# idf.newidfobject(
+#     "WINDOWMATERIAL:SIMPLEGLAZINGSYSTEM",
+#     Name="EXTERIOR GLAZING MATERIAL_E",
+#     UFactor=CONFIG["glass_u_value"],
+#     Solar_Heat_Gain_Coefficient=CONFIG["glass_solar_heat_gain_coefficient_E"],
+#     Visible_Transmittance=CONFIG["glass_visible_transmittance_N"]
+# )
+
+# idf.newidfobject(
+#     "WINDOWMATERIAL:SIMPLEGLAZINGSYSTEM",
+#     Name="EXTERIOR GLAZING MATERIAL_S",
+#     UFactor=CONFIG["glass_u_value"],
+#     Solar_Heat_Gain_Coefficient=CONFIG["glass_solar_heat_gain_coefficient_S"],
+#     Visible_Transmittance=CONFIG["glass_visible_transmittance_N"]
+# )
+
+# idf.newidfobject(
+#     "WINDOWMATERIAL:SIMPLEGLAZINGSYSTEM",
+#     Name="EXTERIOR GLAZING MATERIAL_W",
+#     UFactor=CONFIG["glass_u_value"],
+#     Solar_Heat_Gain_Coefficient=CONFIG["glass_solar_heat_gain_coefficient_W"],
+#     Visible_Transmittance=CONFIG["glass_visible_transmittance_N"]
+# )
+
+# idf.newidfobject(
+#     "WINDOWMATERIAL:SIMPLEGLAZINGSYSTEM",
+#     Name="INTERIOR GLAZING MATERIAL",
+#     UFactor=0.8,
+#     Solar_Heat_Gain_Coefficient=0.9,
+#     Visible_Transmittance=0.9
+# )
+# print("WINDOWMATERIAL:SIMPLEGLAZINGSYSTEM modified")
+
+# # Create basic single layer materials with no mass for easy U-Value attribution
+# idf.idfobjects["MATERIAL:NOMASS"] = []
+# idf.newidfobject(
+#     "MATERIAL:NOMASS",
+#     Name="EXTERIOR WALL MATERIAL",
+#     Roughness="MediumRough",
+#     Thermal_Resistance=1 / CONFIG["exterior_wall_u_value"],
+#     Thermal_Absorptance=0.5,
+#     Solar_Absorptance=0.5,
+#     Visible_Absorptance=1 - CONFIG["wall_reflectivity"]
+# )
+
+# idf.newidfobject(
+#     "MATERIAL:NOMASS",
+#     Name="INTERIOR WALL MATERIAL",
+#     Roughness="MediumSmooth",
+#     Thermal_Resistance=1.8,
+#     Thermal_Absorptance=0.5,
+#     Solar_Absorptance=0.5,
+#     Visible_Absorptance=1 - CONFIG["wall_reflectivity"]
+# )
+
+# idf.newidfobject(
+#     "MATERIAL:NOMASS",
+#     Name="INTERIOR FLOOR MATERIAL",
+#     Roughness="MediumSmooth",
+#     Thermal_Resistance=1,
+#     Thermal_Absorptance=0.5,
+#     Solar_Absorptance=0.5,
+#     Visible_Absorptance=1 - CONFIG["floor_reflectivity"]
+# )
+
+# idf.newidfobject(
+#     "MATERIAL:NOMASS",
+#     Name="INTERIOR CEILING MATERIAL",
+#     Roughness="MediumSmooth",
+#     Thermal_Resistance=1,
+#     Thermal_Absorptance=0.5,
+#     Solar_Absorptance=0.5,
+#     Visible_Absorptance=1 - CONFIG["ceiling_reflectivity"]
+# )
+
+# idf.newidfobject(
+#     "MATERIAL:NOMASS",
+#     Name="EXTERIOR ROOF MATERIAL",
+#     Roughness="MediumRough",
+#     Thermal_Resistance=1 / CONFIG["exterior_roof_u_value"],
+#     Thermal_Absorptance=0.5,
+#     Solar_Absorptance=0.5,
+#     Visible_Absorptance=1 - CONFIG["ceiling_reflectivity"]
+# )
+
+# idf.newidfobject(
+#     "MATERIAL:NOMASS",
+#     Name="AIR WALL MATERIAL",
+#     Roughness="MediumRough",
+#     Thermal_Resistance=0.001,
+#     Thermal_Absorptance=0.001,
+#     Solar_Absorptance=0.001,
+#     Visible_Absorptance=0.001
+# )
+# print("MATERIAL:NOMASS modified")
+
+# idf.newidfobject(
+#     "MATERIAL",
+#     Name="THERMAL MASS MATERIAL",
+#     Roughness="MediumRough",
+#     Thickness=0.3,
+#     Conductivity=2,
+#     Density=1500,
+#     Specific_Heat=900,
+#     Thermal_Absorptance=0.5,
+#     Solar_Absorptance=0.7,
+#     Visible_Absorptance=0.7
+# )
+# print("MATERIAL modified")
+
+# # Set the constructions for the whole building
+# idf.idfobjects["CONSTRUCTION"] = []
+# idf.newidfobject(
+#     "CONSTRUCTION",
+#     Name="EXTERIOR WALL",
+#     Outside_Layer="EXTERIOR WALL MATERIAL"
+# )
+
+# idf.newidfobject(
+#     "CONSTRUCTION",
+#     Name="INTERIOR WALL",
+#     Outside_Layer="INTERIOR WALL MATERIAL"
+# )
+
+# idf.newidfobject(
+#     "CONSTRUCTION",
+#     Name="INTERIOR FLOOR",
+#     Outside_Layer="INTERIOR FLOOR MATERIAL"
+# )
+
+# idf.newidfobject(
+#     "CONSTRUCTION",
+#     Name="INTERIOR CEILING",
+#     Outside_Layer="INTERIOR CEILING MATERIAL"
+# )
+
+# idf.newidfobject(
+#     "CONSTRUCTION",
+#     Name="EXTERIOR ROOF",
+#     Outside_Layer="EXTERIOR ROOF MATERIAL"
+# )
+
+# idf.newidfobject(
+#     "CONSTRUCTION",
+#     Name="AIR WALL",
+#     Outside_Layer="AIR WALL MATERIAL"
+# )
+
+# idf.newidfobject(
+#     "CONSTRUCTION",
+#     Name="EXTERIOR WINDOW",
+#     Outside_Layer="EXTERIOR GLAZING MATERIAL_X"
+# )
+
+# idf.newidfobject(
+#     "CONSTRUCTION",
+#     Name="INTERIOR WINDOW",
+#     Outside_Layer="INTERIOR GLAZING MATERIAL"
+# )
+
+# idf.newidfobject(
+#     "CONSTRUCTION",
+#     Name="THERMAL MASS",
+#     Outside_Layer="THERMAL MASS MATERIAL"
+# )
+# print("CONSTRUCTION modified")
+
+# # Get external surface areas for each zone and assign internal mass
+# ZONE_WALL_AREA = []
+# for zone in [str(i.Name) for i in idf.idfobjects["ZONE"]]:
+#     area = 0
+#     for surface in idf.idfobjects["BUILDINGSURFACE:DETAILED"]:
+#         if (surface.Zone_Name == zone) & (str(surface.Sun_Exposure) == "SunExposed"):
+#             area += surface.area
+#     ZONE_WALL_AREA.append(area)
+
+# idf.idfobjects["INTERNALMASS"] = []
+# for i, j in list(zip([str(i.Name) for i in idf.idfobjects["ZONE"]], ZONE_WALL_AREA)):
+#     if j != 0:
+#         idf.newidfobject(
+#             "INTERNALMASS",
+#             Name=i + "_MASS",
+#             Construction_Name="THERMAL MASS",
+#             Zone_Name=i,
+#             Surface_Area=j*0.8
+#         )
+#     else:
+#         pass
+# print("INTERNALMASS modified")
 
 # Create a list zones to be referenced for passing the internal gains setpoints
 TEMP = idf.newidfobject("ZONELIST", Name="AllZones")
@@ -1176,10 +1346,10 @@ idf.newidfobject("OUTPUT:VARIABLEDICTIONARY", Key_Field="regular")
 print("OUTPUT:VARIABLEDICTIONARY modified")
 
 
-
+# Outputs for Michal - TAS test
 # idf.newidfobject("OUTPUT:SURFACES:LIST", Report_Type="Details")
-# idf.newidfobject("OUTPUTCONTROL:TABLE:STYLE", Column_Separator="Comma")
-# idf.newidfobject("OUTPUT:TABLE:SUMMARYREPORTS", Report_1_Name="AllSummary")
+idf.newidfobject("OUTPUTCONTROL:TABLE:STYLE", Column_Separator="Comma")
+idf.newidfobject("OUTPUT:TABLE:SUMMARYREPORTS", Report_1_Name="AllSummary")
 
 
 
