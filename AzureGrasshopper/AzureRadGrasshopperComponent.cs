@@ -39,11 +39,11 @@ namespace AzureGrasshopper
         {
             pManager.AddTextParameter("Project Number", "Project Number", "The project number for the project being simulated", GH_ParamAccess.item);
             pManager.AddTextParameter("Project Name", "Project Name", "The project name for the project being simulated", GH_ParamAccess.item);
-            //pManager.AddTextParameter("EPW File", "EPW File", "The location on your system (full file path) to the EPW file to include for simulation", GH_ParamAccess.item);
-            //pManager.AddTextParameter("IDF Files", "IDF Files", "The location on your system (full file path) to the IDF file(s) to simulate", GH_ParamAccess.list);
 
-            pManager.AddTextParameter("Zone Files", "Zone Files", "The location on your system (full folder path) to the zipped Zone files being simulated", GH_ParamAccess.item);
-            pManager.AddTextParameter("Zone Folders", "Zone Folders", "The names of the folders you wish to simulate", GH_ParamAccess.list);
+            //pManager.AddTextParameter("Zone Files", "Zone Files", "The location on your system (full folder path) to the zipped Zone files being simulated", GH_ParamAccess.item);
+            //pManager.AddTextParameter("Zone Folders", "Zone Folders", "The names of the folders you wish to simulate", GH_ParamAccess.list);
+
+
             pManager.AddBooleanParameter("Run", "Run", "Do you wish to run this component?", GH_ParamAccess.item);
         }
 

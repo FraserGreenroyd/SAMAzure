@@ -155,14 +155,15 @@ namespace AzureEngine
         public void RunRadiance(String folderName, List<String> zoneFolderNames)
         {
             //Transfer the zip folder to the task, unzip it, and go into the folder(s) provided by the users to run 'commands.sh'
-            String unzipCommand = "sudo unzip " + System.IO.Path.GetFileName(folderName);
             String folder = System.IO.Path.GetFileNameWithoutExtension(folderName);
+            String unzipCommand = "sudo bash -c 'mkdir -p ../../simulationData; sudo unzip -o " + System.IO.Path.GetFileName(folderName) + " -d ../../simulationData/'";            
 
             for(int x = 0; x < zoneFolderNames.Count; x++)
             {
-                batchContainer[x].AddTask(unzipCommand, new List<ResourceFile> { blobContainer.GenerateResourceFile(folderName) });
+                batchContainer[x].AddTask(unzipCommand, new List<ResourceFile> { blobContainer.GenerateResourceFile(System.IO.Path.GetFileName(folderName)) });
 
-                String nextCommand = "cd " + folder + " && sudo /bin/sh -c ./commands.sh";
+                String nextCommand = "sudo bash -c 'cd ../../simulationData/" + folder + "/" + zoneFolderNames[x] + "; pwd; sudo /bin/sh -c ./commands.sh'";
+                //String nextCommand = "pwd";
                 batchContainer[x].AddTask(nextCommand);
             }
 
