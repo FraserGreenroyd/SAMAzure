@@ -719,17 +719,35 @@ idf.newidfobject(
     "WINDOWMATERIAL:GLAZING",
     Name="CLEAR FLOAT 6MM",
     Optical_Data_Type="SpectralAverage",
-    Thickness=0.0059,
-    Solar_Transmittance_at_Normal_Incidence=0.783,  # TODO - REPLACE THIS WITH MODIFIABLE VALUE FOR CUSTOM G VALUE INPUT
-    Front_Side_Solar_Reflectance_at_Normal_Incidence=0.071,
-    Back_Side_Solar_Reflectance_at_Normal_Incidence=0.071,
-    Visible_Transmittance_at_Normal_Incidence=0.78,  # TODO - REPLACE THIS WITH MODIFIABLE VALUE FOR CUSTOM TVIS INPUT
+    Thickness=0.006,
+    Solar_Transmittance_at_Normal_Incidence=0.7832,  # TODO - REPLACE THIS WITH MODIFIABLE VALUE FOR CUSTOM G VALUE INPUT
+    Front_Side_Solar_Reflectance_at_Normal_Incidence=0.0712,
+    Back_Side_Solar_Reflectance_at_Normal_Incidence=0.0712,
+    Visible_Transmittance_at_Normal_Incidence=0.8842,  # TODO - REPLACE THIS WITH MODIFIABLE VALUE FOR CUSTOM TVIS INPUT
     Front_Side_Visible_Reflectance_at_Normal_Incidence=0.071,
     Back_Side_Visible_Reflectance_at_Normal_Incidence=0.071,
     Infrared_Transmittance_at_Normal_Incidence=0,
     Front_Side_Infrared_Hemispherical_Emissivity=0.84,
     Back_Side_Infrared_Hemispherical_Emissivity=0.84,
     Conductivity=1.06,  # TODO - REPLACE THIS WITH MODIFIABLE VALUE FOR CUSTOM GLAZING U VALUE INPUT
+    Dirt_Correction_Factor_for_Solar_and_Visible_Transmittance=1,
+    Solar_Diffusing="No"
+)
+idf.newidfobject(
+    "WINDOWMATERIAL:GLAZING",
+    Name="CLEAR FLOAT 6MM INTERNAL",
+    Optical_Data_Type="SpectralAverage",
+    Thickness=0.006,
+    Solar_Transmittance_at_Normal_Incidence=0.7832,
+    Front_Side_Solar_Reflectance_at_Normal_Incidence=0.0712,
+    Back_Side_Solar_Reflectance_at_Normal_Incidence=0.0712,
+    Visible_Transmittance_at_Normal_Incidence=0.9,
+    Front_Side_Visible_Reflectance_at_Normal_Incidence=0.071,
+    Back_Side_Visible_Reflectance_at_Normal_Incidence=0.071,
+    Infrared_Transmittance_at_Normal_Incidence=0,
+    Front_Side_Infrared_Hemispherical_Emissivity=0.84,
+    Back_Side_Infrared_Hemispherical_Emissivity=0.84,
+    Conductivity=1.06,
     Dirt_Correction_Factor_for_Solar_and_Visible_Transmittance=1,
     Solar_Diffusing="No"
 )
@@ -753,7 +771,6 @@ idf.idfobjects["MATERIAL"] = []
 # Add new materials
 idf.newidfobject(
     "MATERIAL",
-    Name="INTERIOR WALL",
     Name="C00_Gypsum Board_800.923kg/m3_0.161W/mK",
     Roughness="MediumSmooth",
     Thickness=0.019,
@@ -766,7 +783,6 @@ idf.newidfobject(
 )
 idf.newidfobject(
     "MATERIAL",
-    Name="INTERIOR WALL",
     Name="I00_Mineral Wool_50kg/m3_0.036W/mK",
     Roughness="MediumRough",
     Thickness=0.019,
@@ -776,6 +792,54 @@ idf.newidfobject(
     Thermal_Absorptance=0.1,
     Solar_Absorptance=0.7,
     Visible_Absorptance=1.0
+)
+idf.newidfobject(
+    "MATERIAL",
+    Name="C00_Ceiling tile_250kg/m3_0.09W/mK",
+    Roughness="MediumSmooth",
+    Thickness=0.001,
+    Conductivity=0.09,
+    Density=250,
+    Specific_Heat=1000,
+    Thermal_Absorptance=0.1,
+    Solar_Absorptance=0.7,
+    Visible_Absorptance=1  # TODO - REPLACE THIS WITH MODIFIABLE VALUE FOR CUSTOM CEILING LIGHT REFLECTIVITY VALUE INPUT
+)
+idf.newidfobject(
+    "MATERIAL",
+    Name="I00_Mineral Wool_50kg/m3_0.036W/mK",
+    Roughness="MediumRough",
+    Thickness=0.2,  # TODO - REPLACE THIS WITH MODIFIABLE VALUE FOR CUSTOM ROOF U VALUE INPUT
+    Conductivity=0.036,
+    Density=50,
+    Specific_Heat=1030,
+    Thermal_Absorptance=0.1,
+    Solar_Absorptance=0.7,
+    Visible_Absorptance=1
+)
+idf.newidfobject(
+    "MATERIAL",
+    Name="C00_Concrete_1800kg/m3_1.13W/mK",
+    Roughness="MediumRough",
+    Thickness=0.1,
+    Conductivity=0.001,
+    Density=1800,
+    Specific_Heat=1000,
+    Thermal_Absorptance=0.1,
+    Solar_Absorptance=0.7,
+    Visible_Absorptance=1
+)
+idf.newidfobject(
+    "MATERIAL",
+    Name="AIR WALL PROXY MATERIAL",
+    Roughness="Smooth",
+    Thickness=0.002,
+    Conductivity=0.0262,
+    Density=1.225,
+    Specific_Heat=1000,
+    Thermal_Absorptance=0.0,
+    Solar_Absorptance=0.0,
+    Visible_Absorptance=0.0
 )
 
 # Remove constructions
@@ -791,10 +855,34 @@ idf.newidfobject(
 )
 idf.newidfobject(
     "CONSTRUCTION",
+    Name="INTERIOR WINDOW",
+    Outside_Layer="CLEAR FLOAT 6MM INTERNAL",
+)
+idf.newidfobject(
+    "CONSTRUCTION",
     Name="INTERIOR WALL",
     Outside_Layer="C00_Gypsum Board_800.923kg/m3_0.161W/mK",
     Layer_2="I00_Mineral Wool_50kg/m3_0.036W/mK",
     Layer_3="C00_Gypsum Board_800.923kg/m3_0.161W/mK",
+)
+idf.newidfobject(
+    "CONSTRUCTION",
+    Name="EXTERIOR ROOF",
+    Outside_Layer="C00_Concrete_1800kg/m3_1.13W/mK",
+    Layer_2="I00_Mineral Wool_50kg/m3_0.036W/mK",
+    Layer_3="C00_Ceiling tile_250kg/m3_0.09W/mK",
+)
+idf.newidfobject(
+    "CONSTRUCTION",
+    Name="INTERIOR FLOOR",
+    Outside_Layer="C00_Ceiling tile_250kg/m3_0.09W/mK",
+    Layer_2="I00_Mineral Wool_50kg/m3_0.036W/mK",
+    Layer_3="C00_Concrete_1800kg/m3_1.13W/mK",
+)
+idf.newidfobject(
+    "CONSTRUCTION",
+    Name="AIR WALL",
+    Outside_Layer="AIR WALL PROXY MATERIAL"
 )
 print("CONSTRUCTION modified")
 
