@@ -178,6 +178,7 @@ def bat_to_sh(file_path):
                 continue
             modified_line = line.replace('c:\\radiance\\bin\\', '').replace('\\', '/')
             outf.write(modified_line)
+        outf.write('cd -')  # This returns to the original directory for the next command to be run
 
     print('bash file is created at:\n\t%s' % sh_file)
     # Heroku - Make command.sh executable

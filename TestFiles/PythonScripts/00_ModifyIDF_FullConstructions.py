@@ -699,15 +699,66 @@ idf.newidfobject(
 )
 print("SIZING:PARAMETERS modified")
 
-# Modify existing materials
+"""
+The following section defines materials and constructions. The methods below
+either allow for multi-layered constructions or single layered constructions
+with no thermal mass. In the single layered, simplified construction method,
+an additional compoennt of thermal mass is added to the zone to replicate
+the effects this would have on space temperatures.
+
+For the multiple layer constructions, the layers and propwerties of those
+layers were provided by Michal Dengusiak from his SAM workflow, enabling the
+modification of constructuion U-Value and g-Value
+"""
+
+# Remove glazing materials
+idf.idfobjects["WINDOWMATERIAL:GLAZING"] = []
+
+# Add new glazing materials
+idf.newidfobject(
+    "WINDOWMATERIAL:GLAZING",
+    Name="CLEAR FLOAT 6MM",
+    Optical_Data_Type="SpectralAverage",
+    Thickness=0.0059,
+    Solar_Transmittance_at_Normal_Incidence=0.783,  # TODO - REPLACE THIS WITH MODIFIABLE VALUE FOR CUSTOM G VALUE INPUT
+    Front_Side_Solar_Reflectance_at_Normal_Incidence=0.071,
+    Back_Side_Solar_Reflectance_at_Normal_Incidence=0.071,
+    Visible_Transmittance_at_Normal_Incidence=0.78,  # TODO - REPLACE THIS WITH MODIFIABLE VALUE FOR CUSTOM TVIS INPUT
+    Front_Side_Visible_Reflectance_at_Normal_Incidence=0.071,
+    Back_Side_Visible_Reflectance_at_Normal_Incidence=0.071,
+    Infrared_Transmittance_at_Normal_Incidence=0,
+    Front_Side_Infrared_Hemispherical_Emissivity=0.84,
+    Back_Side_Infrared_Hemispherical_Emissivity=0.84,
+    Conductivity=1.06,  # TODO - REPLACE THIS WITH MODIFIABLE VALUE FOR CUSTOM GLAZING U VALUE INPUT
+    Dirt_Correction_Factor_for_Solar_and_Visible_Transmittance=1,
+    Solar_Diffusing="No"
+)
+print("WINDOWMATERIAL:GLAZING modified")
+
+# Remove glazing gas materials
+idf.idfobjects["WINDOWMATERIAL:GAS"] = []
+
+# Add new glazing gas materials
+idf.newidfobject(
+    "WINDOWMATERIAL:GAS",
+    Name="AIR 12MM",
+    Gas_Type="Air",
+    Thickness=0.012
+)
+print("WINDOWMATERIAL:GAS modified")
+
+# Remove materials
 idf.idfobjects["MATERIAL"] = []
+
+# Add new materials
 idf.newidfobject(
     "MATERIAL",
-    Name="G01A 19MM GYPSUM BOARD",
+    Name="INTERIOR WALL",
+    Name="C00_Gypsum Board_800.923kg/m3_0.161W/mK",
     Roughness="MediumSmooth",
     Thickness=0.019,
-    Conductivity=0.16,
-    Density=800,
+    Conductivity=0.161,
+    Density=800.923,
     Specific_Heat=1090,
     Thermal_Absorptance=0.9,
     Solar_Absorptance=0.4,
@@ -715,197 +766,276 @@ idf.newidfobject(
 )
 idf.newidfobject(
     "MATERIAL",
-    Name="M11 100MM LIGHTWEIGHT CONCRETE",
-    Roughness="MediumRough",
-    Thickness=0.1016,
-    Conductivity=0.53,
-    Density=1280,
-    Specific_Heat=840,
-    Thermal_Absorptance=0.9,
-    Solar_Absorptance=0.5,
-    Visible_Absorptance=0.5
-)
-idf.newidfobject(
-    "MATERIAL",
-    Name="F16 ACOUSTIC TILE",
-    Roughness="MediumSmooth",
-    Thickness=0.0191,
-    Conductivity=0.06,
-    Density=368,
-    Specific_Heat=590,
-    Thermal_Absorptance=0.9,
-    Solar_Absorptance=0.3,
-    Visible_Absorptance=0.3
-)
-idf.newidfobject(
-    "MATERIAL",
-    Name="AIR WALL MATERIAL",
-    Roughness="MediumSmooth",
-    Thickness=0.01,
-    Conductivity=0.6,
-    Density=800,
-    Specific_Heat=1000,
-    Thermal_Absorptance=0.95,
-    Solar_Absorptance=0.7,
-    Visible_Absorptance=0.7
-)
-idf.newidfobject(
-    "MATERIAL",
-    Name="M01 100MM BRICK",
-    Roughness="MediumRough",
-    Thickness=0.1016,
-    Conductivity=0.89,
-    Density=1920,
-    Specific_Heat=790,
-    Thermal_Absorptance=0.9,
-    Solar_Absorptance=0.7,
-    Visible_Absorptance=0.7
-)
-idf.newidfobject(
-    "MATERIAL",
-    Name="M15 200MM HEAVYWEIGHT CONCRETE",
-    Roughness="MediumRough",
-    Thickness=0.2032,
-    Conductivity=1.95,
-    Density=2240,
-    Specific_Heat=900,
-    Thermal_Absorptance=0.9,
-    Solar_Absorptance=0.7,
-    Visible_Absorptance=0.7
-)
-idf.newidfobject(
-    "MATERIAL",
-    Name="I02 50MM INSULATION BOARD",
-    Roughness="MediumRough",
-    Thickness=0.0508,
-    Conductivity=0.03,
-    Density=43,
-    Specific_Heat=1210,
-    Thermal_Absorptance=0.9,
-    Solar_Absorptance=0.7,
-    Visible_Absorptance=0.7
-)
-print("MATERIAL modified")
-
-# Modify existing air gap materials
-idf.idfobjects["MATERIAL:AIRGAP"] = []
-idf.newidfobject(
-    "MATERIAL:AIRGAP",
-    Name="F04 WALL AIR SPACE RESISTANCE",
-    Thermal_Resistance=0.15
-)
-idf.newidfobject(
-    "MATERIAL:AIRGAP",
-    Name="F05 CEILING AIR SPACE RESISTANCE",
-    Thermal_Resistance=0.18
-)
-print("MATERIAL:AIRGAP modified")
-
-# The following describes a relationship between the input Solar Heat Transmittance and overal window SHGC. It is used for converting teh users input SHGC into a corresponding value equivalnt to the overall window g-Value that is intended
-userinput_g_value = [0.01, 0.05684211, 0.10368421, 0.15052632, 0.19736842, 0.24421053, 0.29105263, 0.33789474, 0.38473684, 0.43157895, 0.47842105, 0.52526316, 0.57210526, 0.61894737, 0.66578947, 0.71263158, 0.75947368, 0.80631579, 0.85315789, 0.9]
-resultant_g_value = [0.2, 0.221, 0.243, 0.267, 0.292, 0.318, 0.346, 0.375, 0.406, 0.438, 0.471, 0.506, 0.542, 0.579, 0.615, 0.656, 0.697, 0.74 ,0.785, 0.832]
-f_gvalue = interpolate.interp1d(resultant_g_value, userinput_g_value)
-if CONFIG["glass_solar_heat_gain_coefficient"] > 0.832:
-    glassGValue = f_gvalue(0.832)
-elif CONFIG["glass_solar_heat_gain_coefficient"] < 0.2:
-    glassGValue = f_gvalue(0.2)
-else:
-    glassGValue = f_gvalue(CONFIG["glass_solar_heat_gain_coefficient"])
-
-# The following describes a relationship between the input Glazing U Value and glass conductivity. It is used for converting the users input Glazing U Value into a corresponding value in the glass conductivity field equivalnt to the overall window U-Value that is intended
-
-userinput_conduct = [0.001, 0.00621053, 0.01142105, 0.01663158, 0.02184211, 0.02705263, 0.03226316, 0.03747368, 0.04268421, 0.04789474, 0.05310526, 0.05831579, 0.06352632, 0.06873684, 0.07394737, 0.07915789, 0.08436842, 0.08957895, 0.09478947, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
-resultant_ufactor = [0.157, 0.748, 1.118, 1.373, 1.559, 1.702, 1.814, 1.905, 1.98, 2.043, 2.096, 2.143, 2.183, 2.218, 2.25, 2.278, 2.303, 2.326, 2.347, 2.365, 2.552, 2.621, 2.657, 2.68, 2.695, 2.705, 2.714, 2.72, 2.725]
-f_ufactor = interpolate.interp1d(resultant_ufactor, userinput_conduct)
-if CONFIG["glass_u_value"] > 2.725:
-    glassConductivity = f_ufactor(2.725)
-elif CONFIG["glass_u_value"] < 0.157:
-    glassConductivity = f_ufactor(0.157)
-else:
-    glassConductivity = f_ufactor(CONFIG["glass_u_value"])
-
-# Modify the existing window materials
-idf.idfobjects["WINDOWMATERIAL:GLAZING"] = []
-idf.newidfobject(
-    "WINDOWMATERIAL:GLAZING",
-    Name="CLEAR 3MM",
-    Optical_Data_Type="SpectralAverage",
-    Thickness=0.003,
-    Solar_Transmittance_at_Normal_Incidence=glassGValue,  # glassGValue,  # This was determined by running the IDF with a ranger of inputs and determining the relationship between input g-value and overall g-value for the computed glazing
-    Front_Side_Solar_Reflectance_at_Normal_Incidence=0.075,
-    Back_Side_Solar_Reflectance_at_Normal_Incidence=0,
-    Visible_Transmittance_at_Normal_Incidence=CONFIG["glass_visible_transmittance"],
-    Front_Side_Visible_Reflectance_at_Normal_Incidence=0.081,
-    Back_Side_Visible_Reflectance_at_Normal_Incidence=0,
-    Infrared_Transmittance_at_Normal_Incidence=0,
-    Front_Side_Infrared_Hemispherical_Emissivity=0.84,
-    Back_Side_Infrared_Hemispherical_Emissivity=0.84,
-    Conductivity=glassConductivity,
-    Dirt_Correction_Factor_for_Solar_and_Visible_Transmittance=1,
-    Solar_Diffusing="No"
-)
-print("WINDOWMATERIAL:GLAZING modified")
-
-# Modify the existing Window Material Gas materials
-idf.idfobjects["WINDOWMATERIAL:GAS"] = []
-idf.newidfobject(
-    "WINDOWMATERIAL:GAS",
-    Name="AIR 13MM",
-    Gas_Type="Air",
-    Thickness=0.0127
-)
-print("WINDOWMATERIAL:GAS modified")
-
-# Modify Construction objects
-idf.idfobjects["CONSTRUCTION"] = []
-idf.newidfobject(
-    "CONSTRUCTION",
     Name="INTERIOR WALL",
-    Outside_Layer="G01A 19MM GYPSUM BOARD",
-    Layer_2="F04 WALL AIR SPACE RESISTANCE",
-    Layer_3="G01A 19MM GYPSUM BOARD",
+    Name="I00_Mineral Wool_50kg/m3_0.036W/mK",
+    Roughness="MediumRough",
+    Thickness=0.019,
+    Conductivity=0.16,
+    Density=50,
+    Specific_Heat=1030,
+    Thermal_Absorptance=0.1,
+    Solar_Absorptance=0.7,
+    Visible_Absorptance=1.0
 )
-idf.newidfobject(
-    "CONSTRUCTION",
-    Name="INTERIOR WINDOW",
-    Outside_Layer="CLEAR 3MM"
-)
-idf.newidfobject(
-    "CONSTRUCTION",
-    Name="EXTERIOR ROOF",
-    Outside_Layer="M11 100MM LIGHTWEIGHT CONCRETE",
-    Layer_2="F05 CEILING AIR SPACE RESISTANCE",
-    Layer_3="F16 ACOUSTIC TILE",
-)
-idf.newidfobject(
-    "CONSTRUCTION",
-    Name="INTERIOR FLOOR",
-    Outside_Layer="F16 ACOUSTIC TILE",
-    Layer_2="F05 CEILING AIR SPACE RESISTANCE",
-    Layer_3="M11 100MM LIGHTWEIGHT CONCRETE",
-)
-idf.newidfobject(
-    "CONSTRUCTION",
-    Name="AIR WALL",
-    Outside_Layer="AIR WALL MATERIAL"
-)
-idf.newidfobject(
-    "CONSTRUCTION",
-    Name="EXTERIOR WALL",
-    Outside_Layer="M01 100MM BRICK",
-    Layer_2="M15 200MM HEAVYWEIGHT CONCRETE",
-    Layer_3="I02 50MM INSULATION BOARD",
-    Layer_4="F04 WALL AIR SPACE RESISTANCE",
-    Layer_5="G01A 19MM GYPSUM BOARD",
-)
+
+# Remove constructions
+idf.idfobjects["CONSTRUCTION"] = []
+
+# Generate new constructions
 idf.newidfobject(
     "CONSTRUCTION",
     Name="EXTERIOR WINDOW",
-    Outside_Layer="CLEAR 3MM",
-    Layer_2="AIR 13MM",
-    Layer_3="CLEAR 3MM",
+    Outside_Layer="CLEAR FLOAT 6MM",
+    Layer_2="AIR 12MM",
+    Layer_3="CLEAR FLOAT 6MM",
+)
+idf.newidfobject(
+    "CONSTRUCTION",
+    Name="INTERIOR WALL",
+    Outside_Layer="C00_Gypsum Board_800.923kg/m3_0.161W/mK",
+    Layer_2="I00_Mineral Wool_50kg/m3_0.036W/mK",
+    Layer_3="C00_Gypsum Board_800.923kg/m3_0.161W/mK",
 )
 print("CONSTRUCTION modified")
+
+
+
+
+
+# # The following describes a relationship between the input external wall U value and resultant exrternal wall UValue. It is used for converting teh users input target UI value into a corresponding value equivalnt to the overall wall u value that is intended, via the wall insulation thickness
+# userinput_wallU = [0.001, 0.02138776, 0.04177551, 0.06216327, 0.08255102, 0.10293878, 0.12332653, 0.14371429, 0.16410204, 0.1844898, 0.20487755, 0.22526531, 0.24565306, 0.26604082, 0.28642857, 0.30681633, 0.32720408, 0.34759184, 0.36797959, 0.38836735, 0.4087551, 0.42914286, 0.44953061, 0.46991837, 0.49030612, 0.51069388, 0.53108163, 0.55146939, 0.57185714, 0.5922449, 0.61263265, 0.63302041, 0.65340816, 0.67379592, 0.69418367, 0.71457143, 0.73495918, 0.75534694, 0.77573469, 0.79612245, 0.8165102, 0.83689796, 0.85728571, 0.87767347, 0.89806122, 0.91844898, 0.93883673, 0.95922449, 0.97961224, 1]
+# resultant_wallU = [1.923, 0.834, 0.532, 0.391, 0.309, 0.255, 0.218, 0.189, 0.168, 0.151, 0.137, 0.125, 0.115, 0.107, 0.1, 0.093, 0.088, 0.083, 0.078, 0.074, 0.071, 0.068, 0.065, 0.062, 0.059, 0.057, 0.055, 0.053, 0.051, 0.049, 0.048, 0.046, 0.045, 0.044, 0.042, 0.041, 0.04, 0.039, 0.038, 0.037, 0.036, 0.035, 0.034, 0.034, 0.033, 0.032, 0.031, 0.031, 0.03, 0.03]
+# f_walluval = interpolate.interp1d(resultant_wallU, userinput_wallU)
+
+# if CONFIG["exterior_wall_u_value"] > 1.923:
+#     extWallUValue = f_walluval(1.923)
+# elif CONFIG["exterior_wall_u_value"] < 0.03:
+#     extWallUValue = f_walluval(0.03)
+# else:
+#     extWallUValue = f_walluval(CONFIG["exterior_wall_u_value"])
+
+# # Modify existing materials
+# idf.idfobjects["MATERIAL"] = []
+# idf.newidfobject(
+#     "MATERIAL",
+#     Name="G01A 19MM GYPSUM BOARD",
+#     Roughness="MediumSmooth",
+#     Thickness=0.019,
+#     Conductivity=0.16,
+#     Density=800,
+#     Specific_Heat=1090,
+#     Thermal_Absorptance=0.9,
+#     Solar_Absorptance=0.4,
+#     Visible_Absorptance=0.4
+# )
+# idf.newidfobject(
+#     "MATERIAL",
+#     Name="M11 100MM LIGHTWEIGHT CONCRETE",
+#     Roughness="MediumRough",
+#     Thickness=0.1016,
+#     Conductivity=0.53,
+#     Density=1280,
+#     Specific_Heat=840,
+#     Thermal_Absorptance=0.9,
+#     Solar_Absorptance=0.5,
+#     Visible_Absorptance=0.5
+# )
+# idf.newidfobject(
+#     "MATERIAL",
+#     Name="F16 ACOUSTIC TILE",
+#     Roughness="MediumSmooth",
+#     Thickness=0.0191,
+#     Conductivity=0.06,
+#     Density=368,
+#     Specific_Heat=590,
+#     Thermal_Absorptance=0.9,
+#     Solar_Absorptance=0.3,
+#     Visible_Absorptance=0.3
+# )
+# idf.newidfobject(
+#     "MATERIAL",
+#     Name="AIR WALL MATERIAL",
+#     Roughness="MediumSmooth",
+#     Thickness=0.002,
+#     Conductivity=0.6,
+#     Density=800,
+#     Specific_Heat=1000,
+#     Thermal_Absorptance=0.95,
+#     Solar_Absorptance=0.7,
+#     Visible_Absorptance=0.7
+# )
+# idf.newidfobject(
+#     "MATERIAL",
+#     Name="M01 100MM BRICK",
+#     Roughness="MediumRough",
+#     Thickness=0.1016,
+#     Conductivity=0.89,
+#     Density=1920,
+#     Specific_Heat=790,
+#     Thermal_Absorptance=0.9,
+#     Solar_Absorptance=0.7,
+#     Visible_Absorptance=0.7
+# )
+# idf.newidfobject(
+#     "MATERIAL",
+#     Name="M15 200MM HEAVYWEIGHT CONCRETE",
+#     Roughness="MediumRough",
+#     Thickness=0.2032,
+#     Conductivity=1.95,
+#     Density=2240,
+#     Specific_Heat=900,
+#     Thermal_Absorptance=0.9,
+#     Solar_Absorptance=0.7,
+#     Visible_Absorptance=0.7
+# )
+# idf.newidfobject(
+#     "MATERIAL",
+#     Name="I02 50MM INSULATION BOARD",
+#     Roughness="MediumRough",
+#     Thickness=extWallUValue,  # 0.0508,
+#     Conductivity=0.03,
+#     Density=43,
+#     Specific_Heat=1210,
+#     Thermal_Absorptance=0.9,
+#     Solar_Absorptance=0.7,
+#     Visible_Absorptance=0.7
+# )
+# print("MATERIAL modified")
+
+# # Modify existing air gap materials
+# idf.idfobjects["MATERIAL:AIRGAP"] = []
+# idf.newidfobject(
+#     "MATERIAL:AIRGAP",
+#     Name="F04 WALL AIR SPACE RESISTANCE",
+#     Thermal_Resistance=0.15
+# )
+
+# # The following describes a relationship between the input Roof U value and overall floor/ceiling U value. It is used for converting teh users input Roof U value into a corresponding value equivalnt to the overall roof u value that is intended
+# userinput_roofU = [1.542, 1.519, 1.496, 1.473, 1.452, 1.431, 1.411, 1.391, 1.372, 1.353, 1.335, 1.317, 1.3, 1.283, 1.266, 1.25, 1.235, 1.22, 1.205, 1.19, 1.176, 1.162, 1.149, 1.136, 1.123, 1.11, 1.098, 1.086, 1.074, 1.063, 1.051, 1.04, 1.03, 1.019, 1.009, 0.998, 0.988, 0.979, 0.969, 0.96, 0.951, 0.942, 0.933, 0.924, 0.915, 0.907, 0.899, 0.891, 0.883, 0.875, 0.867, 0.86, 0.852, 0.845, 0.838, 0.831, 0.824, 0.817, 0.811, 0.804, 0.798, 0.791, 0.785, 0.779, 0.773, 0.767, 0.761, 0.755, 0.749, 0.744, 0.738, 0.733, 0.727, 0.722, 0.717, 0.712, 0.707, 0.702, 0.697, 0.692, 0.687, 0.682, 0.678, 0.673, 0.668, 0.664, 0.66, 0.655, 0.651, 0.647, 0.642, 0.638, 0.634, 0.63, 0.626, 0.622, 0.618, 0.615, 0.611, 0.607, 0.569, 0.535, 0.505, 0.478, 0.454, 0.432, 0.412, 0.394, 0.378, 0.363, 0.35, 0.337, 0.326, 0.315, 0.305, 0.295, 0.287, 0.278, 0.27, 0.263, 0.256, 0.249, 0.243, 0.237, 0.231, 0.225, 0.22, 0.215, 0.194, 0.177, 0.163, 0.15, 0.14, 0.131, 0.123, 0.116, 0.109, 0.104, 0.099]
+# resultant_roofU = [0.001, 0.011091, 0.021182, 0.031273, 0.041364, 0.051455, 0.061545, 0.071636, 0.081727, 0.091818, 0.101909, 0.112, 0.122091, 0.132182, 0.142273, 0.152364, 0.162455, 0.172545, 0.182636, 0.192727, 0.202818, 0.212909, 0.223, 0.233091, 0.243182, 0.253273, 0.263364, 0.273455, 0.283545, 0.293636, 0.303727, 0.313818, 0.323909, 0.334, 0.344091, 0.354182, 0.364273, 0.374364, 0.384455, 0.394545, 0.404636, 0.414727, 0.424818, 0.434909, 0.445, 0.455091, 0.465182, 0.475273, 0.485364, 0.495455, 0.505545, 0.515636, 0.525727, 0.535818, 0.545909, 0.556, 0.566091, 0.576182, 0.586273, 0.596364, 0.606455, 0.616545, 0.626636, 0.636727, 0.646818, 0.656909, 0.667, 0.677091, 0.687182, 0.697273, 0.707364, 0.717455, 0.727545, 0.737636, 0.747727, 0.757818, 0.767909, 0.778, 0.788091, 0.798182, 0.808273, 0.818364, 0.828455, 0.838545, 0.848636, 0.858727, 0.868818, 0.878909, 0.889, 0.899091, 0.909182, 0.919273, 0.929364, 0.939455, 0.949545, 0.959636, 0.969727, 0.979818, 0.989909, 1, 1.111111, 1.222222, 1.333333, 1.444444, 1.555556, 1.666667, 1.777778, 1.888889, 2, 2.105263, 2.210526, 2.315789, 2.421053, 2.526316, 2.631579, 2.736842, 2.842105, 2.947368, 3.052632, 3.157895, 3.263158, 3.368421, 3.473684, 3.578947, 3.684211, 3.789474, 3.894737, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5]
+# f_roofUvalue = interpolate.interp1d(userinput_roofU, resultant_roofU)
+# if CONFIG["exterior_roof_u_value"] > max(userinput_roofU):
+#     ceilResistance = f_roofUvalue(max(userinput_roofU))
+# elif CONFIG["exterior_roof_u_value"] < min(userinput_roofU):
+#     ceilResistance = f_roofUvalue(min(userinput_roofU))
+# else:
+#     ceilResistance = f_roofUvalue(CONFIG["exterior_roof_u_value"])
+
+# idf.newidfobject(
+#     "MATERIAL:AIRGAP",
+#     Name="F05 CEILING AIR SPACE RESISTANCE",
+#     Thermal_Resistance=ceilResistance
+# )
+# print("MATERIAL:AIRGAP modified")
+
+
+
+
+
+# # The following describes a relationship between the input Solar Heat Transmittance and overal window SHGC. It is used for converting teh users input SHGC into a corresponding value equivalnt to the overall window g-Value that is intended
+# userinput_g_value = [0.01, 0.05684211, 0.10368421, 0.15052632, 0.19736842, 0.24421053, 0.29105263, 0.33789474, 0.38473684, 0.43157895, 0.47842105, 0.52526316, 0.57210526, 0.61894737, 0.66578947, 0.71263158, 0.75947368, 0.80631579, 0.85315789, 0.9]
+# resultant_g_value = [0.2, 0.221, 0.243, 0.267, 0.292, 0.318, 0.346, 0.375, 0.406, 0.438, 0.471, 0.506, 0.542, 0.579, 0.615, 0.656, 0.697, 0.74 ,0.785, 0.832]
+# f_gvalue = interpolate.interp1d(resultant_g_value, userinput_g_value)
+# if CONFIG["glass_solar_heat_gain_coefficient"] > max(userinput_g_value):
+#     glassGValue = f_gvalue(max(userinput_g_value))
+# elif CONFIG["glass_solar_heat_gain_coefficient"] < min(userinput_g_value):
+#     glassGValue = f_gvalue(min(userinput_g_value))
+# else:
+#     glassGValue = f_gvalue(CONFIG["glass_solar_heat_gain_coefficient"])
+
+# # The following describes a relationship between the input Glazing U Value and glass conductivity. It is used for converting the users input Glazing U Value into a corresponding value in the glass conductivity field equivalnt to the overall window U-Value that is intended
+# userinput_conduct = [0.001, 0.00621053, 0.01142105, 0.01663158, 0.02184211, 0.02705263, 0.03226316, 0.03747368, 0.04268421, 0.04789474, 0.05310526, 0.05831579, 0.06352632, 0.06873684, 0.07394737, 0.07915789, 0.08436842, 0.08957895, 0.09478947, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
+# resultant_ufactor = [0.157, 0.748, 1.118, 1.373, 1.559, 1.702, 1.814, 1.905, 1.98, 2.043, 2.096, 2.143, 2.183, 2.218, 2.25, 2.278, 2.303, 2.326, 2.347, 2.365, 2.552, 2.621, 2.657, 2.68, 2.695, 2.705, 2.714, 2.72, 2.725]
+# f_ufactor = interpolate.interp1d(resultant_ufactor, userinput_conduct)
+# if CONFIG["glass_u_value"] > max(resultant_ufactor):
+#     glassConductivity = f_ufactor(max(resultant_ufactor))
+# elif CONFIG["glass_u_value"] < min(resultant_ufactor):
+#     glassConductivity = f_ufactor(min(resultant_ufactor))
+# else:
+#     glassConductivity = f_ufactor(CONFIG["glass_u_value"])
+
+# # Modify the existing window materials
+# idf.idfobjects["WINDOWMATERIAL:GLAZING"] = []
+# idf.newidfobject(
+#     "WINDOWMATERIAL:GLAZING",
+#     Name="CLEAR 3MM",
+#     Optical_Data_Type="SpectralAverage",
+#     Thickness=0.003,
+#     Solar_Transmittance_at_Normal_Incidence=glassGValue,  # glassGValue,  # This was determined by running the IDF with a ranger of inputs and determining the relationship between input g-value and overall g-value for the computed glazing
+#     Front_Side_Solar_Reflectance_at_Normal_Incidence=0.075,
+#     Back_Side_Solar_Reflectance_at_Normal_Incidence=0,
+#     Visible_Transmittance_at_Normal_Incidence=CONFIG["glass_visible_transmittance"],
+#     Front_Side_Visible_Reflectance_at_Normal_Incidence=0.081,
+#     Back_Side_Visible_Reflectance_at_Normal_Incidence=0,
+#     Infrared_Transmittance_at_Normal_Incidence=0,
+#     Front_Side_Infrared_Hemispherical_Emissivity=0.84,
+#     Back_Side_Infrared_Hemispherical_Emissivity=0.84,
+#     Conductivity=glassConductivity,
+#     Dirt_Correction_Factor_for_Solar_and_Visible_Transmittance=1,
+#     Solar_Diffusing="No"
+# )
+# print("WINDOWMATERIAL:GLAZING modified")
+
+# # Modify the existing Window Material Gas materials
+# idf.idfobjects["WINDOWMATERIAL:GAS"] = []
+# idf.newidfobject(
+#     "WINDOWMATERIAL:GAS",
+#     Name="AIR 13MM",
+#     Gas_Type="Air",
+#     Thickness=0.0127
+# )
+# print("WINDOWMATERIAL:GAS modified")
+
+# # Modify Construction objects
+# idf.idfobjects["CONSTRUCTION"] = []
+# idf.newidfobject(
+#     "CONSTRUCTION",
+#     Name="INTERIOR WALL",
+#     Outside_Layer="G01A 19MM GYPSUM BOARD",
+#     Layer_2="F04 WALL AIR SPACE RESISTANCE",
+#     Layer_3="G01A 19MM GYPSUM BOARD",
+# )
+# idf.newidfobject(
+#     "CONSTRUCTION",
+#     Name="INTERIOR WINDOW",
+#     Outside_Layer="CLEAR 3MM"
+# )
+# idf.newidfobject(
+#     "CONSTRUCTION",
+#     Name="EXTERIOR ROOF",
+#     Outside_Layer="M11 100MM LIGHTWEIGHT CONCRETE",
+#     Layer_2="F05 CEILING AIR SPACE RESISTANCE",
+#     Layer_3="F16 ACOUSTIC TILE",
+# )
+# idf.newidfobject(
+#     "CONSTRUCTION",
+#     Name="INTERIOR FLOOR",
+#     Outside_Layer="F16 ACOUSTIC TILE",
+#     Layer_2="F05 CEILING AIR SPACE RESISTANCE",
+#     Layer_3="M11 100MM LIGHTWEIGHT CONCRETE",
+# )
+# idf.newidfobject(
+#     "CONSTRUCTION",
+#     Name="AIR WALL",
+#     Outside_Layer="AIR WALL MATERIAL"
+# )
+# idf.newidfobject(
+#     "CONSTRUCTION",
+#     Name="EXTERIOR WALL",
+#     Outside_Layer="M01 100MM BRICK",
+#     Layer_2="M15 200MM HEAVYWEIGHT CONCRETE",
+#     Layer_3="I02 50MM INSULATION BOARD",
+#     # Layer_4="F04 WALL AIR SPACE RESISTANCE",  # Removed to modify insulation thickness nly for exterior wall U-value modification from IDF config file
+#     Layer_4="G01A 19MM GYPSUM BOARD",
+# )
+# idf.newidfobject(
+#     "CONSTRUCTION",
+#     Name="EXTERIOR WINDOW",
+#     Outside_Layer="CLEAR 3MM",
+#     Layer_2="AIR 13MM",
+#     Layer_3="CLEAR 3MM",
+# )
+# print("CONSTRUCTION modified")
 
 # # Create single layer window material for glazing transmittance/g-value
 # idf.idfobjects["WINDOWMATERIAL:SIMPLEGLAZINGSYSTEM"] = []
@@ -1346,14 +1476,14 @@ OUTPUT_VARIABLES = [
 
 # Set the list of outputs to be generated from the EnergyPLus simulation  # NOTE - Uncomment these for actual outputs in table - not bere for testig purposes currently
 idf.idfobjects["OUTPUT:VARIABLE"] = []
-# [
-#     idf.newidfobject(
-#         "OUTPUT:VARIABLE",
-#         Key_Value="*",
-#         Variable_Name=i,
-#         Reporting_Frequency="hourly"
-#     ) for i in OUTPUT_VARIABLES
-# ]
+[
+    idf.newidfobject(
+        "OUTPUT:VARIABLE",
+        Key_Value="*",
+        Variable_Name=i,
+        Reporting_Frequency="hourly"
+    ) for i in OUTPUT_VARIABLES
+]
 print("OUTPUT:VARIABLE modified")
 
 # # Diagnostics/testing
@@ -1369,24 +1499,47 @@ print("OUTPUT:VARIABLE modified")
 # idf.newidfobject("OUTPUT:VARIABLEDICTIONARY", Key_Field="regular")
 # print("OUTPUT:VARIABLEDICTIONARY modified")
 
+# idf.idfobjects["OUTPUT:CONSTRUCTIONS"] = []
+# idf.newidfobject("OUTPUT:CONSTRUCTIONS", Details_Type_1="Constructions")
 
+# idf.idfobjects["OUTPUT:SQLITE"] = []
+# idf.newidfobject("OUTPUT:SQLITE", Option_Type="Simple")
+
+# idf.idfobjects["OUTPUT:DIAGNOSTICS"] = []
+# idf.newidfobject("OUTPUT:DIAGNOSTICS", Key_1="DisplayExtraWarnings", Key_2="DisplayUnusedSchedules")
+
+
+
+############################################################################################################################################################################################
 # Outputs for Michal - TAS test
 # idf.newidfobject("OUTPUT:SURFACES:LIST", Report_Type="Details")
 idf.newidfobject("OUTPUTCONTROL:TABLE:STYLE", Column_Separator="Comma")
 idf.newidfobject("OUTPUT:TABLE:SUMMARYREPORTS", Report_1_Name="AllSummary")
+# idf.idfobjects["SHADING:BUILDING:DETAILED"] = []  # Remove shading elements
+# idf.idfobjects["SHADOWCALCULATION"] = []
+# idf.newidfobject(
+#     "SHADOWCALCULATION",
+#     Calculation_Method="AverageOverDaysInFrequency",
+#     Calculation_Frequency=20,
+#     Maximum_Figures_in_Shadow_Overlap_Calculations=15000,
+#     Polygon_Clipping_Algorithm="SutherlandHodgman",
+#     Sky_Diffuse_Modeling_Algorithm="SimpleSkyDiffuseModeling",
+#     External_Shading_Calculation_Method="InternalCalculation",
+#     Output_External_Shading_Calculation_Results="Yes"  # NOTE - Remove this for final version - this is used for testing export to TAS
+)
+# idf.idfobjects["SIMULATIONCONTROL"] = []
+# idf.newidfobject(
+#     "SIMULATIONCONTROL",
+#     Do_Zone_Sizing_Calculation="No",
+#     Do_System_Sizing_Calculation="No",
+#     Do_Plant_Sizing_Calculation="No",
+#     Run_Simulation_for_Sizing_Periods="No",
+#     Run_Simulation_for_Weather_File_Run_Periods="Yes"
+# )
+############################################################################################################################################################################################
 
 
 
-
-
-# # idf.idfobjects["OUTPUT:CONSTRUCTIONS"] = []
-# # idf.newidfobject("OUTPUT:CONSTRUCTIONS", Details_Type_1="Constructions")
-
-# # idf.idfobjects["OUTPUT:SQLITE"] = []
-# # idf.newidfobject("OUTPUT:SQLITE", Option_Type="Simple")
-
-# # idf.idfobjects["OUTPUT:DIAGNOSTICS"] = []
-# # idf.newidfobject("OUTPUT:DIAGNOSTICS", Key_1="DisplayExtraWarnings", Key_2="DisplayUnusedSchedules")
 
 # Save the idf to a new file
 idf.saveas(IDF_FILEPATH.replace(".idf", "_modified.idf"))
