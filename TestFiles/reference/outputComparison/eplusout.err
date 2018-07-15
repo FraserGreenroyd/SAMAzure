@@ -1,0 +1,28 @@
+Program Version,EnergyPlus, Version 8.8.0-7c3bbe4830, YMD=2018.07.15 21:52,IDD_Version 8.8.0
+   ** Warning ** GetPurchasedAir: ZoneHVAC:IdealLoadsAirSystem="ZONE1 IDEAL LOADS AIR SYSTEM missing data
+   **   ~~~   ** ZONE1 IDEAL LOADS OUTDOOR AIR INLET does not appear in an OutdoorAir:NodeList or as an OutdoorAir:Node.
+   **   ~~~   ** Adding OutdoorAir:Node=ZONE1 IDEAL LOADS OUTDOOR AIR INLET
+   ** Warning ** GetPurchasedAir: ZoneHVAC:IdealLoadsAirSystem="ZONE2 IDEAL LOADS AIR SYSTEM missing data
+   **   ~~~   ** ZONE2 IDEAL LOADS OUTDOOR AIR INLET does not appear in an OutdoorAir:NodeList or as an OutdoorAir:Node.
+   **   ~~~   ** Adding OutdoorAir:Node=ZONE2 IDEAL LOADS OUTDOOR AIR INLET
+   ** Warning ** GetPurchasedAir: ZoneHVAC:IdealLoadsAirSystem="ZONE3 IDEAL LOADS AIR SYSTEM missing data
+   **   ~~~   ** ZONE3 IDEAL LOADS OUTDOOR AIR INLET does not appear in an OutdoorAir:NodeList or as an OutdoorAir:Node.
+   **   ~~~   ** Adding OutdoorAir:Node=ZONE3 IDEAL LOADS OUTDOOR AIR INLET
+   ** Warning ** GetPurchasedAir: ZoneHVAC:IdealLoadsAirSystem="ZONE4 IDEAL LOADS AIR SYSTEM missing data
+   **   ~~~   ** ZONE4 IDEAL LOADS OUTDOOR AIR INLET does not appear in an OutdoorAir:NodeList or as an OutdoorAir:Node.
+   **   ~~~   ** Adding OutdoorAir:Node=ZONE4 IDEAL LOADS OUTDOOR AIR INLET
+   ************* Testing Individual Branch Integrity
+   ************* All Branches passed integrity testing
+   ************* Testing Individual Supply Air Path Integrity
+   ************* All Supply Air Paths passed integrity testing
+   ************* Testing Individual Return Air Path Integrity
+   ************* All Return Air Paths passed integrity testing
+   ************* No node connection errors were found.
+   ************* Beginning Simulation
+   ************* Simulation Error Summary *************
+   ** Warning ** The following day schedule names are "Unused Schedules".  These schedules are in the idf
+   **   ~~~   **  file but are never obtained by the simulation and therefore are NOT used.
+   ************* Schedule:Day:Hourly or Schedule:Day:Interval or Schedule:Day:List=ALWAYSOFFDAY
+   ************* EnergyPlus Warmup Error Summary. During Warmup: 0 Warning; 0 Severe Errors.
+   ************* EnergyPlus Sizing Error Summary. During Sizing: 0 Warning; 0 Severe Errors.
+   ************* EnergyPlus Completed Successfully-- 5 Warning; 0 Severe Errors; Elapsed Time=00hr 00min 17.34sec
