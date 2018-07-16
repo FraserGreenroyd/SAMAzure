@@ -71,7 +71,7 @@ print("EPW loaded from {0:}\n".format(EPW_FILE))
 
 ZONE_CONDITIONS = load_json(CONFIG["zone_conditions_library"])[CONFIG["zone_template"]]
 
-print("Zone conditions set to {0:}\nLoaded from {1:}\n".format(CONFIG["zone_template"], CONFIG["zone_conditions_library"]))
+print("Zone conditions loaded from {1:}\nZone conditions set to {0:}\n".format(CONFIG["zone_template"], CONFIG["zone_conditions_library"]))
 
 #######################################################################
 # MODIFY IDF SITE INFORMATION USING DATA FROM THE REFERENCED EPW FILE #
@@ -927,8 +927,8 @@ idf.newidfobject(
 idf.newidfobject(
     "WINDOWMATERIAL:SIMPLEGLAZINGSYSTEM",
     Name="INTERIOR WINDOW MATERIAL",
-    UFactor=5,
-    Solar_Heat_Gain_Coefficient=0.9,
+    UFactor=5.8,
+    Solar_Heat_Gain_Coefficient=0.95,
     Visible_Transmittance=0.9
 )
 
@@ -952,7 +952,7 @@ idf.newidfobject(
     Specific_Heat=1090,
     Thermal_Absorptance=0.1,
     Solar_Absorptance=0.4,
-    Visible_Absorptance=0.4  # TODO - REPLACE THIS WITH MODIFIABLE VALUE FOR CUSTOM INTERIOR WALL LIGHT REFLECTIVITY VALUE INPUT
+    Visible_Absorptance=1-CONFIG["wall_reflectivity"]
 )
 
 idf.newidfobject(
@@ -1006,7 +1006,7 @@ idf.newidfobject(
     Specific_Heat=1090,
     Thermal_Absorptance=0.1,
     Solar_Absorptance=0.4,
-    Visible_Absorptance=0.4  # TODO - REPLACE THIS WITH MODIFIABLE VALUE FOR CUSTOM EXTERIOR WALL INSISE LIGHT REFLECTIVITY VALUE INPUT
+    Visible_Absorptance=1-CONFIG["wall_reflectivity"]
 )
 
 # Interior floor/ceiling materials
@@ -1021,7 +1021,7 @@ idf.newidfobject(
     Specific_Heat=590,
     Thermal_Absorptance=0.9,
     Solar_Absorptance=0.3,
-    Visible_Absorptance=0.3  # TODO - REPLACE THIS WITH MODIFIABLE VALUE FOR CUSTOM INTERIOR FLOOR LIGHT REFLECTIVITY VALUE INPUT
+    Visible_Absorptance=1-CONFIG["ceiling_reflectivity"]
 )
 
 # idf.newidfobject(
@@ -1047,7 +1047,7 @@ idf.newidfobject(
     Specific_Heat=840,
     Thermal_Absorptance=0.9,
     Solar_Absorptance=0.5,
-    Visible_Absorptance=0.5  # TODO - REPLACE THIS WITH MODIFIABLE VALUE FOR CUSTOM INTERIOR FLOOR LIGHT REFLECTIVITY VALUE INPUT
+    Visible_Absorptance=1-CONFIG["floor_reflectivity"]
 )
 
 # Exterior floor materials
@@ -1088,7 +1088,7 @@ idf.newidfobject(
     Specific_Heat=900,
     Thermal_Absorptance=0.9,
     Solar_Absorptance=0.7,
-    Visible_Absorptance=0.7  # TODO - REPLACE THIS WITH MODIFIABLE VALUE FOR CUSTOM INTERIOR FLOOR LIGHT REFLECTIVITY VALUE INPUT
+    Visible_Absorptance=1-CONFIG["floor_reflectivity"]
 )
 
 # Exterior roof materials
@@ -1129,7 +1129,7 @@ idf.newidfobject(
     Specific_Heat=1000,
     Thermal_Absorptance=0.9,
     Solar_Absorptance=0.3,
-    Visible_Absorptance=0.3  # TODO - REPLACE THIS WITH MODIFIABLE VALUE FOR CUSTOM INTERIOR CEILING LIGHT REFLECTIVITY VALUE INPUT
+    Visible_Absorptance=1-CONFIG["ceiling_reflectivity"]
 )
 
 # Air wall materials

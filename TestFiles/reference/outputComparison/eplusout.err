@@ -1,4 +1,4 @@
-Program Version,EnergyPlus, Version 8.8.0-7c3bbe4830, YMD=2018.07.15 21:52,IDD_Version 8.8.0
+Program Version,EnergyPlus, Version 8.8.0-7c3bbe4830, YMD=2018.07.16 16:37,IDD_Version 8.8.0
    ** Warning ** GetPurchasedAir: ZoneHVAC:IdealLoadsAirSystem="ZONE1 IDEAL LOADS AIR SYSTEM missing data
    **   ~~~   ** ZONE1 IDEAL LOADS OUTDOOR AIR INLET does not appear in an OutdoorAir:NodeList or as an OutdoorAir:Node.
    **   ~~~   ** Adding OutdoorAir:Node=ZONE1 IDEAL LOADS OUTDOOR AIR INLET
@@ -25,4 +25,4 @@ Program Version,EnergyPlus, Version 8.8.0-7c3bbe4830, YMD=2018.07.15 21:52,IDD_V
    ************* Schedule:Day:Hourly or Schedule:Day:Interval or Schedule:Day:List=ALWAYSOFFDAY
    ************* EnergyPlus Warmup Error Summary. During Warmup: 0 Warning; 0 Severe Errors.
    ************* EnergyPlus Sizing Error Summary. During Sizing: 0 Warning; 0 Severe Errors.
-   ************* EnergyPlus Completed Successfully-- 5 Warning; 0 Severe Errors; Elapsed Time=00hr 00min 17.34sec
+   ************* EnergyPlus Completed Successfully-- 5 Warning; 0 Severe Errors; Elapsed Time=00hr 00min 12.67sec

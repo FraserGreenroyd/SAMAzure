@@ -1,4 +1,4 @@
-Program Version:,EnergyPlus, Version 8.8.0-7c3bbe4830, YMD=2018.07.15 21:52
+Program Version:,EnergyPlus, Version 8.8.0-7c3bbe4830, YMD=2018.07.16 16:37
 Tabular Output Report in Format: ,Comma
 
 Building:,IHOPETHISWORKS
@@ -12,10 +12,10 @@ Values gathered over      8760.00 hours
 Site and Source Energy
 
 ,,Total Energy [GJ],Energy Per Total Building Area [MJ/m2],Energy Per Conditioned Building Area [MJ/m2]
-,Total Site Energy,159106.71,909181.21,909181.21
-,Net Site Energy,159106.71,909181.21,909181.21
-,Total Source Energy,574755.85,3284319.16,3284319.16
-,Net Source Energy,574755.85,3284319.16,3284319.16
+,Total Site Energy,159103.70,909163.99,909163.99
+,Net Site Energy,159103.70,909163.99,909163.99
+,Total Source Energy,574745.16,3284258.06,3284258.06
+,Net Source Energy,574745.16,3284258.06,3284258.06
 
 
 Site to Source Energy Conversion Factors
@@ -47,8 +47,8 @@ Building Area
 End Uses
 
 ,,Electricity [GJ],Natural Gas [GJ],Additional Fuel [GJ],District Cooling [GJ],District Heating [GJ],Water [m3]
-,Heating,0.00,0.00,0.00,0.00,159017.22,0.00
-,Cooling,0.00,0.00,0.00,52.00,0.00,0.00
+,Heating,0.00,0.00,0.00,0.00,159014.29,0.00
+,Cooling,0.00,0.00,0.00,51.92,0.00,0.00
 ,Interior Lighting,11.84,0.00,0.00,0.00,0.00,0.00
 ,Exterior Lighting,0.00,0.00,0.00,0.00,0.00,0.00
 ,Interior Equipment,25.65,0.00,0.00,0.00,0.00,0.00
@@ -62,15 +62,15 @@ End Uses
 ,Refrigeration,0.00,0.00,0.00,0.00,0.00,0.00
 ,Generators,0.00,0.00,0.00,0.00,0.00,0.00
 ,,,,,,,
-,Total End Uses,37.49,0.00,0.00,52.00,159017.22,0.00
+,Total End Uses,37.49,0.00,0.00,51.92,159014.29,0.00
 Note: District heat appears to be the principal heating source based on energy usage.
 
 
 End Uses By Subcategory
 
 ,,Subcategory,Electricity [GJ],Natural Gas [GJ],Additional Fuel [GJ],District Cooling [GJ],District Heating [GJ],Water [m3]
-,Heating,General,0.00,0.00,0.00,0.00,159017.22,0.00
-,Cooling,General,0.00,0.00,0.00,52.00,0.00,0.00
+,Heating,General,0.00,0.00,0.00,0.00,159014.29,0.00
+,Cooling,General,0.00,0.00,0.00,51.92,0.00,0.00
 ,Interior Lighting,General,11.84,0.00,0.00,0.00,0.00,0.00
 ,Exterior Lighting,General,0.00,0.00,0.00,0.00,0.00,0.00
 ,Interior Equipment,General,25.65,0.00,0.00,0.00,0.00,0.00
@@ -90,18 +90,18 @@ Utility Use Per Conditioned Floor Area
 
 ,,Electricity Intensity [MJ/m2],Natural Gas Intensity [MJ/m2],Additional Fuel Intensity [MJ/m2],District Cooling Intensity [MJ/m2],District Heating Intensity [MJ/m2],Water Intensity [m3/m2]
 ,Lighting,67.65,0.00,0.00,0.00,0.00,0.00
-,HVAC,0.00,0.00,0.00,297.15,908669.84,0.00
+,HVAC,0.00,0.00,0.00,296.70,908653.06,0.00
 ,Other,146.58,0.00,0.00,0.00,0.00,0.00
-,Total,214.23,0.00,0.00,297.15,908669.84,0.00
+,Total,214.23,0.00,0.00,296.70,908653.06,0.00
 
 
 Utility Use Per Total Floor Area
 
 ,,Electricity Intensity [MJ/m2],Natural Gas Intensity [MJ/m2],Additional Fuel Intensity [MJ/m2],District Cooling Intensity [MJ/m2],District Heating Intensity [MJ/m2],Water Intensity [m3/m2]
 ,Lighting,67.65,0.00,0.00,0.00,0.00,0.00
-,HVAC,0.00,0.00,0.00,297.15,908669.84,0.00
+,HVAC,0.00,0.00,0.00,296.70,908653.06,0.00
 ,Other,146.58,0.00,0.00,0.00,0.00,0.00
-,Total,214.23,0.00,0.00,297.15,908669.84,0.00
+,Total,214.23,0.00,0.00,296.70,908653.06,0.00
 
 
 Electric Loads Satisfied
@@ -165,7 +165,7 @@ Comfort and Setpoint Not Met Summary
 ,,Facility [Hours]
 ,Time Setpoint Not Met During Occupied Heating,0.00
 ,Time Setpoint Not Met During Occupied Cooling,0.00
-,Time Not Comfortable Based on Simple ASHRAE 55-2004,1717.67
+,Time Not Comfortable Based on Simple ASHRAE 55-2004,1677.83
 
 
 Note 1: An asterisk (*) indicates that the feature is not yet implemented.
@@ -175,7 +175,7 @@ FOR:,Entire Facility
 General
 
 ,,Value
-,Program Version and Build,EnergyPlus, Version 8.8.0-7c3bbe4830, YMD=2018.07.15 21:52
+,Program Version and Build,EnergyPlus, Version 8.8.0-7c3bbe4830, YMD=2018.07.16 16:37
 ,RunPeriod,PARAMETRIC RUN
 ,Weather File,CARDIFF GBR CIBSE_TRY05 WMO#=NA
 ,Latitude [deg],51.48
@@ -237,8 +237,8 @@ End Uses
 
 ,,Electricity [W],Natural Gas [W],Propane [W],District Cooling [W],District Heating [W],Water [m3/s]
 ,Time of Peak,01-JAN-07:10,-,-,20-JUL-17:00,14-FEB-08:00,-
-,Heating,0.00,0.00,0.00,0.00,39406058.04,0.00
-,Cooling,0.00,0.00,0.00,3611846.47,0.00,0.00
+,Heating,0.00,0.00,0.00,0.00,39405413.16,0.00
+,Cooling,0.00,0.00,0.00,3611302.65,0.00,0.00
 ,Interior Lighting,1050.00,0.00,0.00,0.00,0.00,0.00
 ,Exterior Lighting,0.00,0.00,0.00,0.00,0.00,0.00
 ,Interior Equipment,2100.00,0.00,0.00,0.00,0.00,0.00
@@ -252,14 +252,14 @@ End Uses
 ,Refrigeration,0.00,0.00,0.00,0.00,0.00,0.00
 ,Generators,0.00,0.00,0.00,0.00,0.00,0.00
 ,,,,,,,
-,Total End Uses,3150.00,0.00,0.00,3611846.47,39406058.04,0.00
+,Total End Uses,3150.00,0.00,0.00,3611302.65,39405413.16,0.00
 
 
 End Uses By Subcategory
 
 ,,Subcategory,Electricity [W],Natural Gas [W],Propane [W],District Cooling [W],District Heating [W],Water [m3/s]
-,Heating,General,0.00,0.00,0.00,0.00,39406058.04,0.00
-,Cooling,General,0.00,0.00,0.00,3611846.47,0.00,0.00
+,Heating,General,0.00,0.00,0.00,0.00,39405413.16,0.00
+,Cooling,General,0.00,0.00,0.00,3611302.65,0.00,0.00
 ,Interior Lighting,General,1050.00,0.00,0.00,0.00,0.00,0.00
 ,Exterior Lighting,General,0.00,0.00,0.00,0.00,0.00,0.00
 ,Interior Equipment,General,2100.00,0.00,0.00,0.00,0.00,0.00
@@ -282,8 +282,8 @@ Values gathered over      8760.00 hours
 Source Energy End Use Components Summary
 
 ,,Source Electricity [GJ],Source Natural Gas [GJ],Source Additional Fuel [GJ],Source District Cooling [GJ],Source District Heating [GJ]
-,Heating,0.00,0.00,0.00,0.00,574582.23
-,Cooling,0.00,0.00,0.00,54.90,0.00
+,Heating,0.00,0.00,0.00,0.00,574571.62
+,Cooling,0.00,0.00,0.00,54.81,0.00
 ,Interior Lighting,37.49,0.00,0.00,0.00,0.00
 ,Exterior Lighting,0.00,0.00,0.00,0.00,0.00
 ,Interior Equipment,81.24,0.00,0.00,0.00,0.00
@@ -297,15 +297,15 @@ Source Energy End Use Components Summary
 ,Refrigeration,0.00,0.00,0.00,0.00,0.00
 ,Generators,0.00,0.00,0.00,0.00,0.00
 ,,,,,,
-,Total Source Energy End Use Components,118.73,0.00,0.00,54.90,574582.23
+,Total Source Energy End Use Components,118.73,0.00,0.00,54.81,574571.62
 
 
 Normalized Metrics
 Source Energy End Use Components Per Conditioned Floor Area
 
 ,,Source Electricity [MJ/m2],Source Natural Gas [MJ/m2],Source Additional Fuel [MJ/m2],Source District Cooling [MJ/m2],Source District Heating [MJ/m2]
-,Heating,0.00,0.00,0.00,0.00,3283327.00
-,Cooling,0.00,0.00,0.00,313.69,0.00
+,Heating,0.00,0.00,0.00,0.00,3283266.39
+,Cooling,0.00,0.00,0.00,313.21,0.00
 ,Interior Lighting,214.25,0.00,0.00,0.00,0.00
 ,Exterior Lighting,0.00,0.00,0.00,0.00,0.00
 ,Interior Equipment,464.21,0.00,0.00,0.00,0.00
@@ -319,14 +319,14 @@ Source Energy End Use Components Per Conditioned Floor Area
 ,Refrigeration,0.00,0.00,0.00,0.00,0.00
 ,Generators,0.00,0.00,0.00,0.00,0.00
 ,,,,,,
-,Total Source Energy End Use Components,678.46,0.00,0.00,313.69,3283327.00
+,Total Source Energy End Use Components,678.46,0.00,0.00,313.21,3283266.39
 
 
 Source Energy End Use Components Per Total Floor Area
 
 ,,Source Electricity [MJ/m2],Source Natural Gas [MJ/m2],Source Additional Fuel [MJ/m2],Source District Cooling [MJ/m2],Source District Heating [MJ/m2]
-,Heating,0.00,0.00,0.00,0.00,3283327.00
-,Cooling,0.00,0.00,0.00,313.69,0.00
+,Heating,0.00,0.00,0.00,0.00,3283266.39
+,Cooling,0.00,0.00,0.00,313.21,0.00
 ,Interior Lighting,214.25,0.00,0.00,0.00,0.00
 ,Exterior Lighting,0.00,0.00,0.00,0.00,0.00
 ,Interior Equipment,464.21,0.00,0.00,0.00,0.00
@@ -340,7 +340,7 @@ Source Energy End Use Components Per Total Floor Area
 ,Refrigeration,0.00,0.00,0.00,0.00,0.00
 ,Generators,0.00,0.00,0.00,0.00,0.00
 ,,,,,,
-,Total Source Energy End Use Components,678.46,0.00,0.00,313.69,3283327.00
+,Total Source Energy End Use Components,678.46,0.00,0.00,313.21,3283266.39
 
 
 ----------------------------------------------------------------------------------------------------
@@ -364,22 +364,22 @@ FOR:,Entire Facility
 Opaque Exterior
 
 ,,Construction,Reflectance,U-Factor with Film [W/m2-K],U-Factor no Film [W/m2-K],Gross Area [m2],Net Area [m2],Azimuth [deg],Tilt [deg],Cardinal Direction
-,466564015B2F43199C1B,EXTERIOR WALL,0.30,0.221,0.229,30.00,25.20,180.00,90.00,S
-,AA69F423B82B48AAAA7E,EXTERIOR WALL,0.30,0.221,0.229,15.00,10.20,180.00,90.00,S
-,FD8A070E4BE54D88AE3B,EXTERIOR WALL,0.30,0.221,0.229,30.00,25.20,270.00,90.00,W
-,D9E98E2F98CA44578C65,EXTERIOR WALL,0.30,0.221,0.229,15.00,15.00,270.00,90.00,W
-,AF6581C9E0E3475DA994,EXTERIOR WALL,0.30,0.221,0.229,30.00,25.20,0.00,90.00,N
-,3675D61B3AAB405AA64E,EXTERIOR WALL,0.30,0.221,0.229,30.00,25.20,90.00,90.00,E
+,466564015B2F43199C1B,EXTERIOR WALL,0.30,0.036,0.036,30.00,25.20,180.00,90.00,S
+,AA69F423B82B48AAAA7E,EXTERIOR WALL,0.30,0.036,0.036,15.00,10.20,180.00,90.00,S
+,FD8A070E4BE54D88AE3B,EXTERIOR WALL,0.30,0.036,0.036,30.00,25.20,270.00,90.00,W
+,D9E98E2F98CA44578C65,EXTERIOR WALL,0.30,0.036,0.036,15.00,15.00,270.00,90.00,W
+,AF6581C9E0E3475DA994,EXTERIOR WALL,0.30,0.036,0.036,30.00,25.20,0.00,90.00,N
+,3675D61B3AAB405AA64E,EXTERIOR WALL,0.30,0.036,0.036,30.00,25.20,90.00,90.00,E
 ,134068DDAD364F55B5A4,EXTERIOR FLOOR,0.30,0.510,0.556,25.00,25.00,90.00,180.00,
 ,15D536BB1111463BB433,EXTERIOR ROOF,0.50,0.170,0.174,100.00,96.00,180.00,0.00,
-,368CA5EB2212437BAC65,EXTERIOR WALL,0.30,0.221,0.229,15.00,15.00,180.00,90.00,S
-,E9DEF6BFFD0D4E24982D,EXTERIOR WALL,0.30,0.221,0.229,15.00,10.20,90.00,90.00,E
+,368CA5EB2212437BAC65,EXTERIOR WALL,0.30,0.036,0.036,15.00,15.00,180.00,90.00,S
+,E9DEF6BFFD0D4E24982D,EXTERIOR WALL,0.30,0.036,0.036,15.00,10.20,90.00,90.00,E
 ,6EF94013FE2746C399E9,EXTERIOR FLOOR,0.30,0.510,0.556,25.00,25.00,90.00,180.00,
-,65EDE32B890F4F1F9280,EXTERIOR WALL,0.30,0.221,0.229,15.00,15.00,0.00,90.00,N
-,E792B52EA48241D382FB,EXTERIOR WALL,0.30,0.221,0.229,15.00,10.20,270.00,90.00,W
+,65EDE32B890F4F1F9280,EXTERIOR WALL,0.30,0.036,0.036,15.00,15.00,0.00,90.00,N
+,E792B52EA48241D382FB,EXTERIOR WALL,0.30,0.036,0.036,15.00,10.20,270.00,90.00,W
 ,607BDE968C67456E8C5E,EXTERIOR FLOOR,0.30,0.510,0.556,25.00,25.00,90.00,180.00,
-,A9013CCDF7514C79B799,EXTERIOR WALL,0.30,0.221,0.229,15.00,15.00,90.00,90.00,E
-,0BB252B337B243D1A9CA,EXTERIOR WALL,0.30,0.221,0.229,15.00,10.20,0.00,90.00,N
+,A9013CCDF7514C79B799,EXTERIOR WALL,0.30,0.036,0.036,15.00,15.00,90.00,90.00,E
+,0BB252B337B243D1A9CA,EXTERIOR WALL,0.30,0.036,0.036,15.00,10.20,0.00,90.00,N
 ,92EBA5E7333F41208130,EXTERIOR FLOOR,0.30,0.510,0.556,25.00,25.00,90.00,180.00,
 
 
@@ -572,11 +572,11 @@ Demand Controlled Ventilation using Controller:MechanicalVentilation
 Time Not Comfortable Based on Simple ASHRAE 55-2004
 
 ,,Winter Clothes [hr],Summer Clothes [hr],Summer or Winter Clothes [hr]
-,ZONE1,1367.50,3074.17,1338.00
-,ZONE2,1592.17,3101.50,1577.50
-,ZONE3,1531.17,3067.00,1491.67
-,ZONE4,1709.50,3111.33,1703.50
-,Facility,1759.00,3111.33,1717.67
+,ZONE1,1301.50,3086.50,1275.50
+,ZONE2,1539.50,3106.67,1527.50
+,ZONE3,1461.67,3079.00,1431.83
+,ZONE4,1666.17,3113.67,1662.00
+,Facility,1709.83,3113.67,1677.83
 Aggregated over the RunPeriods for Weather
 
 
@@ -597,7 +597,7 @@ FOR:,Entire Facility
 Average Outdoor Air During Occupied Hours
 
 ,,Average Number of Occupants,Nominal Number of Occupants,Zone Volume [m3],Mechanical Ventilation [ach],Infiltration [ach],AFN Infiltration [ach],Simple Ventilation [ach]
-,ZONE1,36.46,50.00,375.00,6.650,0.000,0.000,6807.700
+,ZONE1,36.46,50.00,375.00,6.650,0.000,0.000,6807.699
 ,ZONE2,9.11,12.50,75.00,8.313,0.000,0.000,8509.183
 ,ZONE3,9.11,12.50,75.00,8.313,0.000,0.000,8509.188
 ,ZONE4,9.11,12.50,75.00,8.313,0.000,0.000,8509.181
@@ -708,9 +708,9 @@ Annual and Peak Values - Gas
 Annual and Peak Values - Cooling
 
 ,,Cooling Annual Value [GJ],Cooling Minimum Value [W],Timestamp of Minimum {TIMESTAMP},Cooling Maximum Value [W],Timestamp of Maximum {TIMESTAMP}
-,DistrictCooling:Facility,52.00,0.00,01-JAN-00:10,3611846.47,20-JUL-18:00
-,DistrictCooling:HVAC,52.00,0.00,01-JAN-00:10,3611846.47,20-JUL-18:00
-,Cooling:DistrictCooling,52.00,0.00,01-JAN-00:10,3611846.47,20-JUL-18:00
+,DistrictCooling:Facility,51.92,0.00,01-JAN-00:10,3611302.65,20-JUL-18:00
+,DistrictCooling:HVAC,51.92,0.00,01-JAN-00:10,3611302.65,20-JUL-18:00
+,Cooling:DistrictCooling,51.92,0.00,01-JAN-00:10,3611302.65,20-JUL-18:00
 
 
 Annual and Peak Values - Water
@@ -741,25 +741,25 @@ Annual and Peak Values - Other Liquid/Gas
 Annual and Peak Values - Other
 
 ,,Annual Value [GJ],Minimum Value [W],Timestamp of Minimum {TIMESTAMP},Maximum Value [W],Timestamp of Maximum {TIMESTAMP}
-,EnergyTransfer:Facility,158940.66,0.00,01-JAN-00:10,39370193.39,14-FEB-09:00
-,EnergyTransfer:Building,158940.66,0.00,01-JAN-00:10,39370193.39,14-FEB-09:00
-,EnergyTransfer:Zone:ZONE1,90889.51,0.00,01-JAN-00:10,22504353.42,14-FEB-09:00
-,Heating:EnergyTransfer,158888.96,0.00,01-JAN-00:10,39370193.39,14-FEB-09:00
-,Heating:EnergyTransfer:Zone:ZONE1,90860.16,0.00,01-JAN-00:10,22504353.42,14-FEB-09:00
-,Cooling:EnergyTransfer,51.69,0.00,01-JAN-00:10,3608153.42,20-JUL-18:00
-,Cooling:EnergyTransfer:Zone:ZONE1,29.36,0.00,01-JAN-00:10,2056357.90,20-JUL-18:00
-,EnergyTransfer:Zone:ZONE2,22683.54,0.00,01-JAN-00:10,5621907.49,14-FEB-09:00
-,Heating:EnergyTransfer:Zone:ZONE2,22676.10,0.00,01-JAN-00:10,5621907.49,14-FEB-09:00
-,Cooling:EnergyTransfer:Zone:ZONE2,7.44,0.00,01-JAN-00:10,517160.18,20-JUL-18:00
-,EnergyTransfer:Zone:ZONE3,22683.30,0.00,01-JAN-00:10,5621962.06,14-FEB-09:00
-,Heating:EnergyTransfer:Zone:ZONE3,22675.83,0.00,01-JAN-00:10,5621962.06,14-FEB-09:00
-,Cooling:EnergyTransfer:Zone:ZONE3,7.47,0.00,01-JAN-00:10,517687.57,20-JUL-18:00
-,EnergyTransfer:Zone:ZONE4,22684.30,0.00,01-JAN-00:10,5621970.43,14-FEB-09:00
-,Heating:EnergyTransfer:Zone:ZONE4,22676.87,0.00,01-JAN-00:10,5621970.43,14-FEB-09:00
-,Cooling:EnergyTransfer:Zone:ZONE4,7.43,0.00,01-JAN-00:10,516947.77,20-JUL-18:00
-,DistrictHeating:Facility,159017.22,0.00,01-JAN-00:10,39406058.04,14-FEB-09:00
-,DistrictHeating:HVAC,159017.22,0.00,01-JAN-00:10,39406058.04,14-FEB-09:00
-,Heating:DistrictHeating,159017.22,0.00,01-JAN-00:10,39406058.04,14-FEB-09:00
+,EnergyTransfer:Facility,158937.68,0.00,01-JAN-00:10,39369548.50,14-FEB-09:00
+,EnergyTransfer:Building,158937.68,0.00,01-JAN-00:10,39369548.50,14-FEB-09:00
+,EnergyTransfer:Zone:ZONE1,90887.43,0.00,01-JAN-00:10,22503950.80,14-FEB-09:00
+,Heating:EnergyTransfer,158886.06,0.00,01-JAN-00:10,39369548.50,14-FEB-09:00
+,Heating:EnergyTransfer:Zone:ZONE1,90858.12,0.00,01-JAN-00:10,22503950.80,14-FEB-09:00
+,Cooling:EnergyTransfer,51.62,0.00,01-JAN-00:10,3607609.60,20-JUL-18:00
+,Cooling:EnergyTransfer:Zone:ZONE1,29.31,0.00,01-JAN-00:10,2056032.55,20-JUL-18:00
+,EnergyTransfer:Zone:ZONE2,22683.33,0.00,01-JAN-00:10,5621827.63,14-FEB-09:00
+,Heating:EnergyTransfer:Zone:ZONE2,22675.89,0.00,01-JAN-00:10,5621827.63,14-FEB-09:00
+,Cooling:EnergyTransfer:Zone:ZONE2,7.43,0.00,01-JAN-00:10,517059.03,20-JUL-18:00
+,EnergyTransfer:Zone:ZONE3,22682.98,0.00,01-JAN-00:10,5621883.45,14-FEB-09:00
+,Heating:EnergyTransfer:Zone:ZONE3,22675.52,0.00,01-JAN-00:10,5621883.45,14-FEB-09:00
+,Cooling:EnergyTransfer:Zone:ZONE3,7.45,0.00,01-JAN-00:10,517629.28,20-JUL-18:00
+,EnergyTransfer:Zone:ZONE4,22683.95,0.00,01-JAN-00:10,5621886.63,14-FEB-09:00
+,Heating:EnergyTransfer:Zone:ZONE4,22676.52,0.00,01-JAN-00:10,5621886.63,14-FEB-09:00
+,Cooling:EnergyTransfer:Zone:ZONE4,7.42,0.00,01-JAN-00:10,516888.75,20-JUL-18:00
+,DistrictHeating:Facility,159014.29,0.00,01-JAN-00:10,39405413.16,14-FEB-09:00
+,DistrictHeating:HVAC,159014.29,0.00,01-JAN-00:10,39405413.16,14-FEB-09:00
+,Heating:DistrictHeating,159014.29,0.00,01-JAN-00:10,39405413.16,14-FEB-09:00
 
 
 ----------------------------------------------------------------------------------------------------
@@ -768,31 +768,31 @@ FOR:,Entire Facility
 Annual Building Sensible Heat Gain Components
 
 ,,HVAC Zone Eq & Other Sensible Air Heating [GJ],HVAC Zone Eq & Other Sensible Air Cooling [GJ],HVAC Terminal Unit Sensible Air Heating [GJ],HVAC Terminal Unit Sensible Air Cooling [GJ],HVAC Input Heated Surface Heating [GJ],HVAC Input Cooled Surface Cooling [GJ],People Sensible Heat Addition [GJ],Lights Sensible Heat Addition [GJ],Equipment Sensible Heat Addition [GJ],Window Heat Addition [GJ],Interzone Air Transfer Heat Addition [GJ],Infiltration Heat Addition [GJ],Opaque Surface Conduction and Other Heat Addition [GJ],Equipment Sensible Heat Removal [GJ],Window Heat Removal [GJ],Interzone Air Transfer Heat Removal [GJ],Infiltration Heat Removal [GJ],Opaque Surface Conduction and Other Heat Removal [GJ]
-,ZONE1,90858.555,-29.356,0.000,0.000,0.000,0.000,17.787,6.765,2.199,27.167,0.790,29.189,0.002,0.000,-8.981,-0.157,-90891.858,-12.098
-,ZONE2,22675.723,-7.437,0.000,0.000,0.000,0.000,4.447,1.691,0.550,2.660,0.081,7.415,0.000,0.000,-1.525,-0.236,-22683.350,-0.018
-,ZONE3,22675.462,-7.468,0.000,0.000,0.000,0.000,4.447,1.691,0.550,6.554,0.105,7.413,0.000,0.000,-1.590,-0.701,-22683.981,-2.483
-,ZONE4,22676.486,-7.430,0.000,0.000,0.000,0.000,4.447,1.691,0.550,1.984,0.244,7.415,0.000,0.000,-1.528,-0.084,-22683.210,-0.565
-,Total Facility,158886.226,-51.691,0.000,0.000,0.000,0.000,31.127,11.839,3.848,38.365,1.220,51.432,0.003,0.000,-13.624,-1.178,-158942.400,-15.163
+,ZONE1,90856.481,-29.309,0.000,0.000,0.000,0.000,17.787,6.765,2.199,27.135,0.843,29.189,0.001,0.000,-9.022,-0.160,-90891.701,-10.207
+,ZONE2,22675.502,-7.431,0.000,0.000,0.000,0.000,4.447,1.691,0.550,2.658,0.092,7.415,0.145,0.000,-1.536,-0.169,-22683.364,-0.000
+,ZONE3,22675.144,-7.453,0.000,0.000,0.000,0.000,4.447,1.691,0.550,6.550,0.099,7.413,0.000,0.000,-1.600,-0.747,-22684.007,-2.089
+,ZONE4,22676.129,-7.425,0.000,0.000,0.000,0.000,4.447,1.691,0.550,1.980,0.169,7.415,0.000,0.000,-1.544,-0.088,-22683.247,-0.078
+,Total Facility,158883.257,-51.617,0.000,0.000,0.000,0.000,31.127,11.839,3.848,38.324,1.203,51.432,0.147,0.000,-13.701,-1.164,-158942.319,-12.374
 
 
 Peak Cooling Sensible Heat Gain Components
 
 ,,Time of Peak {TIMESTAMP},HVAC Zone Eq & Other Sensible Air Heating [W],HVAC Zone Eq & Other Sensible Air Cooling [W],HVAC Terminal Unit Sensible Air Heating [W],HVAC Terminal Unit Sensible Air Cooling [W],HVAC Input Heated Surface Heating [W],HVAC Input Cooled Surface Cooling [W],People Sensible Heat Addition [W],Lights Sensible Heat Addition [W],Equipment Sensible Heat Addition [W],Window Heat Addition [W],Interzone Air Transfer Heat Addition [W],Infiltration Heat Addition [W],Opaque Surface Conduction and Other Heat Addition [W],Equipment Sensible Heat Removal [W],Window Heat Removal [W],Interzone Air Transfer Heat Removal [W],Infiltration Heat Removal [W],Opaque Surface Conduction and Other Heat Removal [W]
-,ZONE1,20-JUL-18:00,0.00,-2056384.23,0.00,0.00,0.00,0.00,540.87,600.00,180.00,3264.40,0.00,2052655.60,0.00,0.00,-0.00,-0.00,0.00,-856.64
-,ZONE2,20-JUL-18:00,0.00,-517166.81,0.00,0.00,0.00,0.00,135.22,150.00,45.00,171.23,0.00,516537.71,127.65,0.00,-0.00,0.00,0.00,0.00
-,ZONE3,20-JUL-18:00,0.00,-517694.20,0.00,0.00,0.00,0.00,135.22,150.00,45.00,2070.54,0.00,516537.71,0.00,0.00,-0.00,-0.00,0.00,-1244.27
-,ZONE4,20-JUL-18:00,0.00,-516954.38,0.00,0.00,0.00,0.00,135.22,150.00,45.00,291.38,0.00,516537.71,0.00,0.00,-0.00,-0.00,0.00,-204.92
-,Total Facility,20-JUL-18:00,0.00,-3608199.62,0.00,0.00,0.00,0.00,946.51,1050.00,315.00,5797.55,0.00,3602268.72,0.00,0.00,0.00,-0.00,0.00,-2178.17
+,ZONE1,20-JUL-18:00,0.00,-2056058.87,0.00,0.00,0.00,0.00,540.87,600.00,180.00,3268.69,0.00,2052655.60,0.00,0.00,-0.00,-0.00,0.00,-1186.28
+,ZONE2,20-JUL-18:00,0.00,-517065.65,0.00,0.00,0.00,0.00,135.22,150.00,45.00,172.26,0.00,516537.71,25.47,0.00,-0.00,0.00,0.00,0.00
+,ZONE3,20-JUL-18:00,0.00,-517635.90,0.00,0.00,0.00,0.00,135.22,150.00,45.00,2071.23,0.00,516537.71,0.00,0.00,-0.00,0.00,0.00,-1303.25
+,ZONE4,20-JUL-18:00,0.00,-516895.36,0.00,0.00,0.00,0.00,135.22,150.00,45.00,292.30,0.00,516537.71,0.00,0.00,-0.00,-0.00,0.00,-264.86
+,Total Facility,20-JUL-18:00,0.00,-3607655.79,0.00,0.00,0.00,0.00,946.51,1050.00,315.00,5804.47,0.00,3602268.72,0.00,0.00,0.00,-0.00,0.00,-2728.92
 
 
 Peak Heating Sensible Heat Gain Components
 
 ,,Time of Peak {TIMESTAMP},HVAC Zone Eq & Other Sensible Air Heating [W],HVAC Zone Eq & Other Sensible Air Cooling [W],HVAC Terminal Unit Sensible Air Heating [W],HVAC Terminal Unit Sensible Air Cooling [W],HVAC Input Heated Surface Heating [W],HVAC Input Cooled Surface Cooling [W],People Sensible Heat Addition [W],Lights Sensible Heat Addition [W],Equipment Sensible Heat Addition [W],Window Heat Addition [W],Interzone Air Transfer Heat Addition [W],Infiltration Heat Addition [W],Opaque Surface Conduction and Other Heat Addition [W],Equipment Sensible Heat Removal [W],Window Heat Removal [W],Interzone Air Transfer Heat Removal [W],Infiltration Heat Removal [W],Opaque Surface Conduction and Other Heat Removal [W]
-,ZONE1,14-FEB-09:00,22504128.16,0.00,0.00,0.00,0.00,0.00,2163.46,600.00,180.00,303.83,0.00,0.00,0.00,0.00,-0.00,0.00,-22504944.23,-2431.23
-,ZONE2,14-FEB-09:00,5621851.23,0.00,0.00,0.00,0.00,0.00,540.87,150.00,45.00,246.15,0.00,0.00,0.00,0.00,-0.00,-0.00,-5622138.76,-694.48
-,ZONE3,14-FEB-09:00,5621905.80,0.00,0.00,0.00,0.00,0.00,540.87,150.00,45.00,0.00,0.00,0.00,0.00,0.00,-94.38,0.00,-5622138.76,-408.53
-,ZONE4,14-FEB-09:00,5621914.17,0.00,0.00,0.00,0.00,0.00,540.87,150.00,45.00,0.00,0.00,0.00,0.00,0.00,-90.54,0.00,-5622138.76,-420.74
-,Total Facility,14-FEB-09:00,39369799.36,0.00,0.00,0.00,0.00,0.00,3786.06,1050.00,315.00,549.98,0.00,0.00,0.00,0.00,-184.92,-0.00,-39371360.50,-3954.98
+,ZONE1,14-FEB-09:00,22503725.63,0.00,0.00,0.00,0.00,0.00,2163.46,600.00,180.00,297.08,0.00,0.00,0.00,0.00,-0.00,0.00,-22504944.23,-2021.94
+,ZONE2,14-FEB-09:00,5621771.38,0.00,0.00,0.00,0.00,0.00,540.87,150.00,45.00,245.03,0.00,0.00,0.00,0.00,-0.00,-0.00,-5622138.76,-613.51
+,ZONE3,14-FEB-09:00,5621827.22,0.00,0.00,0.00,0.00,0.00,540.87,150.00,45.00,0.00,0.00,0.00,0.00,0.00,-95.44,0.00,-5622138.76,-328.89
+,ZONE4,14-FEB-09:00,5621830.37,0.00,0.00,0.00,0.00,0.00,540.87,150.00,45.00,0.00,0.00,0.00,0.00,0.00,-91.70,0.00,-5622138.76,-335.78
+,Total Facility,14-FEB-09:00,39369154.60,0.00,0.00,0.00,0.00,0.00,3786.06,1050.00,315.00,542.10,0.00,0.00,0.00,0.00,-187.14,-0.00,-39371360.50,-3300.12
 
 
 ----------------------------------------------------------------------------------------------------
@@ -833,8 +833,8 @@ EAp2-3. Energy Type Summary
 EAp2-4/5. Performance Rating Method Compliance
 
 ,,Electric Energy Use [GJ],Electric Demand [W],Natural Gas Energy Use [GJ],Natural Gas Demand [W],Additional Fuel Use [GJ],Additional Fuel Demand [W],District Cooling Use [GJ],District Cooling Demand [W],District Heating Use [GJ],District Heating Demand [W]
-,Heating -- Not Subdivided,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,159017.22,39406058.04
-,Cooling -- Not Subdivided,0.00,0.00,0.00,0.00,0.00,0.00,52.00,3611846.47,0.00,0.00
+,Heating -- Not Subdivided,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,159014.29,39405413.16
+,Cooling -- Not Subdivided,0.00,0.00,0.00,0.00,0.00,0.00,51.92,3611302.65,0.00,0.00
 ,Interior Lighting -- General,11.84,1050.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00
 ,Exterior Lighting -- Not Subdivided,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00
 ,Interior Equipment -- General,25.65,2100.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00
@@ -854,8 +854,8 @@ EAp2-6. Energy Use Summary
 ,,Process Subtotal [GJ],Total Energy Use [GJ]
 ,Electricity,25.65,37.49
 ,Natural Gas,0.00,0.00
-,Additional,0.00,159069.22
-,Total,25.65,159106.71
+,Additional,0.00,159066.21
+,Total,25.65,159103.70
 
 
 EAp2-7. Energy Cost Summary
@@ -1199,7 +1199,7 @@ Construction CTF
 
 ,,Construction Name,Index,#Layers,#CTFs,Time Step {hours},ThermalConductance {w/m2-K},OuterThermalAbsorptance,InnerThermalAbsorptance,OuterSolarAbsorptance,InnerSolarAbsorptance,Roughness
 ,           1,INTERIOR WALL,1,3,6,0.167,2.807,0.100,0.100,0.400,0.400,MediumSmooth
-,           2,EXTERIOR WALL,2,3,14,0.167,0.2286,0.100,0.100,0.700,0.400,MediumSmooth
+,           2,EXTERIOR WALL,2,3,18,1.167,0.3573E-01,0.100,0.100,0.700,0.400,MediumSmooth
 ,           3,INTERIOR FLOOR,3,3,9,0.167,1.515,0.900,0.900,0.300,0.500,MediumSmooth
 ,           4,EXTERIOR FLOOR,4,2,10,0.167,0.5563,0.900,0.900,0.700,0.700,MediumRough
 ,           5,INTERIOR CEILING,5,3,9,0.167,1.515,0.900,0.900,0.500,0.300,MediumRough
@@ -1214,7 +1214,7 @@ Material CTF Summary
 ,           2,INTERIOR WALL MIDDLE MATERIAL,0.0190,0.160,50.000,1030.000,0.1187
 ,           3,INTERIOR WALL OUTSIDE MATERIAL,0.0190,0.160,800.000,1090.000,0.1187
 ,           4,EXTERIOR WALL OUTSIDE MATERIAL,0.1000,1.130,1800.000,1000.000,0.8850E-01
-,           5,EXTERIOR WALL MIDDLE MATERIAL,0.1500,0.036,50.000,1030.000,4.167
+,           5,EXTERIOR WALL MIDDLE MATERIAL,1.0000,0.036,50.000,1030.000,27.78
 ,           6,EXTERIOR WALL INSIDE MATERIAL,0.0190,0.160,800.000,1090.000,0.1187
 ,           7,INTERIOR FLOOR/CEILING CEILING MATERIAL,0.0191,0.060,368.000,590.000,0.3183
 ,           8,INTERIOR FLOOR/CEILING FLOOR MATERIAL,0.1016,0.530,1280.000,840.000,0.1917
@@ -1245,68 +1245,72 @@ CTF
 ,           5,2,6.6700339,0.49457956,6.6700339,-0.10964049
 ,           6,1,-21.578919,0.53419366,-21.578919,0.71569727
 ,           7,0,16.443169,0.31282506E-01,16.443169,
-,           8,14,-0.12933012E-14,-0.32549069E-18,0.48692520E-12,0.28286562E-16
-,           9,13,-0.68520021E-10,0.96226872E-15,-0.71656174E-09,0.47706029E-12
-,          10,12,0.40364707E-07,0.54907146E-14,0.20738454E-06,-0.28926651E-09
-,          11,11,-0.79488629E-05,0.46406237E-12,-0.20876873E-04,0.59623212E-07
-,          12,10,0.62393530E-03,0.15660713E-09,0.90055053E-03,-0.50353955E-05
-,          13,9,-0.21344792E-01,0.14708086E-07,-0.20484608E-01,0.18857148E-03
-,          14,8,0.37975809,0.48025883E-06,0.27501741,-0.36770731E-02
-,          15,7,-3.8911294,0.60680826E-05,-2.3157762,0.41351276E-01
-,          16,6,24.365466,0.31309221E-04,12.620601,-0.28477979
-,          17,5,-96.415723,0.66547424E-04,-45.081665,1.2407333
-,          18,4,244.19383,0.55909264E-04,105.34849,-3.4603987
-,          19,3,-392.52974,0.16552589E-04,-158.19073,6.1223786
-,          20,2,385.45993,0.13328947E-05,146.08478,-6.6100819
-,          21,1,-210.07031,0.15168089E-07,-75.148549,3.9535110
-,          22,0,48.528818,0.12484589E-10,16.427611,
-,          23,9,-0.35904404E-11,0.59297810E-15,-0.10712783E-14,-0.18879158E-16
-,          24,8,0.48118398E-06,0.44758322E-12,0.10040435E-08,-0.19613027E-10
-,          25,7,-0.77647225E-04,0.76139413E-08,-0.30718380E-04,0.60014004E-06
-,          26,6,0.43401625E-02,0.40728305E-05,0.36683249E-02,-0.74298645E-04
-,          27,5,-0.10453189,0.27676385E-03,-0.14076380,0.30224653E-02
-,          28,4,1.1140826,0.39640219E-02,2.1904223,-0.51158879E-01
-,          29,3,-5.3680776,0.14008479E-01,-15.012449,0.39279842
-,          30,2,12.243479,0.11829131E-01,44.640559,-1.3578025
-,          31,1,-12.938165,0.17754670E-02,-55.533077,1.9921783
-,          32,0,5.0808206,0.13237046E-04,23.883542,
-,          33,10,0.23808708E-10,0.19900769E-14,0.28584045E-12,-0.40622520E-14
-,          34,9,-0.82903898E-06,0.45037678E-13,-0.20661016E-06,0.29462360E-08
-,          35,8,0.35660301E-03,0.25244069E-09,0.95662959E-03,-0.13643327E-04
-,          36,7,-0.11265829E-01,0.91752358E-07,-0.86605806E-01,0.12438554E-02
-,          37,6,0.14364361,0.50514870E-05,1.6751937,-0.24672138E-01
-,          38,5,-0.94528551,0.66576082E-04,-14.314405,0.21798586
-,          39,4,3.5088560,0.25620873E-03,64.793430,-1.0283945
-,          40,3,-7.5730183,0.29982817E-03,-164.58870,2.7453106
-,          41,2,9.3772855,0.95427985E-04,232.96189,-4.1165986
-,          42,1,-6.1574957,0.55696743E-05,-170.08001,3.2038286
-,          43,0,1.6576533,0.12641049E-07,49.638978,
-,          44,9,-0.10712783E-14,0.59297810E-15,-0.35904404E-11,-0.18879158E-16
-,          45,8,0.10040435E-08,0.44758322E-12,0.48118398E-06,-0.19613027E-10
-,          46,7,-0.30718380E-04,0.76139413E-08,-0.77647225E-04,0.60014004E-06
-,          47,6,0.36683249E-02,0.40728305E-05,0.43401625E-02,-0.74298645E-04
-,          48,5,-0.14076380,0.27676385E-03,-0.10453189,0.30224653E-02
-,          49,4,2.1904223,0.39640219E-02,1.1140826,-0.51158879E-01
-,          50,3,-15.012449,0.14008479E-01,-5.3680776,0.39279842
-,          51,2,44.640559,0.11829131E-01,12.243479,-1.3578025
-,          52,1,-55.533077,0.17754670E-02,-12.938165,1.9921783
-,          53,0,23.883542,0.13237046E-04,5.0808206,
-,          54,12,0.45181270E-15,0.12267917E-13,0.63144483E-09,0.28022575E-17
-,          55,11,-0.38159363E-07,0.11861593E-13,-0.13684350E-06,0.68629947E-09
-,          56,10,0.78204607E-05,0.21525646E-12,0.10232442E-04,-0.14666257E-06
-,          57,9,-0.53715968E-03,0.17721693E-09,-0.35872850E-03,0.10684488E-04
-,          58,8,0.16852507E-01,0.25315423E-07,0.68751254E-02,-0.35875502E-03
-,          59,7,-0.28151725,0.10011007E-05,-0.77871813E-01,0.64623487E-02
-,          60,6,2.6951230,0.13334101E-04,0.54359077,-0.67220854E-01
-,          61,5,-15.320024,0.65194687E-04,-2.3914628,0.41859992
-,          62,4,52.557548,0.11810373E-03,6.6725484,-1.5837372
-,          63,3,-108.46738,0.74455248E-04,-11.673905,3.6185506
-,          64,2,130.51698,0.13405780E-04,12.319150,-4.8269684
-,          65,1,-83.840341,0.50875538E-06,-7.1287053,3.4330151
-,          66,0,22.123580,0.19400213E-07,1.7304156,
-,          67,2,0.28731289E-15,0.16983614E-15,0.28731289E-15,0.0000000
-,          68,1,-0.12854938E-02,0.75617283E-03,-0.12854938E-02,0.86365181E-12
-,          69,0,13.101285,13.099244,13.101285,
+,           8,18,0.11684751E-10,0.13883041E-23,0.60447934E-11,-0.22780031E-13
+,           9,17,-0.89766620E-09,-0.24156154E-21,-0.45657281E-09,0.23055248E-11
+,          10,16,0.47610298E-07,-0.93584335E-17,0.24033418E-07,-0.15899695E-09
+,          11,15,-0.17970852E-05,0.64777002E-14,-0.89202577E-06,0.77005343E-08
+,          12,14,0.49164586E-04,0.14489924E-12,0.23759223E-04,-0.26718536E-06
+,          13,13,-0.98646479E-03,0.68393977E-11,-0.45912918E-03,0.67190961E-05
+,          14,12,0.14630185E-01,0.15366191E-09,0.64833625E-02,-0.12327235E-03
+,          15,11,-0.16121600,0.19034106E-08,-0.67249029E-01,0.16559095E-02
+,          16,10,1.3241576,0.13210075E-07,0.51454428,-0.16318812E-01
+,          17,9,-8.1175098,0.51279524E-07,-2.9142432,0.11811650
+,          18,8,37.115983,0.10979873E-06,12.246757,-0.62811977
+,          19,7,-126.18259,0.12607530E-06,-38.197825,2.4513271
+,          20,6,316.93616,0.73838985E-07,88.147515,-6.9938433
+,          21,5,-581.62748,0.20518385E-07,-149.22121,14.462591
+,          22,4,765.45794,0.21672924E-08,182.21415,-21.321857
+,          23,3,-700.09783,0.24460496E-09,-155.69089,21.752439
+,          24,2,421.00813,-0.10513471E-09,88.098994,-14.544326
+,          25,1,-149.25845,0.41317801E-10,-29.600017,5.7184415
+,          26,0,23.589000,-0.71731073E-11,4.4634244,
+,          27,9,-0.35904404E-11,0.59297810E-15,-0.10712783E-14,-0.18879158E-16
+,          28,8,0.48118398E-06,0.44758322E-12,0.10040435E-08,-0.19613027E-10
+,          29,7,-0.77647225E-04,0.76139413E-08,-0.30718380E-04,0.60014004E-06
+,          30,6,0.43401625E-02,0.40728305E-05,0.36683249E-02,-0.74298645E-04
+,          31,5,-0.10453189,0.27676385E-03,-0.14076380,0.30224653E-02
+,          32,4,1.1140826,0.39640219E-02,2.1904223,-0.51158879E-01
+,          33,3,-5.3680776,0.14008479E-01,-15.012449,0.39279842
+,          34,2,12.243479,0.11829131E-01,44.640559,-1.3578025
+,          35,1,-12.938165,0.17754670E-02,-55.533077,1.9921783
+,          36,0,5.0808206,0.13237046E-04,23.883542,
+,          37,10,0.23808708E-10,0.19900769E-14,0.28584045E-12,-0.40622520E-14
+,          38,9,-0.82903898E-06,0.45037678E-13,-0.20661016E-06,0.29462360E-08
+,          39,8,0.35660301E-03,0.25244069E-09,0.95662959E-03,-0.13643327E-04
+,          40,7,-0.11265829E-01,0.91752358E-07,-0.86605806E-01,0.12438554E-02
+,          41,6,0.14364361,0.50514870E-05,1.6751937,-0.24672138E-01
+,          42,5,-0.94528551,0.66576082E-04,-14.314405,0.21798586
+,          43,4,3.5088560,0.25620873E-03,64.793430,-1.0283945
+,          44,3,-7.5730183,0.29982817E-03,-164.58870,2.7453106
+,          45,2,9.3772855,0.95427985E-04,232.96189,-4.1165986
+,          46,1,-6.1574957,0.55696743E-05,-170.08001,3.2038286
+,          47,0,1.6576533,0.12641049E-07,49.638978,
+,          48,9,-0.10712783E-14,0.59297810E-15,-0.35904404E-11,-0.18879158E-16
+,          49,8,0.10040435E-08,0.44758322E-12,0.48118398E-06,-0.19613027E-10
+,          50,7,-0.30718380E-04,0.76139413E-08,-0.77647225E-04,0.60014004E-06
+,          51,6,0.36683249E-02,0.40728305E-05,0.43401625E-02,-0.74298645E-04
+,          52,5,-0.14076380,0.27676385E-03,-0.10453189,0.30224653E-02
+,          53,4,2.1904223,0.39640219E-02,1.1140826,-0.51158879E-01
+,          54,3,-15.012449,0.14008479E-01,-5.3680776,0.39279842
+,          55,2,44.640559,0.11829131E-01,12.243479,-1.3578025
+,          56,1,-55.533077,0.17754670E-02,-12.938165,1.9921783
+,          57,0,23.883542,0.13237046E-04,5.0808206,
+,          58,12,0.45181270E-15,0.12267917E-13,0.63144483E-09,0.28022575E-17
+,          59,11,-0.38159363E-07,0.11861593E-13,-0.13684350E-06,0.68629947E-09
+,          60,10,0.78204607E-05,0.21525646E-12,0.10232442E-04,-0.14666257E-06
+,          61,9,-0.53715968E-03,0.17721693E-09,-0.35872850E-03,0.10684488E-04
+,          62,8,0.16852507E-01,0.25315423E-07,0.68751254E-02,-0.35875502E-03
+,          63,7,-0.28151725,0.10011007E-05,-0.77871813E-01,0.64623487E-02
+,          64,6,2.6951230,0.13334101E-04,0.54359077,-0.67220854E-01
+,          65,5,-15.320024,0.65194687E-04,-2.3914628,0.41859992
+,          66,4,52.557548,0.11810373E-03,6.6725484,-1.5837372
+,          67,3,-108.46738,0.74455248E-04,-11.673905,3.6185506
+,          68,2,130.51698,0.13405780E-04,12.319150,-4.8269684
+,          69,1,-83.840341,0.50875538E-06,-7.1287053,3.4330151
+,          70,0,22.123580,0.19400213E-07,1.7304156,
+,          71,2,0.28731289E-15,0.16983614E-15,0.28731289E-15,0.0000000
+,          72,1,-0.12854938E-02,0.75617283E-03,-0.12854938E-02,0.86365181E-12
+,          73,0,13.101285,13.099244,13.101285,
 
 
 WindowConstruction
@@ -1471,16 +1475,16 @@ Zone Surfaces
 HeatTransfer Surface
 
 ,,Surface Name,Surface Class,Base Surface,Heat Transfer Algorithm,Construction,Nominal U (w/o film coefs) {W/m2-K},Nominal U (with film coefs) {W/m2-K},Solar Diffusing,Area (Net) {m2},Area (Gross) {m2},Area (Sunlit Calc) {m2},Azimuth {deg},Tilt {deg},~Width {m},~Height {m},Reveal {m},ExtBoundCondition,ExtConvCoeffCalc,IntConvCoeffCalc,SunExposure,WindExposure,ViewFactorToGround,ViewFactorToSky,ViewFactorToGround-IR,ViewFactorToSky-IR,#Sides
-,           1,466564015B2F43199C1B,Wall,,CTF - ConductionTransferFunction,EXTERIOR WALL,0.229,0.221,,25.20,30.00,25.20,180.00,90.00,10.00,3.00,0.00,ExternalEnvironment,DOE-2,ASHRAETARP,SunExposed,WindExposed,0.50,0.50,0.50,0.50,4
+,           1,466564015B2F43199C1B,Wall,,CTF - ConductionTransferFunction,EXTERIOR WALL,3.573E-002,3.554E-002,,25.20,30.00,25.20,180.00,90.00,10.00,3.00,0.00,ExternalEnvironment,DOE-2,ASHRAETARP,SunExposed,WindExposed,0.50,0.50,0.50,0.50,4
 ,           2,466564015B2F43199C1B_GLZ_0_F3AAB6FB8BD3451FBA7D,Window,466564015B2F43199C1B,Window5 Detailed Fenestration,EXTERIOR WINDOW,N/A,1.600,No,4.80,4.80,4.80,180.00,90.00,3.00,1.60,0.00,ExternalEnvironment,DOE-2,ASHRAETARP,SunExposed,WindExposed,0.50,0.50,0.50,0.50,4
-,           3,AA69F423B82B48AAAA7E,Wall,,CTF - ConductionTransferFunction,EXTERIOR WALL,0.229,0.221,,10.20,15.00,10.20,180.00,90.00,5.00,3.00,0.00,ExternalEnvironment,DOE-2,ASHRAETARP,SunExposed,WindExposed,0.50,0.50,0.50,0.50,4
+,           3,AA69F423B82B48AAAA7E,Wall,,CTF - ConductionTransferFunction,EXTERIOR WALL,3.573E-002,3.554E-002,,10.20,15.00,10.20,180.00,90.00,5.00,3.00,0.00,ExternalEnvironment,DOE-2,ASHRAETARP,SunExposed,WindExposed,0.50,0.50,0.50,0.50,4
 ,           4,AA69F423B82B48AAAA7E_GLZ_0_706693F7F3F64B68969E,Window,AA69F423B82B48AAAA7E,Window5 Detailed Fenestration,EXTERIOR WINDOW,N/A,1.600,No,4.80,4.80,4.80,180.00,90.00,3.00,1.60,0.00,ExternalEnvironment,DOE-2,ASHRAETARP,SunExposed,WindExposed,0.50,0.50,0.50,0.50,4
-,           5,FD8A070E4BE54D88AE3B,Wall,,CTF - ConductionTransferFunction,EXTERIOR WALL,0.229,0.221,,25.20,30.00,25.20,270.00,90.00,10.00,3.00,0.00,ExternalEnvironment,DOE-2,ASHRAETARP,SunExposed,WindExposed,0.50,0.50,0.50,0.50,4
+,           5,FD8A070E4BE54D88AE3B,Wall,,CTF - ConductionTransferFunction,EXTERIOR WALL,3.573E-002,3.554E-002,,25.20,30.00,25.20,270.00,90.00,10.00,3.00,0.00,ExternalEnvironment,DOE-2,ASHRAETARP,SunExposed,WindExposed,0.50,0.50,0.50,0.50,4
 ,           6,FD8A070E4BE54D88AE3B_GLZ_0_B285641B64A742589E03,Window,FD8A070E4BE54D88AE3B,Window5 Detailed Fenestration,EXTERIOR WINDOW,N/A,1.600,No,4.80,4.80,4.80,270.00,90.00,3.00,1.60,0.00,ExternalEnvironment,DOE-2,ASHRAETARP,SunExposed,WindExposed,0.50,0.50,0.50,0.50,4
-,           7,D9E98E2F98CA44578C65,Wall,,CTF - ConductionTransferFunction,EXTERIOR WALL,0.229,0.221,,15.00,15.00,15.00,270.00,90.00,5.00,3.00,0.00,ExternalEnvironment,DOE-2,ASHRAETARP,SunExposed,WindExposed,0.50,0.50,0.50,0.50,4
-,           8,AF6581C9E0E3475DA994,Wall,,CTF - ConductionTransferFunction,EXTERIOR WALL,0.229,0.221,,25.20,30.00,25.20,0.00,90.00,10.00,3.00,0.00,ExternalEnvironment,DOE-2,ASHRAETARP,SunExposed,WindExposed,0.50,0.50,0.50,0.50,4
+,           7,D9E98E2F98CA44578C65,Wall,,CTF - ConductionTransferFunction,EXTERIOR WALL,3.573E-002,3.554E-002,,15.00,15.00,15.00,270.00,90.00,5.00,3.00,0.00,ExternalEnvironment,DOE-2,ASHRAETARP,SunExposed,WindExposed,0.50,0.50,0.50,0.50,4
+,           8,AF6581C9E0E3475DA994,Wall,,CTF - ConductionTransferFunction,EXTERIOR WALL,3.573E-002,3.554E-002,,25.20,30.00,25.20,0.00,90.00,10.00,3.00,0.00,ExternalEnvironment,DOE-2,ASHRAETARP,SunExposed,WindExposed,0.50,0.50,0.50,0.50,4
 ,           9,AF6581C9E0E3475DA994_GLZ_0_A0DF08794DAE4C1B8D9A,Window,AF6581C9E0E3475DA994,Window5 Detailed Fenestration,EXTERIOR WINDOW,N/A,1.600,No,4.80,4.80,4.80,0.00,90.00,3.00,1.60,0.00,ExternalEnvironment,DOE-2,ASHRAETARP,SunExposed,WindExposed,0.50,0.50,0.50,0.50,4
-,          10,3675D61B3AAB405AA64E,Wall,,CTF - ConductionTransferFunction,EXTERIOR WALL,0.229,0.221,,25.20,30.00,25.20,90.00,90.00,10.00,3.00,0.00,ExternalEnvironment,DOE-2,ASHRAETARP,SunExposed,WindExposed,0.50,0.50,0.50,0.50,4
+,          10,3675D61B3AAB405AA64E,Wall,,CTF - ConductionTransferFunction,EXTERIOR WALL,3.573E-002,3.554E-002,,25.20,30.00,25.20,90.00,90.00,10.00,3.00,0.00,ExternalEnvironment,DOE-2,ASHRAETARP,SunExposed,WindExposed,0.50,0.50,0.50,0.50,4
 ,          11,3675D61B3AAB405AA64E_GLZ_0_C015151E9B4341638ED8,Window,3675D61B3AAB405AA64E,Window5 Detailed Fenestration,EXTERIOR WINDOW,N/A,1.600,No,4.80,4.80,4.80,90.00,90.00,3.00,1.60,0.00,ExternalEnvironment,DOE-2,ASHRAETARP,SunExposed,WindExposed,0.50,0.50,0.50,0.50,4
 ,          12,3450B9CAC0D14E639808_SRFP_0,Wall,,CTF - ConductionTransferFunction,INTERIOR WALL,2.807,1.977,,1.60,1.60,1.60,0.00,90.00,2.04,2.83,0.00,A492058F47A24CFDB0FC_SRFP_0,Other/Same Surface Int Conv,ASHRAETARP,NoSun,NoWind,0.50,0.50,0.50,0.50,3
 ,          13,3450B9CAC0D14E639808_SRFP_1,Wall,,CTF - ConductionTransferFunction,INTERIOR WALL,2.807,1.977,,3.00,3.00,3.00,0.00,90.00,2.83,3.00,0.00,A492058F47A24CFDB0FC_SRFP_1,Other/Same Surface Int Conv,ASHRAETARP,NoSun,NoWind,0.50,0.50,0.50,0.50,3
@@ -1499,8 +1503,8 @@ HeatTransfer Surface
 ,          26,134068DDAD364F55B5A4,Floor,,CTF - ConductionTransferFunction,EXTERIOR FLOOR,0.556,0.490,,25.00,25.00,25.00,90.00,180.00,5.00,5.00,0.00,Ground,N/A-Ground,ASHRAETARP,NoSun,NoWind,1.00,0.00,1.00,0.00,4
 ,          27,15D536BB1111463BB433,Roof,,CTF - ConductionTransferFunction,EXTERIOR ROOF,0.174,0.168,,96.00,100.00,96.00,180.00,0.00,10.00,10.00,0.00,ExternalEnvironment,DOE-2,ASHRAETARP,SunExposed,WindExposed,0.00,1.00,0.00,1.00,4
 ,          28,15D536BB1111463BB433_GLZ_0_3B1B787BEBAE42D6974C,Window,15D536BB1111463BB433,Window5 Detailed Fenestration,EXTERIOR WINDOW,N/A,1.600,No,4.00,4.00,4.00,180.00,0.00,2.00,2.00,0.00,ExternalEnvironment,DOE-2,ASHRAETARP,SunExposed,WindExposed,0.00,1.00,0.00,1.00,4
-,          29,368CA5EB2212437BAC65,Wall,,CTF - ConductionTransferFunction,EXTERIOR WALL,0.229,0.221,,15.00,15.00,15.00,180.00,90.00,5.00,3.00,0.00,ExternalEnvironment,DOE-2,ASHRAETARP,SunExposed,WindExposed,0.50,0.50,0.50,0.50,4
-,          30,E9DEF6BFFD0D4E24982D,Wall,,CTF - ConductionTransferFunction,EXTERIOR WALL,0.229,0.221,,10.20,15.00,10.20,90.00,90.00,5.00,3.00,0.00,ExternalEnvironment,DOE-2,ASHRAETARP,SunExposed,WindExposed,0.50,0.50,0.50,0.50,4
+,          29,368CA5EB2212437BAC65,Wall,,CTF - ConductionTransferFunction,EXTERIOR WALL,3.573E-002,3.554E-002,,15.00,15.00,15.00,180.00,90.00,5.00,3.00,0.00,ExternalEnvironment,DOE-2,ASHRAETARP,SunExposed,WindExposed,0.50,0.50,0.50,0.50,4
+,          30,E9DEF6BFFD0D4E24982D,Wall,,CTF - ConductionTransferFunction,EXTERIOR WALL,3.573E-002,3.554E-002,,10.20,15.00,10.20,90.00,90.00,5.00,3.00,0.00,ExternalEnvironment,DOE-2,ASHRAETARP,SunExposed,WindExposed,0.50,0.50,0.50,0.50,4
 ,          31,E9DEF6BFFD0D4E24982D_GLZ_0_FACD16C8C8724A7C9FE8,Window,E9DEF6BFFD0D4E24982D,Window5 Detailed Fenestration,EXTERIOR WINDOW,N/A,1.600,No,4.80,4.80,4.80,90.00,90.00,3.00,1.60,0.00,ExternalEnvironment,DOE-2,ASHRAETARP,SunExposed,WindExposed,0.50,0.50,0.50,0.50,4
 ,          32,18827043BD1748228F9F_SRFP_0,Wall,,CTF - ConductionTransferFunction,INTERIOR WALL,2.807,1.977,,1.60,1.60,1.60,0.00,90.00,2.04,2.83,0.00,1B4A70146E884417A6C2_SRFP_0,Other/Same Surface Int Conv,ASHRAETARP,NoSun,NoWind,0.50,0.50,0.50,0.50,3
 ,          33,18827043BD1748228F9F_SRFP_1,Wall,,CTF - ConductionTransferFunction,INTERIOR WALL,2.807,1.977,,3.00,3.00,3.00,0.00,90.00,2.83,3.00,0.00,1B4A70146E884417A6C2_SRFP_1,Other/Same Surface Int Conv,ASHRAETARP,NoSun,NoWind,0.50,0.50,0.50,0.50,3
@@ -1515,8 +1519,8 @@ HeatTransfer Surface
 ,          42,21EFBD8EB290413FBD96,Wall,,CTF - ConductionTransferFunction,AIR WALL,13.100,4.424,,1.60,1.60,1.60,0.00,90.00,1.00,1.60,0.00,E4458FF87EE04E219343,Other/Same Surface Int Conv,ASHRAETARP,NoSun,NoWind,0.50,0.50,0.50,0.50,4
 ,          43,6EF94013FE2746C399E9,Floor,,CTF - ConductionTransferFunction,EXTERIOR FLOOR,0.556,0.490,,25.00,25.00,25.00,90.00,180.00,5.00,5.00,0.00,Ground,N/A-Ground,ASHRAETARP,NoSun,NoWind,1.00,0.00,1.00,0.00,4
 ,          44,47C50FED2A7A44E3B20B,Roof,,CTF - ConductionTransferFunction,INTERIOR CEILING,1.515,1.179,,25.00,25.00,25.00,180.00,0.00,5.00,5.00,0.00,2A66A42AD58A403783AA,Other/Same Surface Int Conv,ASHRAETARP,NoSun,NoWind,0.00,1.00,0.00,1.00,4
-,          45,65EDE32B890F4F1F9280,Wall,,CTF - ConductionTransferFunction,EXTERIOR WALL,0.229,0.221,,15.00,15.00,15.00,0.00,90.00,5.00,3.00,0.00,ExternalEnvironment,DOE-2,ASHRAETARP,SunExposed,WindExposed,0.50,0.50,0.50,0.50,4
-,          46,E792B52EA48241D382FB,Wall,,CTF - ConductionTransferFunction,EXTERIOR WALL,0.229,0.221,,10.20,15.00,10.20,270.00,90.00,5.00,3.00,0.00,ExternalEnvironment,DOE-2,ASHRAETARP,SunExposed,WindExposed,0.50,0.50,0.50,0.50,4
+,          45,65EDE32B890F4F1F9280,Wall,,CTF - ConductionTransferFunction,EXTERIOR WALL,3.573E-002,3.554E-002,,15.00,15.00,15.00,0.00,90.00,5.00,3.00,0.00,ExternalEnvironment,DOE-2,ASHRAETARP,SunExposed,WindExposed,0.50,0.50,0.50,0.50,4
+,          46,E792B52EA48241D382FB,Wall,,CTF - ConductionTransferFunction,EXTERIOR WALL,3.573E-002,3.554E-002,,10.20,15.00,10.20,270.00,90.00,5.00,3.00,0.00,ExternalEnvironment,DOE-2,ASHRAETARP,SunExposed,WindExposed,0.50,0.50,0.50,0.50,4
 ,          47,E792B52EA48241D382FB_GLZ_0_1798305B2A5941A4899A,Window,E792B52EA48241D382FB,Window5 Detailed Fenestration,EXTERIOR WINDOW,N/A,1.600,No,4.80,4.80,4.80,270.00,90.00,3.00,1.60,0.00,ExternalEnvironment,DOE-2,ASHRAETARP,SunExposed,WindExposed,0.50,0.50,0.50,0.50,4
 ,          48,A492058F47A24CFDB0FC_SRFP_0,Wall,,CTF - ConductionTransferFunction,INTERIOR WALL,2.807,1.977,,1.60,1.60,1.60,180.00,90.00,2.83,2.04,0.00,3450B9CAC0D14E639808_SRFP_0,Other/Same Surface Int Conv,ASHRAETARP,NoSun,NoWind,0.50,0.50,0.50,0.50,3
 ,          49,A492058F47A24CFDB0FC_SRFP_1,Wall,,CTF - ConductionTransferFunction,INTERIOR WALL,2.807,1.977,,3.00,3.00,3.00,180.00,90.00,3.00,2.83,0.00,3450B9CAC0D14E639808_SRFP_1,Other/Same Surface Int Conv,ASHRAETARP,NoSun,NoWind,0.50,0.50,0.50,0.50,3
@@ -1531,8 +1535,8 @@ HeatTransfer Surface
 ,          58,629F7D9ECD6240458EB2,Wall,,CTF - ConductionTransferFunction,AIR WALL,13.100,4.424,,1.60,1.60,1.60,180.00,90.00,1.00,1.60,0.00,F54267983C3742E19DB3,Other/Same Surface Int Conv,ASHRAETARP,NoSun,NoWind,0.50,0.50,0.50,0.50,4
 ,          59,607BDE968C67456E8C5E,Floor,,CTF - ConductionTransferFunction,EXTERIOR FLOOR,0.556,0.490,,25.00,25.00,25.00,90.00,180.00,5.00,5.00,0.00,Ground,N/A-Ground,ASHRAETARP,NoSun,NoWind,1.00,0.00,1.00,0.00,4
 ,          60,FCBCC5A43A364B309038,Roof,,CTF - ConductionTransferFunction,INTERIOR CEILING,1.515,1.179,,25.00,25.00,25.00,180.00,0.00,5.00,5.00,0.00,10AE508A81264C718D07,Other/Same Surface Int Conv,ASHRAETARP,NoSun,NoWind,0.00,1.00,0.00,1.00,4
-,          61,A9013CCDF7514C79B799,Wall,,CTF - ConductionTransferFunction,EXTERIOR WALL,0.229,0.221,,15.00,15.00,15.00,90.00,90.00,5.00,3.00,0.00,ExternalEnvironment,DOE-2,ASHRAETARP,SunExposed,WindExposed,0.50,0.50,0.50,0.50,4
-,          62,0BB252B337B243D1A9CA,Wall,,CTF - ConductionTransferFunction,EXTERIOR WALL,0.229,0.221,,10.20,15.00,10.20,0.00,90.00,5.00,3.00,0.00,ExternalEnvironment,DOE-2,ASHRAETARP,SunExposed,WindExposed,0.50,0.50,0.50,0.50,4
+,          61,A9013CCDF7514C79B799,Wall,,CTF - ConductionTransferFunction,EXTERIOR WALL,3.573E-002,3.554E-002,,15.00,15.00,15.00,90.00,90.00,5.00,3.00,0.00,ExternalEnvironment,DOE-2,ASHRAETARP,SunExposed,WindExposed,0.50,0.50,0.50,0.50,4
+,          62,0BB252B337B243D1A9CA,Wall,,CTF - ConductionTransferFunction,EXTERIOR WALL,3.573E-002,3.554E-002,,10.20,15.00,10.20,0.00,90.00,5.00,3.00,0.00,ExternalEnvironment,DOE-2,ASHRAETARP,SunExposed,WindExposed,0.50,0.50,0.50,0.50,4
 ,          63,0BB252B337B243D1A9CA_GLZ_0_F5CF2156590D48F8B885,Window,0BB252B337B243D1A9CA,Window5 Detailed Fenestration,EXTERIOR WINDOW,N/A,1.600,No,4.80,4.80,4.80,0.00,90.00,3.00,1.60,0.00,ExternalEnvironment,DOE-2,ASHRAETARP,SunExposed,WindExposed,0.50,0.50,0.50,0.50,4
 ,          64,1B4A70146E884417A6C2_SRFP_0,Wall,,CTF - ConductionTransferFunction,INTERIOR WALL,2.807,1.977,,1.60,1.60,1.60,180.00,90.00,2.83,2.04,0.00,18827043BD1748228F9F_SRFP_0,Other/Same Surface Int Conv,ASHRAETARP,NoSun,NoWind,0.50,0.50,0.50,0.50,3
 ,          65,1B4A70146E884417A6C2_SRFP_1,Wall,,CTF - ConductionTransferFunction,INTERIOR WALL,2.807,1.977,,3.00,3.00,3.00,180.00,90.00,3.00,2.83,0.00,18827043BD1748228F9F_SRFP_1,Other/Same Surface Int Conv,ASHRAETARP,NoSun,NoWind,0.50,0.50,0.50,0.50,3
@@ -1570,9 +1574,9 @@ Environment:WarmupDays
 Warmup Convergence Information
 
 ,,Zone Name,Environment Type/Name,Average Warmup Temperature Difference {deltaC},Std Dev Warmup Temperature Difference {deltaC},Max Temperature Pass/Fail Convergence,Min Temperature Pass/Fail Convergence,Average Warmup Load Difference {W},Std Dev Warmup Load Difference {W},Heating Load Pass/Fail Convergence,Cooling Load Pass/Fail Convergence
-,           1,ZONE1,RunPeriod: PARAMETRIC RUN,8.9120673861E-002,0.5020464845,Pass,Pass,4.0332410815E-002,0.2003062338,Pass,Pass
-,           2,ZONE2,RunPeriod: PARAMETRIC RUN,7.4119890843E-002,0.4195205806,Pass,Pass,4.2237145389E-002,0.1881870879,Pass,Pass
-,           3,ZONE3,RunPeriod: PARAMETRIC RUN,8.3017720861E-002,0.4661290153,Pass,Pass,4.6012178386E-002,0.2081686809,Pass,Pass
-,           4,ZONE4,RunPeriod: PARAMETRIC RUN,7.3852299330E-002,0.4185228621,Pass,Pass,4.3864374472E-002,0.1966511031,Pass,Pass
+,           1,ZONE1,RunPeriod: PARAMETRIC RUN,8.4449998243E-002,0.4532936561,Pass,Pass,4.4061994056E-002,0.2274458668,Pass,Pass
+,           2,ZONE2,RunPeriod: PARAMETRIC RUN,7.0792339834E-002,0.3928671972,Pass,Pass,6.1126419737E-002,0.3046309227,Pass,Pass
+,           3,ZONE3,RunPeriod: PARAMETRIC RUN,7.8251891369E-002,0.4241098181,Pass,Pass,7.2567450047E-002,0.3985945417,Pass,Pass
+,           4,ZONE4,RunPeriod: PARAMETRIC RUN,7.0574436164E-002,0.3921591352,Pass,Pass,6.2492675382E-002,0.3146872172,Pass,Pass
 
 
