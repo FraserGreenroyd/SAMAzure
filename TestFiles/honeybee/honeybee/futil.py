@@ -164,8 +164,9 @@ def bat_to_sh(file_path):
     WARNING: This is a very simple function and doesn't handle any edge cases.
     """
     sh_file = file_path[:-4] + '.sh'
-    with open(file_path, 'rb') as inf, open(sh_file, 'wb') as outf:
+    with open(file_path, 'r') as inf, open(sh_file, 'w') as outf:
         outf.write('#!/usr/bin/env bash\n\n')
+
         for line in inf:
             # pass the path lines, etc to get to the commands
             if line.strip():
@@ -176,8 +177,15 @@ def bat_to_sh(file_path):
         for line in inf:
             if line.startswith('echo'):
                 continue
-            modified_line = line.replace('c:\\radiance\\bin\\', '').replace('\\', '/')
+            #modified_line = line.replace('c:\\radiance\\bin\\', '').replace('\\', '../../radiance-5.1.0-Linux/usr/local/radiance')
+            modified_line = line.replace('c:\\radiance\\bin\\', 'radiance-5.1.0-Linux/usr/local/radiance')
+            #modified_line = line.replace('c:\\radiance\\bin\\', '$AZ_BATCH_APP_PACKAGE_radiance')
+            if modified_line != '\n' and not modified_line.startswith('cd'):
+                modified_line = "../../../" + modified_line
+
+            #modified_line = modified_line.replace('>', '&>')
             outf.write(modified_line)
+        #outf.write("cd - ");
 
     print('bash file is created at:\n\t%s' % sh_file)
     # Heroku - Make command.sh executable

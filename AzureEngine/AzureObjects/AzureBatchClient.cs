@@ -94,6 +94,15 @@ namespace AzureEngine.AzureObjects
 
             };
 
+            task.ApplicationPackageReferences = new List<ApplicationPackageReference>
+            {
+                new ApplicationPackageReference
+                {
+                    ApplicationId = "radiance",
+                    Version = "1.0"
+                }
+            };
+
             task.UserIdentity = new UserIdentity(
                         new AutoUserSpecification(
                             scope: AutoUserScope.Task,
@@ -134,20 +143,21 @@ namespace AzureEngine.AzureObjects
 
             if (cPool == null)
             {
-                imageReference = (imageReference == null ? CreateImageReference() : imageReference);
+                imageReference = (imageReference == null ? CreateImageReference("MicrosoftWindowsServer", "WindowsServer", "2016-Datacenter", "latest") : imageReference);
                 VirtualMachineConfiguration vmConfig = new VirtualMachineConfiguration(imageReference, SKUReference(imageReference.Offer));
 
                 messageContainer.AddInformationMessage("Creating pool...");
                 cPool = batchClient.PoolOperations.CreatePool(poolID, vmSize, vmConfig, computerNodes);
-               /* if(cPool.StartTask == null)
-                    cPool.StartTask = new StartTask();
 
-                cPool.StartTask.UserIdentity = new UserIdentity(
-                        new AutoUserSpecification(
-                            scope: AutoUserScope.Pool,
-                            elevationLevel: ElevationLevel.Admin
-                        )
-                    );*/
+                cPool.ApplicationPackageReferences = new List<ApplicationPackageReference>
+                {
+                    new ApplicationPackageReference
+                    {
+                        ApplicationId = "radiance",
+                        Version = "1.0"
+                    }
+                };
+
                 cPool.Commit();
                 messageContainer.AddInformationMessage("Pool created...");
             }
@@ -215,8 +225,8 @@ namespace AzureEngine.AzureObjects
         {
             messageContainer.AddInformationMessage("Starting installation of Radiance on batch " + batchClient.ToString() + "...");
             //AddTask("sudo /bin/sh -c ./radInstall.sh", new List<ResourceFile> { rdZip, rdInstallFile });
-            AddTask("sudo apt-get -y install radiance");
-            AddTask("sudo apt-get install unzip");
+            //AddTask("sudo apt-get -y install radiance");
+            //AddTask("sudo apt-get install unzip");
 
             if (AwaitTaskCompletion())
                 messageContainer.AddInformationMessage("Radiance successfully installed...");

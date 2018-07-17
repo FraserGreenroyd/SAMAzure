@@ -84,10 +84,10 @@ namespace AzureEngine
             messageContainer.AddInformationMessage("Creating batch client(s)...");
 
             //Each batch pool can only have 100 nodes, and we want to use one node per file. If we have more than 100 nodes we need to create more than one batch client
-            int maxClients = (int)Math.Ceiling((double)filesToRun/ 100);
+            int maxClients = (int)Math.Ceiling((double)filesToRun / 100);
             int numberOfFullNodes = (int)Math.Floor((double)filesToRun / 100);
 
-            for(int x = 0; x < maxClients; x++)
+            for (int x = 0; x < maxClients; x++)
             {
                 //Create a new batch client with the pool size either 100 or max files
                 int numNodes = (int)(x < numberOfFullNodes ? 100 : filesToRun % 100);
@@ -152,10 +152,42 @@ namespace AzureEngine
             }         
         }
 
-        public void RunRadiance(String folderName, List<String> zoneFolderNames)
+        public void RunRadiance(List<String> analysisGridFiles, String skyMatrixFile, String surfaceFileName)
         {
+            //For each analysis grid - create a task, send the honeybee, ladybug, and python script from master blob, the analysis grid, sky matrix, and surface JSON from this blob, unzip the honeybee/ladybug folders and run the python script...
+
+            ResourceFile radTar = masterBlobContainer.GenerateResourceFile("radiance-5.1.0-Linux.tar.gz");
+            ResourceFile skyMatrix = blobContainer.GenerateResourceFile(skyMatrixFile);
+            ResourceFile surfaceFile = blobContainer.GenerateResourceFile(surfaceFileName);
+            ResourceFile honeybeeFolder = masterBlobContainer.GenerateResourceFile("honeybee.zip");
+            ResourceFile ladybugFolder = masterBlobContainer.GenerateResourceFile("ladybug.zip");
+            ResourceFile pythonScript = masterBlobContainer.GenerateResourceFile("02_RunRadianceJSON.py");
+
+            for(int x = 0; x < analysisGridFiles.Count; x++)
+            {
+                ResourceFile analysisGridFile = blobContainer.GenerateResourceFile(System.IO.Path.GetFileName(analysisGridFiles[x]));
+
+                List<ResourceFile> resourceFiles = new List<ResourceFile>();
+                resourceFiles.Add(radTar);
+                resourceFiles.Add(skyMatrix);
+                resourceFiles.Add(surfaceFile);
+                resourceFiles.Add(honeybeeFolder);
+                resourceFiles.Add(ladybugFolder);
+                resourceFiles.Add(pythonScript);
+                resourceFiles.Add(analysisGridFile);
+
+                //String command = "sudo bash -c 'tar -zxvf radiance-5.1.0-Linux.tar.gz; sudo apt-get install unzip; sudo unzip -o honeybee.zip; sudo unzip -o ladybug.zip; python 02_RunRadianceJSON.py " + System.IO.Path.GetFileName(analysisGridFiles[x]) + " " + surfaceFileName + " " + skyMatrixFile +  "'";
+
+                String command = "sudo bash -c '$AZ_BATCH_NODE_SHARED_DIR; echo $AZ_BATCH_NODE_SHARED_DIR; $AZ_BATCH_APP_PACKAGE_radiance_1_0; env; sudo apt-get install unzip; sudo unzip -o honeybee.zip; sudo unzip -o ladybug.zip; python 02_RunRadianceJSON.py " + System.IO.Path.GetFileName(analysisGridFiles[x]) + " " + surfaceFileName + " " + skyMatrixFile + "'";
+
+                int batchIndex = (int)Math.Floor((double)x / 100);
+                batchContainer[batchIndex].AddTask(command, resourceFiles);
+            }
+
             //Transfer the zip folder to the task, unzip it, and go into the folder(s) provided by the users to run 'commands.sh'
-            String folder = System.IO.Path.GetFileNameWithoutExtension(folderName);
+
+
+            /*String folder = System.IO.Path.GetFileNameWithoutExtension(folderName);
             String unzipCommand = "sudo bash -c 'mkdir -p ../../simulationData; sudo unzip -o " + System.IO.Path.GetFileName(folderName) + " -d ../../simulationData/'";            
 
             for(int x = 0; x < zoneFolderNames.Count; x++)
@@ -166,7 +198,7 @@ namespace AzureEngine
                 //String nextCommand = "pwd";
                 batchContainer[x].AddTask(nextCommand);
             }
-
+            */
             //String fullCommand = "";
             //batchContainer[0].AddTask(fullCommand, new List<ResourceFile> { blobContainer.GenerateResourceFile(zoneFolder) });
         }

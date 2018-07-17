@@ -40,9 +40,9 @@ namespace AzureGrasshopper
             pManager.AddTextParameter("Project Number", "Project Number", "The project number for the project being simulated", GH_ParamAccess.item);
             pManager.AddTextParameter("Project Name", "Project Name", "The project name for the project being simulated", GH_ParamAccess.item);
 
-            //pManager.AddTextParameter("Zone Files", "Zone Files", "The location on your system (full folder path) to the zipped Zone files being simulated", GH_ParamAccess.item);
-            //pManager.AddTextParameter("Zone Folders", "Zone Folders", "The names of the folders you wish to simulate", GH_ParamAccess.list);
-
+            pManager.AddTextParameter("Sky Matrix", "Sky Matrix", "The location on your system (full file path) to the Sky Matrix JSON file", GH_ParamAccess.item);
+            pManager.AddTextParameter("Surfaces", "Surfaces", "The location on your system (full file path) to the Surfaces JSON file", GH_ParamAccess.item);
+            pManager.AddTextParameter("Analysis Grids", "Analysis Grids", "The location on your system (full folder path) to the analysis grids to simulate", GH_ParamAccess.item);
 
             pManager.AddBooleanParameter("Run", "Run", "Do you wish to run this component?", GH_ParamAccess.item);
         }
@@ -72,24 +72,40 @@ namespace AzureGrasshopper
             if (pName == null)
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Please provide a valid project name");
 
-            String zoneFolder = null;
-            DA.GetData(2, ref zoneFolder);
-            if (zoneFolder == null)
+            String skyMatrix = null;
+            DA.GetData(2, ref skyMatrix);
+            if (skyMatrix == null)
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Please provide a valid Zone folder");
 
-            if (!File.Exists(zoneFolder))
+            if (!File.Exists(skyMatrix))
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Please provide a valid, existing, Zone folder");
 
-            List<String> folderNames = new List<string>();
+            String surfaceJSON = null;
+            DA.GetData(3, ref surfaceJSON);
+            if (surfaceJSON == null)
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Please provide a valid Zone folder");
+
+            if (!File.Exists(surfaceJSON))
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Please provide a valid, existing, Zone folder");
+
+            /*List<String> analysisGrid = new List<string>();
             DA.GetDataList(3, folderNames);
 
             if (folderNames.Count == 0)
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Please provide a valid folder name to simulate");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Please provide a valid folder name to simulate");*/
+
+            String analysisGridFolder = null;
+            DA.GetData(4, ref analysisGridFolder);
+            if (analysisGridFolder == null)
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Please provide a valid Analysis Grid folder location");
+
+            if (!Directory.Exists(analysisGridFolder))
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Please provide a valid folder to simulate");
 
             bool run = false;
-            DA.GetData(4, ref run);
+            DA.GetData(5, ref run);
 
-            if (pNumber == null || pName == null || zoneFolder == null || !File.Exists(zoneFolder) || folderNames.Count == 0 || !run)
+            if (pNumber == null || pName == null || skyMatrix == null || !File.Exists(skyMatrix) || surfaceJSON == null || !File.Exists(surfaceJSON) || analysisGridFolder == null || !Directory.Exists(analysisGridFolder) || !run)
                 return;
 
             //Everything is valid - let's run a simulation!
@@ -97,7 +113,13 @@ namespace AzureGrasshopper
             aEngine.CreateBlobStorage();
 
             //aEngine.CreateBatchClients(idfFiles.Count);
-            aEngine.CreateBatchClients(folderNames.Count);
+            //aEngine.CreateBatchClients(folderNames.Count);
+            String[] jsonZones = Directory.GetFiles(analysisGridFolder);
+            List<String> jsonZoneNames = new List<String>();
+            foreach (String s in jsonZones)
+                jsonZoneNames.Add(s);
+
+            aEngine.CreateBatchClients(jsonZoneNames.Count);
 
             aEngine.InstallRadiance();
 
@@ -106,14 +128,26 @@ namespace AzureGrasshopper
                 //Wait until the install is complete...
             }
 
+            //Upload each analysis grid
+            foreach (String s in jsonZoneNames)
+                aEngine.UploadFile(s);
+
+            aEngine.UploadFile(skyMatrix);
+            aEngine.UploadFile(surfaceJSON);
+
+            while(!aEngine.TrueWhenTasksComplete())
+            {
+                //Wait till all have uploaded...
+            }
+
             /*aEngine.UploadFile(epwFile);
             aEngine.UploadFiles(idfFiles);
 
             aEngine.RunEnergyPlus(idfFiles, epwFile);*/
 
-            aEngine.UploadFile(zoneFolder);
+            //aEngine.UploadFile(zoneFolder);
 
-            aEngine.RunRadiance(zoneFolder, folderNames);
+            aEngine.RunRadiance(jsonZoneNames, Path.GetFileName(skyMatrix), Path.GetFileName(surfaceJSON));
 
             if (aEngine.TrueWhenTasksComplete())
                 DA.SetData(0, true);
