@@ -728,7 +728,7 @@ print("ELECTRICEQUIPMENT modified")
 # REMOVE INFILTRATION FOR ALL ZONES #
 #####################################
 
-# NOTE - This was done to enable a fixed level of infiltrtation to be added to the ventilation design flowrate
+# NOTE - This was done to enable a fixed level of infiltration to be added to the ventilation design flow-rate
 
 idf.idfobjects["ZONEINFILTRATION:DESIGNFLOWRATE"] = []
 
@@ -771,7 +771,7 @@ idf.newidfobject(
     Zone_or_ZoneList_Name="AllZones",
     Schedule_Name="VentilationYear",
     Design_Flow_Rate_Calculation_Method="Flow/Person",
-    Flow_Rate_per_Person=ZONE_CONDITIONS["ventilation_litres_per_second_per_person"],
+    Flow_Rate_per_Person=float(ZONE_CONDITIONS["ventilation_litres_per_second_per_person"]) / 1000,
     Ventilation_Type="Natural"
 )
 
@@ -877,8 +877,8 @@ print("SIZING:PARAMETERS modified")
 """
 
 The following section defines materials and constructions. Glazing is specified
-using simplified single-layered constructions, wheras opaque building elements
-are mul;ti-layered. A simple method of defining opaque materials is possible;
+using simplified single-layered constructions, whereas opaque building elements
+are multi-layered. A simple method of defining opaque materials is possible;
 however, replicating thermal mass effects without that mass being present in
 the simple massless single-layered method proved difficult.
 
@@ -938,16 +938,44 @@ print("WINDOWMATERIAL:SIMPLEGLAZINGSYSTEM modified")
 # SET MATERIALS #
 #################
 
-idf.idfobjects["MATERIAL"] = []
+"""
+
+To generate materials that when combined define a construction of specified
+U-Value, the following values have been used for resultant U-Values and
+corresponding insulation thicknesses. As each Exterior Wall, Exterior Floor
+and Exterior Roof construction are comprised of three materials, their Inside
+and Outside layers are the same across each construction (with the exception
+of their reflective characteristics) and only the middle Insulation layer is
+modified. As such, the same value interpolation can be applied to each
+construction type.
+
+"""
+
+# Interpolation for Custom U-Value assignment
+
+u_values = [5.0, 1.7346938775510203, 1.6530612244897958, 1.5714285714285714, 1.489795918367347, 1.4081632653061225, 1.3265306122448979, 1.2448979591836735, 1.163265306122449, 1.0816326530612246, 1.0, 0.9855217391304348, 0.9710434782608696, 0.9565652173913044, 0.9420869565217392, 0.927608695652174, 0.9131304347826087, 0.8986521739130435, 0.8841739130434784, 0.8696956521739131, 0.8552173913043478, 0.8407391304347827, 0.8262608695652175, 0.8117826086956522, 0.797304347826087, 0.7828260869565218, 0.7683478260869566, 0.7538695652173913, 0.7393913043478261, 0.7249130434782609, 0.7104347826086957, 0.6959565217391305, 0.6814782608695652, 0.667, 0.6525217391304349, 0.6380434782608696, 0.6235652173913043, 0.6090869565217392, 0.594608695652174, 0.5801304347826087, 0.5656521739130435, 0.5511739130434783, 0.5366956521739131, 0.5222173913043479, 0.5077391304347826, 0.4932608695652174, 0.4787826086956522, 0.464304347826087, 0.44982608695652176, 0.43534782608695655, 0.42086956521739133, 0.4063913043478261, 0.3919130434782609, 0.3774347826086957, 0.36295652173913046, 0.34847826086956524, 0.334, 0.3195217391304348, 0.3050434782608696, 0.29056521739130436, 0.27608695652173915, 0.26160869565217393, 0.2471304347826087, 0.2326521739130435, 0.21817391304347827, 0.20369565217391306, 0.18921739130434784, 0.17473913043478262, 0.1602608695652174, 0.14578260869565218, 0.13130434782608696, 0.11682608695652175, 0.10234782608695653, 0.08786956521739131, 0.07339130434782609, 0.058913043478260874, 0.044434782608695655, 0.029956521739130437, 0.015478260869565219, 0.001]
+
+insulation_thicknesses = [0.01982, 0.02075, 0.02178, 0.02291, 0.02416, 0.02556, 0.02714, 0.02891, 0.03094, 0.03328, 0.03599, 0.03652, 0.03707, 0.03763, 0.03821, 0.0388, 0.03942, 0.04005, 0.04071, 0.04139, 0.04209, 0.04281, 0.04356, 0.04434, 0.04514, 0.04598, 0.04685, 0.04774, 0.04868, 0.04965, 0.05066, 0.05172, 0.05282, 0.05396, 0.05516, 0.05641, 0.05772, 0.05909, 0.06053, 0.06204, 0.06363, 0.0653, 0.06706, 0.06892, 0.07088, 0.07296, 0.07517, 0.07751, 0.08001, 0.08267, 0.08551, 0.08855, 0.09182, 0.09534, 0.09915, 0.1033, 0.1077, 0.1126, 0.118, 0.1238, 0.1303, 0.1375, 0.1456, 0.1546, 0.1649, 0.1766, 0.1901, 0.2059, 0.2244, 0.2467, 0.2739, 0.3078, 0.3512, 0.409, 0.4896, 0.6096, 0.8076, 1.196, 2.304, 31.47]
+
+f = interpolate.interp1d(u_values, insulation_thicknesses)
+
+if CONFIG["exterior_wall_u_value"] > 1.5:
+    print("WARNING - Your wall U-Value might fall outside interpolatable limits for this script. The actual value will likely be lower than expected")
+if CONFIG["exterior_floor_u_value"] > 1.5:
+    print("WARNING - Your floor U-Value might fall outside interpolatable limits for this script. The actual value will likely be lower than expected")
+if CONFIG["exterior_roof_u_value"] > 1.5:
+    print("WARNING - Your roof U-Value might fall outside interpolatable limits for this script. The actual value will likely be lower than expected")
 
 # Interior wall materials
+
+idf.idfobjects["MATERIAL"] = []
 
 idf.newidfobject(
     "MATERIAL",
     Name="INTERIOR WALL OUTSIDE MATERIAL",
     Roughness="MediumSmooth",
-    Thickness=0.019,
-    Conductivity=0.16,
+    Thickness=0.1,
+    Conductivity=0.1,
     Density=800,
     Specific_Heat=1090,
     Thermal_Absorptance=0.1,
@@ -955,37 +983,27 @@ idf.newidfobject(
     Visible_Absorptance=1-CONFIG["wall_reflectivity"]
 )
 
-idf.newidfobject(
-    "MATERIAL",
-    Name="INTERIOR WALL MIDDLE MATERIAL",
-    Roughness="MediumRough",
-    Thickness=0.019,  # TODO - REPLACE THIS WITH A SENSIBLE VALUE FOR INTERIOR WALL U-VALUE
-    Conductivity=0.16,
-    Density=50,
-    Specific_Heat=1030,
-    Thermal_Absorptance=0.1,
-    Solar_Absorptance=0.7,
-    Visible_Absorptance=1.0
-)
+# idf.newidfobject(
+#     "MATERIAL",
+#     Name="INTERIOR WALL MIDDLE MATERIAL",
+#     Roughness="MediumRough",
+#     Thickness=0.019,
+#     Conductivity=0.16,
+#     Density=50,
+#     Specific_Heat=1030,
+#     Thermal_Absorptance=0.1,
+#     Solar_Absorptance=0.7,
+#     Visible_Absorptance=1.0
+# )
 
 # Exterior wall materials
-u_values = [5.0, 5.0, 1.7346938775510203, 1.6530612244897958, 1.631578947368421, 1.5714285714285714, 1.489795918367347, 1.4210526315789473, 1.4081632653061225, 1.3265306122448979, 1.2448979591836735, 1.2105263157894737, 1.163265306122449, 1.0816326530612246, 1.0, 0.965551724137931, 0.9311034482758621, 0.8966551724137931, 0.8622068965517241, 0.8277586206896551, 0.7933103448275862, 0.7588620689655172, 0.7244137931034482, 0.6899655172413793, 0.6555172413793103, 0.6210689655172413, 0.5866206896551724, 0.5521724137931034, 0.5177241379310344, 0.4832758620689655, 0.44882758620689656, 0.41437931034482756, 0.3799310344827586, 0.34548275862068967, 0.31103448275862067, 0.2765862068965517, 0.24213793103448275, 0.20768965517241378, 0.17324137931034483, 0.13879310344827586, 0.10434482758620689, 0.06989655172413793, 0.035448275862068966, 0.001]
-insulation_thicknesses = [0.01946, 0.01974, 0.02066, 0.02168, 0.02196, 0.0228, 0.02404, 0.0252, 0.02543, 0.02699, 0.02875, 0.02956, 0.03075, 0.03306, 0.03573, 0.037, 0.03836, 0.03982, 0.0414, 0.0431, 0.04496, 0.04698, 0.04919, 0.05162, 0.0543, 0.05728, 0.0606, 0.06433, 0.06855, 0.07336, 0.0789, 0.08534, 0.09293, 0.102, 0.113, 0.1267, 0.1442, 0.1673, 0.1992, 0.2461, 0.322, 0.4654, 0.839, 4.255]
-f = interpolate.interp1d(insulation_thicknesses, u_values)
-if CONFIG["exterior_wall_u_value"] < 0.02:
-    thickness = f(0.02)
-elif CONFIG["exterior_wall_u_value"] > 4.0:
-    thickness = f(4.0)
-else:
-    thickness = f(CONFIG["exterior_wall_u_value"])
-print(thickness)
 
 idf.newidfobject(
     "MATERIAL",
     Name="EXTERIOR WALL OUTSIDE MATERIAL",
     Roughness="MediumSmooth",
-    Thickness=0.1,
-    Conductivity=1.13,
+    Thickness=0.01,
+    Conductivity=5.0,
     Density=1800,
     Specific_Heat=1000,
     Thermal_Absorptance=0.1,
@@ -997,7 +1015,7 @@ idf.newidfobject(
     "MATERIAL",
     Name="EXTERIOR WALL MIDDLE MATERIAL",
     Roughness="MediumRough",
-    Thickness=thickness,
+    Thickness=f(1.5) if CONFIG["exterior_wall_u_value"] > 1.5 else f(0.1) if CONFIG["exterior_wall_u_value"] < 0.1 else f(CONFIG["exterior_wall_u_value"]),
     Conductivity=0.036,
     Density=50,
     Specific_Heat=1030,
@@ -1010,8 +1028,8 @@ idf.newidfobject(
     "MATERIAL",
     Name="EXTERIOR WALL INSIDE MATERIAL",
     Roughness="MediumSmooth",
-    Thickness=0.019,
-    Conductivity=0.16,
+    Thickness=0.01,
+    Conductivity=5.0,
     Density=800,
     Specific_Heat=1090,
     Thermal_Absorptance=0.1,
@@ -1025,8 +1043,8 @@ idf.newidfobject(
     "MATERIAL",
     Name="INTERIOR FLOOR/CEILING CEILING MATERIAL",
     Roughness="MediumSmooth",
-    Thickness=0.0191,
-    Conductivity=0.06,
+    Thickness=0.1,
+    Conductivity=0.2,
     Density=368,
     Specific_Heat=590,
     Thermal_Absorptance=0.9,
@@ -1051,8 +1069,8 @@ idf.newidfobject(
     "MATERIAL",
     Name="INTERIOR FLOOR/CEILING FLOOR MATERIAL",
     Roughness="MediumRough",
-    Thickness=0.1016,
-    Conductivity=0.53,
+    Thickness=0.1,
+    Conductivity=0.2,
     Density=1280,
     Specific_Heat=840,
     Thermal_Absorptance=0.9,
@@ -1066,34 +1084,34 @@ idf.newidfobject(
     "MATERIAL",
     Name="EXTERIOR FLOOR OUTSIDE MATERIAL",
     Roughness="MediumRough",
-    Thickness=0.0508,
-    Conductivity=0.03,
-    Density=43,
+    Thickness=0.01,
+    Conductivity=5,
+    Density=1000,
     Specific_Heat=1210,
     Thermal_Absorptance=0.9,
     Solar_Absorptance=0.7,
     Visible_Absorptance=0.7
 )
 
-# idf.newidfobject(
-#     "MATERIAL",
-#     Name="EXTERIOR FLOOR MIDDLE MATERIAL",
-#     Roughness="MediumRough",
-#     Thickness=0.2,  # TODO - REPLACE THIS WITH SENSIBLE VALUE FOR EXTERIOR FLOOR U-VALUE
-#     Conductivity=0.036,
-#     Density=50,
-#     Specific_Heat=1030,
-#     Thermal_Absorptance=0.1,
-#     Solar_Absorptance=0.7,
-#     Visible_Absorptance=1.0
-# )
+idf.newidfobject(
+    "MATERIAL",
+    Name="EXTERIOR FLOOR MIDDLE MATERIAL",
+    Roughness="MediumRough",
+    Thickness=f(1.5) if CONFIG["exterior_floor_u_value"] > 1.5 else f(0.1) if CONFIG["exterior_floor_u_value"] < 0.1 else f(CONFIG["exterior_floor_u_value"]),
+    Conductivity=0.036,
+    Density=700,
+    Specific_Heat=1030,
+    Thermal_Absorptance=0.1,
+    Solar_Absorptance=0.7,
+    Visible_Absorptance=1.0
+)
 
 idf.newidfobject(
     "MATERIAL",
     Name="EXTERIOR FLOOR INSIDE MATERIAL",
     Roughness="MediumRough",
-    Thickness=0.2032,
-    Conductivity=1.95,
+    Thickness=0.01,
+    Conductivity=5,
     Density=2240,
     Specific_Heat=900,
     Thermal_Absorptance=0.9,
@@ -1107,8 +1125,8 @@ idf.newidfobject(
     "MATERIAL",
     Name="EXTERIOR ROOF OUTSIDE MATERIAL",
     Roughness="MediumRough",
-    Thickness=0.1,
-    Conductivity=0.5,
+    Thickness=0.01,
+    Conductivity=5,
     Density=1800,
     Specific_Heat=1000,
     Thermal_Absorptance=0.9,
@@ -1120,7 +1138,7 @@ idf.newidfobject(
     "MATERIAL",
     Name="EXTERIOR ROOF MIDDLE MATERIAL",
     Roughness="MediumRough",
-    Thickness=0.2,  # TODO - REPLACE THIS WITH MODIFIABLE VALUE FOR CUSTOM ROOF U-VALUE INPUT
+    Thickness=f(1.5) if CONFIG["exterior_roof_u_value"] > 1.5 else f(0.1) if CONFIG["exterior_roof_u_value"] < 0.1 else f(CONFIG["exterior_roof_u_value"]),
     Conductivity=0.036,
     Density=50,
     Specific_Heat=1030,
@@ -1133,8 +1151,8 @@ idf.newidfobject(
     "MATERIAL",
     Name="EXTERIOR ROOF INSIDE MATERIAL",
     Roughness="MediumSmooth",
-    Thickness=0.001,
-    Conductivity=0.5,
+    Thickness=0.01,
+    Conductivity=5,
     Density=250,
     Specific_Heat=1000,
     Thermal_Absorptance=0.9,
@@ -1186,8 +1204,9 @@ idf.newidfobject(
     "CONSTRUCTION",
     Name="INTERIOR WALL",
     Outside_Layer="INTERIOR WALL OUTSIDE MATERIAL",
-    Layer_2="INTERIOR WALL MIDDLE MATERIAL",
-    Layer_3="INTERIOR WALL OUTSIDE MATERIAL"
+    # Layer_2="INTERIOR WALL MIDDLE MATERIAL",
+    # Layer_3="INTERIOR WALL OUTSIDE MATERIAL"
+    Layer_2="INTERIOR WALL OUTSIDE MATERIAL"
 )
 
 idf.newidfobject(
@@ -1202,25 +1221,27 @@ idf.newidfobject(
     "CONSTRUCTION",
     Name="INTERIOR FLOOR",
     Outside_Layer="INTERIOR FLOOR/CEILING CEILING MATERIAL",
-    Layer_2="INTERIOR FLOOR/CEILING MIDDLE MATERIAL",
-    Layer_3="INTERIOR FLOOR/CEILING FLOOR MATERIAL"
+    # Layer_2="INTERIOR FLOOR/CEILING MIDDLE MATERIAL",
+    # Layer_3="INTERIOR FLOOR/CEILING FLOOR MATERIAL"
+    Layer_2="INTERIOR FLOOR/CEILING FLOOR MATERIAL"
+
 )
 
 idf.newidfobject(
     "CONSTRUCTION",
     Name="EXTERIOR FLOOR",
     Outside_Layer="EXTERIOR FLOOR OUTSIDE MATERIAL",
-    # Layer_2="EXTERIOR FLOOR MIDDLE MATERIAL",
-    # Layer_3="EXTERIOR FLOOR INSIDE MATERIAL"
-    Layer_2="EXTERIOR FLOOR INSIDE MATERIAL"
+    Layer_2="EXTERIOR FLOOR MIDDLE MATERIAL",
+    Layer_3="EXTERIOR FLOOR INSIDE MATERIAL"
 )
 
 idf.newidfobject(
     "CONSTRUCTION",
     Name="INTERIOR CEILING",
     Outside_Layer="INTERIOR FLOOR/CEILING FLOOR MATERIAL",
-    Layer_2="INTERIOR FLOOR/CEILING MIDDLE MATERIAL",
-    Layer_3="INTERIOR FLOOR/CEILING CEILING MATERIAL"
+    # Layer_2="INTERIOR FLOOR/CEILING MIDDLE MATERIAL",
+    # Layer_3="INTERIOR FLOOR/CEILING CEILING MATERIAL"
+    Layer_2="INTERIOR FLOOR/CEILING CEILING MATERIAL"
 )
 
 idf.newidfobject(
@@ -1528,7 +1549,7 @@ print("OUTPUT:VARIABLEDICTIONARY modified")
 
 """
 The following commands further modify the IDF file, to include certain aspects
-necessary for debugging, or to output additional files from the simulation.null=
+necessary for debugging, or to output additional files from the simulation.
 
 To run these uncomment the lines below
 """
@@ -1554,7 +1575,7 @@ idf.newidfobject("OUTPUTCONTROL:TABLE:STYLE", Column_Separator="Comma")
 idf.idfobjects["OUTPUT:TABLE:SUMMARYREPORTS"] = []
 idf.newidfobject("OUTPUT:TABLE:SUMMARYREPORTS", Report_1_Name="AllSummary")
 
-idf.idfobjects["SHADING:BUILDING:DETAILED"] = []  # Remove shading elements
+# idf.idfobjects["SHADING:BUILDING:DETAILED"] = []  # Remove shading elements
 
 idf.idfobjects["SHADOWCALCULATION"] = []
 idf.newidfobject(

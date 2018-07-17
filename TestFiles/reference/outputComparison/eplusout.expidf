@@ -1,4 +1,4 @@
-!- Darwin Line endings
+!- Windows Line endings
 
 VERSION,
     8.8.0;                    !- Version Identifier
@@ -654,8 +654,8 @@ SCHEDULE:YEAR,
 MATERIAL,
     INTERIOR WALL OUTSIDE MATERIAL,    !- Name
     MediumSmooth,             !- Roughness
-    0.019,                    !- Thickness
-    0.16,                     !- Conductivity
+    0.1,                      !- Thickness
+    0.1,                      !- Conductivity
     800,                      !- Density
     1090,                     !- Specific Heat
     0.1,                      !- Thermal Absorptance
@@ -663,21 +663,10 @@ MATERIAL,
     0.5;                      !- Visible Absorptance
 
 MATERIAL,
-    INTERIOR WALL MIDDLE MATERIAL,    !- Name
-    MediumRough,              !- Roughness
-    0.019,                    !- Thickness
-    0.16,                     !- Conductivity
-    50,                       !- Density
-    1030,                     !- Specific Heat
-    0.1,                      !- Thermal Absorptance
-    0.7,                      !- Solar Absorptance
-    1.0;                      !- Visible Absorptance
-
-MATERIAL,
     EXTERIOR WALL OUTSIDE MATERIAL,    !- Name
     MediumSmooth,             !- Roughness
-    0.1,                      !- Thickness
-    1.13,                     !- Conductivity
+    0.01,                     !- Thickness
+    5.0,                      !- Conductivity
     1800,                     !- Density
     1000,                     !- Specific Heat
     0.1,                      !- Thermal Absorptance
@@ -687,7 +676,7 @@ MATERIAL,
 MATERIAL,
     EXTERIOR WALL MIDDLE MATERIAL,    !- Name
     MediumRough,              !- Roughness
-    0.025757177178389726,     !- Thickness
+    0.1636009009009009,       !- Thickness
     0.036,                    !- Conductivity
     50,                       !- Density
     1030,                     !- Specific Heat
@@ -698,8 +687,8 @@ MATERIAL,
 MATERIAL,
     EXTERIOR WALL INSIDE MATERIAL,    !- Name
     MediumSmooth,             !- Roughness
-    0.019,                    !- Thickness
-    0.16,                     !- Conductivity
+    0.01,                     !- Thickness
+    5.0,                      !- Conductivity
     800,                      !- Density
     1090,                     !- Specific Heat
     0.1,                      !- Thermal Absorptance
@@ -709,8 +698,8 @@ MATERIAL,
 MATERIAL,
     INTERIOR FLOOR/CEILING CEILING MATERIAL,    !- Name
     MediumSmooth,             !- Roughness
-    0.0191,                   !- Thickness
-    0.06,                     !- Conductivity
+    0.1,                      !- Thickness
+    0.2,                      !- Conductivity
     368,                      !- Density
     590,                      !- Specific Heat
     0.9,                      !- Thermal Absorptance
@@ -720,8 +709,8 @@ MATERIAL,
 MATERIAL,
     INTERIOR FLOOR/CEILING FLOOR MATERIAL,    !- Name
     MediumRough,              !- Roughness
-    0.1016,                   !- Thickness
-    0.53,                     !- Conductivity
+    0.1,                      !- Thickness
+    0.2,                      !- Conductivity
     1280,                     !- Density
     840,                      !- Specific Heat
     0.9,                      !- Thermal Absorptance
@@ -731,19 +720,30 @@ MATERIAL,
 MATERIAL,
     EXTERIOR FLOOR OUTSIDE MATERIAL,    !- Name
     MediumRough,              !- Roughness
-    0.0508,                   !- Thickness
-    0.03,                     !- Conductivity
-    43,                       !- Density
+    0.01,                     !- Thickness
+    5,                        !- Conductivity
+    1000,                     !- Density
     1210,                     !- Specific Heat
     0.9,                      !- Thermal Absorptance
     0.7,                      !- Solar Absorptance
     0.7;                      !- Visible Absorptance
 
 MATERIAL,
+    EXTERIOR FLOOR MIDDLE MATERIAL,    !- Name
+    MediumRough,              !- Roughness
+    0.1636009009009009,       !- Thickness
+    0.036,                    !- Conductivity
+    700,                      !- Density
+    1030,                     !- Specific Heat
+    0.1,                      !- Thermal Absorptance
+    0.7,                      !- Solar Absorptance
+    1.0;                      !- Visible Absorptance
+
+MATERIAL,
     EXTERIOR FLOOR INSIDE MATERIAL,    !- Name
     MediumRough,              !- Roughness
-    0.2032,                   !- Thickness
-    1.95,                     !- Conductivity
+    0.01,                     !- Thickness
+    5,                        !- Conductivity
     2240,                     !- Density
     900,                      !- Specific Heat
     0.9,                      !- Thermal Absorptance
@@ -753,8 +753,8 @@ MATERIAL,
 MATERIAL,
     EXTERIOR ROOF OUTSIDE MATERIAL,    !- Name
     MediumRough,              !- Roughness
-    0.1,                      !- Thickness
-    0.5,                      !- Conductivity
+    0.01,                     !- Thickness
+    5,                        !- Conductivity
     1800,                     !- Density
     1000,                     !- Specific Heat
     0.9,                      !- Thermal Absorptance
@@ -764,7 +764,7 @@ MATERIAL,
 MATERIAL,
     EXTERIOR ROOF MIDDLE MATERIAL,    !- Name
     MediumRough,              !- Roughness
-    0.2,                      !- Thickness
+    0.20015885885885887,      !- Thickness
     0.036,                    !- Conductivity
     50,                       !- Density
     1030,                     !- Specific Heat
@@ -775,8 +775,8 @@ MATERIAL,
 MATERIAL,
     EXTERIOR ROOF INSIDE MATERIAL,    !- Name
     MediumSmooth,             !- Roughness
-    0.001,                    !- Thickness
-    0.5,                      !- Conductivity
+    0.01,                     !- Thickness
+    5,                        !- Conductivity
     250,                      !- Density
     1000,                     !- Specific Heat
     0.9,                      !- Thermal Absorptance
@@ -819,8 +819,7 @@ WINDOWMATERIAL:SIMPLEGLAZINGSYSTEM,
 CONSTRUCTION,
     INTERIOR WALL,            !- Name
     INTERIOR WALL OUTSIDE MATERIAL,    !- Outside Layer
-    INTERIOR WALL MIDDLE MATERIAL,    !- Layer 2
-    INTERIOR WALL OUTSIDE MATERIAL;    !- Layer 3
+    INTERIOR WALL OUTSIDE MATERIAL;    !- Layer 2
 
 CONSTRUCTION,
     EXTERIOR WALL,            !- Name
@@ -831,19 +830,18 @@ CONSTRUCTION,
 CONSTRUCTION,
     INTERIOR FLOOR,           !- Name
     INTERIOR FLOOR/CEILING CEILING MATERIAL,    !- Outside Layer
-    INTERIOR FLOOR/CEILING MIDDLE MATERIAL,    !- Layer 2
-    INTERIOR FLOOR/CEILING FLOOR MATERIAL;    !- Layer 3
+    INTERIOR FLOOR/CEILING FLOOR MATERIAL;    !- Layer 2
 
 CONSTRUCTION,
     EXTERIOR FLOOR,           !- Name
     EXTERIOR FLOOR OUTSIDE MATERIAL,    !- Outside Layer
-    EXTERIOR FLOOR INSIDE MATERIAL;    !- Layer 2
+    EXTERIOR FLOOR MIDDLE MATERIAL,    !- Layer 2
+    EXTERIOR FLOOR INSIDE MATERIAL;    !- Layer 3
 
 CONSTRUCTION,
     INTERIOR CEILING,         !- Name
     INTERIOR FLOOR/CEILING FLOOR MATERIAL,    !- Outside Layer
-    INTERIOR FLOOR/CEILING MIDDLE MATERIAL,    !- Layer 2
-    INTERIOR FLOOR/CEILING CEILING MATERIAL;    !- Layer 3
+    INTERIOR FLOOR/CEILING CEILING MATERIAL;    !- Layer 2
 
 CONSTRUCTION,
     EXTERIOR ROOF,            !- Name
@@ -2637,6 +2635,278 @@ FenestrationSurface:Detailed,
     8.0,                      !- Vertex 4 Ycoordinate
     1.0;                      !- Vertex 4 Zcoordinate
 
+Shading:Building:Detailed,
+    shdSrf_0_0_ddaca7cd-88c8-46c3-9dc0-0fc04362a939_0,    !- Name
+    ,                         !- Transmittance Schedule Name
+    4,                        !- Number of Vertices
+    6.0,                      !- Vertex 1 Xcoordinate
+    -0.319999992847,          !- Vertex 1 Ycoordinate
+    4.79949998856,            !- Vertex 1 Zcoordinate
+    9.0,                      !- Vertex 2 Xcoordinate
+    -0.319999992847,          !- Vertex 2 Ycoordinate
+    4.79949998856,            !- Vertex 2 Zcoordinate
+    9.0,                      !- Vertex 3 Xcoordinate
+    -0.019999999553,          !- Vertex 3 Ycoordinate
+    4.79949998856,            !- Vertex 3 Zcoordinate
+    6.0,                      !- Vertex 4 Xcoordinate
+    -0.019999999553,          !- Vertex 4 Ycoordinate
+    4.79949998856;            !- Vertex 4 Zcoordinate
+
+Shading:Building:Detailed,
+    shdSrf_1_0_6d4414a5-3479-4238-8deb-e62150a51133_0,    !- Name
+    ,                         !- Transmittance Schedule Name
+    4,                        !- Number of Vertices
+    6.0,                      !- Vertex 1 Xcoordinate
+    -0.319999992847,          !- Vertex 1 Ycoordinate
+    5.59999990463,            !- Vertex 1 Zcoordinate
+    9.0,                      !- Vertex 2 Xcoordinate
+    -0.319999992847,          !- Vertex 2 Ycoordinate
+    5.59999990463,            !- Vertex 2 Zcoordinate
+    9.0,                      !- Vertex 3 Xcoordinate
+    -0.019999999553,          !- Vertex 3 Ycoordinate
+    5.59999990463,            !- Vertex 3 Zcoordinate
+    6.0,                      !- Vertex 4 Xcoordinate
+    -0.019999999553,          !- Vertex 4 Ycoordinate
+    5.59999990463;            !- Vertex 4 Zcoordinate
+
+Shading:Building:Detailed,
+    shdSrf_2_0_548acaba-a54c-4746-9a6a-212aa5e8786f_0,    !- Name
+    ,                         !- Transmittance Schedule Name
+    4,                        !- Number of Vertices
+    1.0,                      !- Vertex 1 Xcoordinate
+    -0.319999992847,          !- Vertex 1 Ycoordinate
+    1.79949998856,            !- Vertex 1 Zcoordinate
+    4.0,                      !- Vertex 2 Xcoordinate
+    -0.319999992847,          !- Vertex 2 Ycoordinate
+    1.79949998856,            !- Vertex 2 Zcoordinate
+    4.0,                      !- Vertex 3 Xcoordinate
+    -0.019999999553,          !- Vertex 3 Ycoordinate
+    1.79949998856,            !- Vertex 3 Zcoordinate
+    1.0,                      !- Vertex 4 Xcoordinate
+    -0.019999999553,          !- Vertex 4 Ycoordinate
+    1.79949998856;            !- Vertex 4 Zcoordinate
+
+Shading:Building:Detailed,
+    shdSrf_3_0_33baae6c-8965-4cad-90a9-70738f57d035_0,    !- Name
+    ,                         !- Transmittance Schedule Name
+    4,                        !- Number of Vertices
+    1.0,                      !- Vertex 1 Xcoordinate
+    -0.319999992847,          !- Vertex 1 Ycoordinate
+    2.59999990463,            !- Vertex 1 Zcoordinate
+    4.0,                      !- Vertex 2 Xcoordinate
+    -0.319999992847,          !- Vertex 2 Ycoordinate
+    2.59999990463,            !- Vertex 2 Zcoordinate
+    4.0,                      !- Vertex 3 Xcoordinate
+    -0.019999999553,          !- Vertex 3 Ycoordinate
+    2.59999990463,            !- Vertex 3 Zcoordinate
+    1.0,                      !- Vertex 4 Xcoordinate
+    -0.019999999553,          !- Vertex 4 Ycoordinate
+    2.59999990463;            !- Vertex 4 Zcoordinate
+
+Shading:Building:Detailed,
+    shdSrf_4_0_5077a5d0-e86c-45f8-8d6a-400e3a9b40b1_0,    !- Name
+    ,                         !- Transmittance Schedule Name
+    4,                        !- Number of Vertices
+    -0.319999992847,          !- Vertex 1 Xcoordinate
+    1.0,                      !- Vertex 1 Ycoordinate
+    4.79949998856,            !- Vertex 1 Zcoordinate
+    -0.019999999553,          !- Vertex 2 Xcoordinate
+    1.0,                      !- Vertex 2 Ycoordinate
+    4.79949998856,            !- Vertex 2 Zcoordinate
+    -0.019999999553,          !- Vertex 3 Xcoordinate
+    4.0,                      !- Vertex 3 Ycoordinate
+    4.79949998856,            !- Vertex 3 Zcoordinate
+    -0.319999992847,          !- Vertex 4 Xcoordinate
+    4.0,                      !- Vertex 4 Ycoordinate
+    4.79949998856;            !- Vertex 4 Zcoordinate
+
+Shading:Building:Detailed,
+    shdSrf_5_0_7a5d5ab5-ad15-4421-8ea5-de6cd14b14c7_0,    !- Name
+    ,                         !- Transmittance Schedule Name
+    4,                        !- Number of Vertices
+    -0.319999992847,          !- Vertex 1 Xcoordinate
+    1.0,                      !- Vertex 1 Ycoordinate
+    5.59999990463,            !- Vertex 1 Zcoordinate
+    -0.019999999553,          !- Vertex 2 Xcoordinate
+    1.0,                      !- Vertex 2 Ycoordinate
+    5.59999990463,            !- Vertex 2 Zcoordinate
+    -0.019999999553,          !- Vertex 3 Xcoordinate
+    4.0,                      !- Vertex 3 Ycoordinate
+    5.59999990463,            !- Vertex 3 Zcoordinate
+    -0.319999992847,          !- Vertex 4 Xcoordinate
+    4.0,                      !- Vertex 4 Ycoordinate
+    5.59999990463;            !- Vertex 4 Zcoordinate
+
+Shading:Building:Detailed,
+    shdSrf_6_0_afd421f8-ef76-48ba-9167-9b9060345026_0,    !- Name
+    ,                         !- Transmittance Schedule Name
+    4,                        !- Number of Vertices
+    1.0,                      !- Vertex 1 Xcoordinate
+    10.0200004578,            !- Vertex 1 Ycoordinate
+    4.79949998856,            !- Vertex 1 Zcoordinate
+    4.0,                      !- Vertex 2 Xcoordinate
+    10.0200004578,            !- Vertex 2 Ycoordinate
+    4.79949998856,            !- Vertex 2 Zcoordinate
+    4.0,                      !- Vertex 3 Xcoordinate
+    10.3199996948,            !- Vertex 3 Ycoordinate
+    4.79949998856,            !- Vertex 3 Zcoordinate
+    1.0,                      !- Vertex 4 Xcoordinate
+    10.3199996948,            !- Vertex 4 Ycoordinate
+    4.79949998856;            !- Vertex 4 Zcoordinate
+
+Shading:Building:Detailed,
+    shdSrf_7_0_61743848-80d8-4a65-9a87-471d87560e6e_0,    !- Name
+    ,                         !- Transmittance Schedule Name
+    4,                        !- Number of Vertices
+    1.0,                      !- Vertex 1 Xcoordinate
+    10.0200004578,            !- Vertex 1 Ycoordinate
+    5.59999990463,            !- Vertex 1 Zcoordinate
+    4.0,                      !- Vertex 2 Xcoordinate
+    10.0200004578,            !- Vertex 2 Ycoordinate
+    5.59999990463,            !- Vertex 2 Zcoordinate
+    4.0,                      !- Vertex 3 Xcoordinate
+    10.3199996948,            !- Vertex 3 Ycoordinate
+    5.59999990463,            !- Vertex 3 Zcoordinate
+    1.0,                      !- Vertex 4 Xcoordinate
+    10.3199996948,            !- Vertex 4 Ycoordinate
+    5.59999990463;            !- Vertex 4 Zcoordinate
+
+Shading:Building:Detailed,
+    shdSrf_8_0_556dddaa-4d81-4608-b374-86b235c13fff_0,    !- Name
+    ,                         !- Transmittance Schedule Name
+    4,                        !- Number of Vertices
+    10.0200004578,            !- Vertex 1 Xcoordinate
+    6.0,                      !- Vertex 1 Ycoordinate
+    4.79949998856,            !- Vertex 1 Zcoordinate
+    10.3199996948,            !- Vertex 2 Xcoordinate
+    6.0,                      !- Vertex 2 Ycoordinate
+    4.79949998856,            !- Vertex 2 Zcoordinate
+    10.3199996948,            !- Vertex 3 Xcoordinate
+    9.0,                      !- Vertex 3 Ycoordinate
+    4.79949998856,            !- Vertex 3 Zcoordinate
+    10.0200004578,            !- Vertex 4 Xcoordinate
+    9.0,                      !- Vertex 4 Ycoordinate
+    4.79949998856;            !- Vertex 4 Zcoordinate
+
+Shading:Building:Detailed,
+    shdSrf_9_0_5e77c3f9-1fa6-4baf-992d-d611da9a44f1_0,    !- Name
+    ,                         !- Transmittance Schedule Name
+    4,                        !- Number of Vertices
+    10.0200004578,            !- Vertex 1 Xcoordinate
+    6.0,                      !- Vertex 1 Ycoordinate
+    5.59999990463,            !- Vertex 1 Zcoordinate
+    10.3199996948,            !- Vertex 2 Xcoordinate
+    6.0,                      !- Vertex 2 Ycoordinate
+    5.59999990463,            !- Vertex 2 Zcoordinate
+    10.3199996948,            !- Vertex 3 Xcoordinate
+    9.0,                      !- Vertex 3 Ycoordinate
+    5.59999990463,            !- Vertex 3 Zcoordinate
+    10.0200004578,            !- Vertex 4 Xcoordinate
+    9.0,                      !- Vertex 4 Ycoordinate
+    5.59999990463;            !- Vertex 4 Zcoordinate
+
+Shading:Building:Detailed,
+    shdSrf_10_0_538a0872-244f-4f40-a653-aba6c8f24df9_0,    !- Name
+    ,                         !- Transmittance Schedule Name
+    4,                        !- Number of Vertices
+    10.0200004578,            !- Vertex 1 Xcoordinate
+    1.0,                      !- Vertex 1 Ycoordinate
+    1.79949998856,            !- Vertex 1 Zcoordinate
+    10.3199996948,            !- Vertex 2 Xcoordinate
+    1.0,                      !- Vertex 2 Ycoordinate
+    1.79949998856,            !- Vertex 2 Zcoordinate
+    10.3199996948,            !- Vertex 3 Xcoordinate
+    4.0,                      !- Vertex 3 Ycoordinate
+    1.79949998856,            !- Vertex 3 Zcoordinate
+    10.0200004578,            !- Vertex 4 Xcoordinate
+    4.0,                      !- Vertex 4 Ycoordinate
+    1.79949998856;            !- Vertex 4 Zcoordinate
+
+Shading:Building:Detailed,
+    shdSrf_11_0_26236bf2-e1f2-4b54-b9e2-828621595ba8_0,    !- Name
+    ,                         !- Transmittance Schedule Name
+    4,                        !- Number of Vertices
+    10.0200004578,            !- Vertex 1 Xcoordinate
+    1.0,                      !- Vertex 1 Ycoordinate
+    2.59999990463,            !- Vertex 1 Zcoordinate
+    10.3199996948,            !- Vertex 2 Xcoordinate
+    1.0,                      !- Vertex 2 Ycoordinate
+    2.59999990463,            !- Vertex 2 Zcoordinate
+    10.3199996948,            !- Vertex 3 Xcoordinate
+    4.0,                      !- Vertex 3 Ycoordinate
+    2.59999990463,            !- Vertex 3 Zcoordinate
+    10.0200004578,            !- Vertex 4 Xcoordinate
+    4.0,                      !- Vertex 4 Ycoordinate
+    2.59999990463;            !- Vertex 4 Zcoordinate
+
+Shading:Building:Detailed,
+    shdSrf_12_0_b332089a-9e62-4afb-93f4-eabfc470390f_0,    !- Name
+    ,                         !- Transmittance Schedule Name
+    4,                        !- Number of Vertices
+    -0.319999992847,          !- Vertex 1 Xcoordinate
+    6.0,                      !- Vertex 1 Ycoordinate
+    1.79949998856,            !- Vertex 1 Zcoordinate
+    -0.019999999553,          !- Vertex 2 Xcoordinate
+    6.0,                      !- Vertex 2 Ycoordinate
+    1.79949998856,            !- Vertex 2 Zcoordinate
+    -0.019999999553,          !- Vertex 3 Xcoordinate
+    9.0,                      !- Vertex 3 Ycoordinate
+    1.79949998856,            !- Vertex 3 Zcoordinate
+    -0.319999992847,          !- Vertex 4 Xcoordinate
+    9.0,                      !- Vertex 4 Ycoordinate
+    1.79949998856;            !- Vertex 4 Zcoordinate
+
+Shading:Building:Detailed,
+    shdSrf_13_0_a5302187-e94b-429a-9746-e0077ff0245b_0,    !- Name
+    ,                         !- Transmittance Schedule Name
+    4,                        !- Number of Vertices
+    -0.319999992847,          !- Vertex 1 Xcoordinate
+    6.0,                      !- Vertex 1 Ycoordinate
+    2.59999990463,            !- Vertex 1 Zcoordinate
+    -0.019999999553,          !- Vertex 2 Xcoordinate
+    6.0,                      !- Vertex 2 Ycoordinate
+    2.59999990463,            !- Vertex 2 Zcoordinate
+    -0.019999999553,          !- Vertex 3 Xcoordinate
+    9.0,                      !- Vertex 3 Ycoordinate
+    2.59999990463,            !- Vertex 3 Zcoordinate
+    -0.319999992847,          !- Vertex 4 Xcoordinate
+    9.0,                      !- Vertex 4 Ycoordinate
+    2.59999990463;            !- Vertex 4 Zcoordinate
+
+Shading:Building:Detailed,
+    shdSrf_14_0_451847bd-39e0-4f4f-8a0a-42e41311d835_0,    !- Name
+    ,                         !- Transmittance Schedule Name
+    4,                        !- Number of Vertices
+    6.0,                      !- Vertex 1 Xcoordinate
+    10.0200004578,            !- Vertex 1 Ycoordinate
+    1.79949998856,            !- Vertex 1 Zcoordinate
+    9.0,                      !- Vertex 2 Xcoordinate
+    10.0200004578,            !- Vertex 2 Ycoordinate
+    1.79949998856,            !- Vertex 2 Zcoordinate
+    9.0,                      !- Vertex 3 Xcoordinate
+    10.3199996948,            !- Vertex 3 Ycoordinate
+    1.79949998856,            !- Vertex 3 Zcoordinate
+    6.0,                      !- Vertex 4 Xcoordinate
+    10.3199996948,            !- Vertex 4 Ycoordinate
+    1.79949998856;            !- Vertex 4 Zcoordinate
+
+Shading:Building:Detailed,
+    shdSrf_15_0_7086de1e-ad81-41d8-809b-4895f3e09900_0,    !- Name
+    ,                         !- Transmittance Schedule Name
+    4,                        !- Number of Vertices
+    6.0,                      !- Vertex 1 Xcoordinate
+    10.0200004578,            !- Vertex 1 Ycoordinate
+    2.59999990463,            !- Vertex 1 Zcoordinate
+    9.0,                      !- Vertex 2 Xcoordinate
+    10.0200004578,            !- Vertex 2 Ycoordinate
+    2.59999990463,            !- Vertex 2 Zcoordinate
+    9.0,                      !- Vertex 3 Xcoordinate
+    10.3199996948,            !- Vertex 3 Ycoordinate
+    2.59999990463,            !- Vertex 3 Zcoordinate
+    6.0,                      !- Vertex 4 Xcoordinate
+    10.3199996948,            !- Vertex 4 Ycoordinate
+    2.59999990463;            !- Vertex 4 Zcoordinate
+
 PEOPLE,
     PeopleGain,               !- Name
     AllZones,                 !- Zone or ZoneList Name
@@ -2720,7 +2990,7 @@ ZONEVENTILATION:DESIGNFLOWRATE,
     Flow/Person,              !- Design Flow Rate Calculation Method
     ,                         !- Design Flow Rate
     ,                         !- Flow Rate per Zone Floor Area
-    15,                       !- Flow Rate per Person
+    0.015,                    !- Flow Rate per Person
     ,                         !- Air Changes per Hour
     Natural,                  !- Ventilation Type
     0.0,                      !- Fan Pressure Rise
