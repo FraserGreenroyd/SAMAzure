@@ -1,0 +1,34 @@
+FROM ubuntu:16.04
+
+# Update the Ubuntu image - NOTOE: This may not work on BH network as BH firewall is restrictive!
+# RUN apt-get update
+# RUN apt-get install locales
+
+# Add radiance-5.1.0-Linux.tar.gz to image on build
+#COPY radiance-5.1.0-Linux.tar.gz /data/foo.txt
+
+# Extract the radiance tar-ball
+#RUN tar -zxvf radiance-5.1.0-Linux.tar.gz
+
+# Add the python libraries (Honeybee and Ladybug) on build
+# ADD /ladybug /home/ladybug
+# ADD /honeybee /home/honeybee
+# ADD /resources /home/resources
+
+COPY /resources/ladybug /home/ladybug
+COPY /resources/honeybee /home/honeybee
+COPY /resources/radiance-5.1.0-Linux.tar.gz /home/radiance-5.1.0-Linux.tar.gz
+
+# Start the docker container with the interactive bash cell interface!
+
+# Change the current working directory
+WORKDIR /home
+
+# Extract and install Radiance from the tarball
+RUN tar -zxvf radiance-5.1.0-Linux.tar.gz
+
+# BUILD THE CONTAINER
+# docker build -t bh_radiance:latest
+
+# RUN THE CONTAINER
+# winpty docker run -v "C:/Users/tgerrish/Desktop/SAMAzure/TestFiles/Docker/resources":/home -it bh_radiance:latest

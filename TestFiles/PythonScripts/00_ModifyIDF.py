@@ -9,9 +9,7 @@ Returns:
     idf file [file object]: Modified IDF file
 
 Annotations:
-    TODO - Add exposed floor and roof materials
     TODO - Fix the glazing solar heat gain assignment from the config file for different orientations
-    TODO - Add air supply as infiltration to the zones - using the zone area and people per area to define the air supply rate
     OR
     TODO - Add ventilation as ZONEVENTILATION:DESIGNFLOWRATE
     TODO - Remove the HVAC supply air in EnergyPlus
