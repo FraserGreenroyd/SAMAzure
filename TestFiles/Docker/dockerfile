@@ -1,5 +1,49 @@
 FROM ubuntu:16.04
 
+# Update the linux distro
+RUN apt-get update
+RUN apt-get install xorg openbox nano -y
+
+# Install locales
+# RUN apt-get install locales
+# RUN apt-get install sudo -y
+
+# RUN sudo apt-get install radiance -y
+
+# Add nano for file content viewing
+# RUN apt-get install nano
+# RUN apt install ssh rsync
+
+# Copy radiance tarball into the image
+COPY /resources/radiance-5.1.0-Linux.tar.gz /usr/local/radiance-5.1.0-Linux.tar.gz
+COPY /resources/Radiance-5.1.0.tar.gz /usr/local/Radiance-5.1.0.tar.gz
+
+# WORKDIR /usr/local
+
+# RUN tar xzf radiance-5.1.0-Linux.tar.gz
+
+# WORKDIR /usr/local/Radiance-5.1.0
+
+
+
+# RUN mv -v Radiance-5.1.0 /usr/local/Radiance-5.1.0
+
+
+# Extract radiance from the tarball
+# RUN cd opt && tar xzf /opt/radiance-5.1.0-Linux.tar.gz
+
+# # Move all the files and folders into the usr directory
+#
+# RUN mv -v opt/radiance-5.1.0-Linux/usr/local/radiance/lib/* usr/local/lib/ray/
+
+# RUN rsync -a /opt/radiance-5.1.0-Linux/usr/ /usr/
+
+# RUN cp -R /opt/radiance-5.1.0-Linux/usr/local/radiance/bin /usr/local/bin
+# RUN cp -R /opt/radiance-5.1.0-Linux/usr/local/radiance/lib /usr/local/lib/ray
+
+# RUN /opt/ray/makeall install
+# RUN ./makeall install
+
 # Update the Ubuntu image - NOTOE: This may not work on BH network as BH firewall is restrictive!
 # RUN apt-get update
 # RUN apt-get install locales
@@ -15,17 +59,17 @@ FROM ubuntu:16.04
 # ADD /honeybee /home/honeybee
 # ADD /resources /home/resources
 
-COPY /resources/ladybug /home/ladybug
-COPY /resources/honeybee /home/honeybee
-COPY /resources/radiance-5.1.0-Linux.tar.gz /home/radiance-5.1.0-Linux.tar.gz
+# COPY /resources/ladybug /home/ladybug
+# COPY /resources/honeybee /home/honeybee
+# COPY /resources/radiance-5.1.0-Linux.tar.gz /home/radiance-5.1.0-Linux.tar.gz
 
 # Start the docker container with the interactive bash cell interface!
 
 # Change the current working directory
-WORKDIR /home
+# WORKDIR /home
 
 # Extract and install Radiance from the tarball
-RUN tar -zxvf radiance-5.1.0-Linux.tar.gz
+# RUN tar -zxvf radiance-5.1.0-Linux.tar.gz
 
 # BUILD THE CONTAINER
 # docker build -t bh_radiance:latest
