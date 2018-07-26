@@ -2,10 +2,15 @@ FROM ubuntu:16.04
 
 # Update the linux distro
 RUN apt-get update
-RUN apt-get install xorg openbox nano -y
+RUN apt-get install build-essential
+RUN apt-get install git-core
+RUN apt-get install xorg
+RUN apt-get install openbox
+RUN apt-get install nano
+RUN apt-get install locales
 
 # Install locales
-# RUN apt-get install locales
+
 # RUN apt-get install sudo -y
 
 # RUN sudo apt-get install radiance -y
@@ -14,8 +19,10 @@ RUN apt-get install xorg openbox nano -y
 # RUN apt-get install nano
 # RUN apt install ssh rsync
 
-# Copy radiance tarball into the image
+# Copy radiance tarball Linux pre-compiled binaries to the image
 COPY /resources/radiance-5.1.0-Linux.tar.gz /usr/local/radiance-5.1.0-Linux.tar.gz
+
+# Copy radiance tarball un-compiled binaries to the image
 COPY /resources/Radiance-5.1.0.tar.gz /usr/local/Radiance-5.1.0.tar.gz
 
 # WORKDIR /usr/local

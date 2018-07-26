@@ -42,6 +42,8 @@ def load_json(path):
 IDF_FILEPATH = sys.argv[1]
 CONFIG_FILEPATH = sys.argv[2]
 
+print(CONFIG_FILEPATH)
+
 with open(CONFIG_FILEPATH, "r") as f:
     CONFIG = json.load(f)
 
@@ -1593,6 +1595,9 @@ idf.newidfobject(
 # SAVE THE IDF AS A NEW FILE #
 ##############################
 
-idf.saveas(IDF_FILEPATH.replace(".idf", "_modified.idf"))
+MODIFIED_IDF_FILEPATH = sys.argv[3]
+print(MODIFIED_IDF_FILEPATH)
 
-print("\nIDF file modified and saved to {0:}".format(IDF_FILEPATH.replace(".idf", "_modified.idf")))
+idf.saveas(MODIFIED_IDF_FILEPATH)
+
+print("\nIDF file modified and saved to {0:}".format(MODIFIED_IDF_FILEPATH))
