@@ -1,13 +1,16 @@
 FROM ubuntu:16.04
 
-# Update the linux distro
-RUN apt-get update
-RUN apt-get install build-essential
-RUN apt-get install git-core
-RUN apt-get install xorg
-RUN apt-get install openbox
-RUN apt-get install nano
-RUN apt-get install locales
+###################################################################
+# Update the linux distro - uncomment this for outside BH network #
+###################################################################
+# RUN apt-get update
+# RUN apt-get install build-essential
+# RUN apt-get install git-core
+# RUN apt-get install xorg
+# RUN apt-get install openbox
+# RUN apt-get install nano
+# RUN apt-get install locales
+# RUN apt-get install sudo -y
 
 # Install locales
 

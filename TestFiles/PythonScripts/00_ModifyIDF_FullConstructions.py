@@ -1516,7 +1516,7 @@ for i in OUTPUT_VARIABLES:
         "OUTPUT:VARIABLE",
         Key_Value="*",
         Variable_Name=i,
-        Reporting_Frequency="hourly"
+        Reporting_Frequency="Timestep"
     )
 
 print("OUTPUT:VARIABLE modified")

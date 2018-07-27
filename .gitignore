@@ -4,6 +4,7 @@
 *.sln.docstates
 HoneybeeRecipeJSONs/
 Test_4ZoneIES/
+IDFs/
 
 # Rhino/Grasshopper and backup files
 *.3dm
