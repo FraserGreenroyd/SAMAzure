@@ -45,6 +45,8 @@ namespace AzureGrasshopper
             pManager.AddTextParameter("Analysis Grids", "Analysis Grids", "The location on your system (full folder path) to the analysis grids to simulate", GH_ParamAccess.item);
 
             pManager.AddBooleanParameter("Run", "Run", "Do you wish to run this component?", GH_ParamAccess.item);
+
+            pManager.AddTextParameter("Command", "CMD", "CMD to run", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -147,7 +149,10 @@ namespace AzureGrasshopper
 
             //aEngine.UploadFile(zoneFolder);
 
-            aEngine.RunRadiance(jsonZoneNames, Path.GetFileName(skyMatrix), Path.GetFileName(surfaceJSON));
+            String cmd = "";
+            DA.GetData(6, ref cmd);
+
+            aEngine.RunRadiance(jsonZoneNames, Path.GetFileName(skyMatrix), Path.GetFileName(surfaceJSON), cmd);
 
             if (aEngine.TrueWhenTasksComplete())
                 DA.SetData(0, true);

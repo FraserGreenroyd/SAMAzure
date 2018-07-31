@@ -152,18 +152,28 @@ namespace AzureEngine
             }         
         }
 
-        public void RunRadiance(List<String> analysisGridFiles, String skyMatrixFile, String surfaceFileName)
+        public void RunRadiance(List<String> analysisGridFiles, String skyMatrixFile, String surfaceFileName, String command)
         {
             //For each analysis grid - create a task, send the honeybee, ladybug, and python script from master blob, the analysis grid, sky matrix, and surface JSON from this blob, unzip the honeybee/ladybug folders and run the python script...
 
             ResourceFile radTar = masterBlobContainer.GenerateResourceFile("radiance-5.1.0-Linux.tar.gz");
+            
             ResourceFile skyMatrix = blobContainer.GenerateResourceFile(skyMatrixFile);
             ResourceFile surfaceFile = blobContainer.GenerateResourceFile(surfaceFileName);
             ResourceFile honeybeeFolder = masterBlobContainer.GenerateResourceFile("honeybee.zip");
             ResourceFile ladybugFolder = masterBlobContainer.GenerateResourceFile("ladybug.zip");
-            ResourceFile pythonScript = masterBlobContainer.GenerateResourceFile("02_RunRadianceJSON.py");
+            ResourceFile pythonScript = masterBlobContainer.GenerateResourceFile("02_RunRadianceJSON2.py");
 
-            for(int x = 0; x < analysisGridFiles.Count; x++)
+            ResourceFile pyMSI = masterBlobContainer.GenerateResourceFile("python-2.7.10.amd64.msi");
+            ResourceFile radWin = masterBlobContainer.GenerateResourceFile("radWin.exe");
+            ResourceFile zip7 = masterBlobContainer.GenerateResourceFile("7zip.exe");
+            ResourceFile runRad = masterBlobContainer.GenerateResourceFile("runRad.bat");
+
+            ResourceFile oct = masterBlobContainer.GenerateResourceFile("zone1.oct");
+            ResourceFile shell = masterBlobContainer.GenerateResourceFile("zone1.sh");
+            ResourceFile pts = masterBlobContainer.GenerateResourceFile("zone1.pts");
+
+            for (int x = 0; x < analysisGridFiles.Count; x++)
             {
                 ResourceFile analysisGridFile = blobContainer.GenerateResourceFile(System.IO.Path.GetFileName(analysisGridFiles[x]));
 
@@ -176,9 +186,24 @@ namespace AzureEngine
                 resourceFiles.Add(pythonScript);
                 resourceFiles.Add(analysisGridFile);
 
-                //String command = "sudo bash -c 'tar -zxvf radiance-5.1.0-Linux.tar.gz; sudo apt-get install unzip; sudo unzip -o honeybee.zip; sudo unzip -o ladybug.zip; python 02_RunRadianceJSON.py " + System.IO.Path.GetFileName(analysisGridFiles[x]) + " " + surfaceFileName + " " + skyMatrixFile +  "'";
+                /*resourceFiles.Add(pyMSI);
+                resourceFiles.Add(radWin);
+                resourceFiles.Add(zip7);
+                resourceFiles.Add(runRad);*/
 
-                String command = "sudo bash -c '$AZ_BATCH_NODE_SHARED_DIR; echo $AZ_BATCH_NODE_SHARED_DIR; $AZ_BATCH_APP_PACKAGE_radiance_1_0; env; sudo apt-get install unzip; sudo unzip -o honeybee.zip; sudo unzip -o ladybug.zip; python 02_RunRadianceJSON.py " + System.IO.Path.GetFileName(analysisGridFiles[x]) + " " + surfaceFileName + " " + skyMatrixFile + "'";
+                resourceFiles.Add(oct);
+                resourceFiles.Add(shell);
+                resourceFiles.Add(pts);
+
+
+                command = "sudo bash -c 'mkdir HoneybeeJSONs; mkdir HoneybeeJSONs/zone1; mkdir HoneybeeJSONs/zone1/daylightfactor; mv zone1.sh HoneybeeJSONs/zone1/daylightfactor/zone1.sh; tar -zxvf radiance-5.1.0-Linux.tar.gz; sudo apt-get install unzip; sudo unzip -o honeybee.zip; sudo unzip -o ladybug.zip; python 02_RunRadianceJSON2.py " + System.IO.Path.GetFileName(analysisGridFiles[x]) + " " + surfaceFileName + " " + skyMatrixFile +  "'";
+
+                //String command = "sudo bash -c '$AZ_BATCH_NODE_SHARED_DIR; echo $AZ_BATCH_NODE_SHARED_DIR; $AZ_BATCH_APP_PACKAGE_radiance_1_0; env; sudo apt-get install unzip; sudo unzip -o honeybee.zip; sudo unzip -o ladybug.zip; python 02_RunRadianceJSON.py " + System.IO.Path.GetFileName(analysisGridFiles[x]) + " " + surfaceFileName + " " + skyMatrixFile + "'";
+
+                //String command = "python";
+
+                //String command = "python-2.7.10.amd64.msi";
+                //String command = "python-2.7.10.amd64.msi && radWin.exe && 7zip.exe && ";
 
                 int batchIndex = (int)Math.Floor((double)x / 100);
                 batchContainer[batchIndex].AddTask(command, resourceFiles);

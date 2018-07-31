@@ -143,7 +143,8 @@ namespace AzureEngine.AzureObjects
 
             if (cPool == null)
             {
-                imageReference = (imageReference == null ? CreateImageReference("MicrosoftWindowsServer", "WindowsServer", "2016-Datacenter", "latest") : imageReference);
+                //imageReference = (imageReference == null ? CreateImageReference("MicrosoftWindowsServer", "WindowsServer", "2016-Datacenter", "latest") : imageReference);
+                imageReference = (imageReference == null ? CreateImageReference() : imageReference);
                 VirtualMachineConfiguration vmConfig = new VirtualMachineConfiguration(imageReference, SKUReference(imageReference.Offer));
 
                 messageContainer.AddInformationMessage("Creating pool...");
