@@ -21,6 +21,7 @@ Annotations:
 import os
 from eppy.modeleditor import IDF
 import json
+import argparse
 import numpy as np
 import matplotlib.patches as patches
 from scipy.spatial import Delaunay
@@ -36,6 +37,23 @@ from honeybee.radiance.material.plastic import Plastic
 from honeybee.radiance.properties import RadianceProperties
 from honeybee.radiance.sky.skymatrix import SkyMatrix
 
+
+##############################################
+# Helper text to assist in running this file #
+##############################################
+
+parser = argparse.ArgumentParser(
+    description='''Create a Radiance case from an IDF file! Using a config file to specify fabric performance and analysis resolution data.''',
+    epilog="""Best of luck!""")
+parser.add_argument('source.idf', type=str, default=None, help='')
+parser.add_argument('config.json', type=str, default=None, help='')
+parser.add_argument('weatherfile.epw', type=str, default=None, help='')
+parser.add_argument('output_directory', type=str, default=None, help='')
+args = parser.parse_args()
+
+##########################################
+# FREQUENTLY USED FUNCTIONS DEFINED HERE #
+##########################################
 
 def unit_vector(start, end):
     """

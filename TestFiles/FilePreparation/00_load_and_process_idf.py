@@ -15,10 +15,22 @@ Annotations:
 
 import json
 import sys
-
+import argparse
 from eppy.modeleditor import IDF
 from scipy import interpolate
 
+##############################################
+# Helper text to assist in running this file #
+##############################################
+
+parser = argparse.ArgumentParser(
+    description='''Modify an IDF file generated using Grasshopper/Honeybee using a config file to specify fabric performance and space thermal profile data.''',
+    epilog="""Best of luck!""")
+parser.add_argument('source.idf', type=str, default=None, help='')
+parser.add_argument('config.json', type=str, default=None, help='')
+parser.add_argument('weatherfile.epw', type=str, default=None, help='')
+parser.add_argument('output.idf', type=str, default=None, help='')
+args = parser.parse_args()
 
 ##########################################
 # FREQUENTLY USED FUNCTIONS DEFINED HERE #

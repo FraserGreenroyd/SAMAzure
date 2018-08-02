@@ -30,7 +30,7 @@ from honeybee.futil import bat_to_sh
 
 parser = argparse.ArgumentParser(
     description='''Run a Radiance Daylight Factor and Annual simulation using Honeybee analysis grid, sky matrix and context geometry, outputting summary results to a user specified location.''',
-    epilog="""Best of luck""")
+    epilog="""Best of luck!""")
 parser.add_argument('analysis_grid.json', type=str, default=None, help='')
 parser.add_argument('surfaces.json', type=str, default=None, help='')
 parser.add_argument('sky_mtx.json', type=str, default=None, help='')
