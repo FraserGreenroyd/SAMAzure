@@ -16,6 +16,7 @@ Annotations:
 import argparse
 import json
 import sys
+
 sys.path.insert(0, 'ladybug')
 sys.path.insert(0, 'honeybee')
 
@@ -37,6 +38,7 @@ parser.add_argument('sky_mtx.json', type=str, default=None, help='')
 parser.add_argument('output_summary_results.json', type=str, default=None, help='')
 args = parser.parse_args()
 
+
 ##########################################
 # FREQUENTLY USED FUNCTIONS DEFINED HERE #
 ##########################################
@@ -44,6 +46,7 @@ args = parser.parse_args()
 def load_json(path):
     with open(path) as data_file:
         return json.load(data_file)
+
 
 ####################################################
 # Gather arguments and paths to provided resources #
@@ -133,7 +136,8 @@ else:
 ##############################
 
 # Obtain the x, y, z coordinates for the analysis points
-x, y, z = [list(elem) for elem in list(zip(*[i["location"] for i in df_recipe.results()[0].to_json()["analysis_points"]]))]
+x, y, z = [list(elem) for elem in
+           list(zip(*[i["location"] for i in df_recipe.results()[0].to_json()["analysis_points"]]))]
 print("Analysis point coordinates obtained")
 
 # Obtain the Daylight Factor values corresponding with the analysis points
@@ -149,7 +153,8 @@ da, cda, udi, udi_less, udi_more = annual_recipe.results()[0].annual_metrics(300
 print("Daylight autonomy metrics calculated\n")
 
 # Write the results to a single JSON file
-summary_results = {"ZONE": zone_name, "X": x, "Y": y, "Z": z, "DF": df, "DA": da, "CDA": cda, "UDI_LESS": udi_less, "UDI": udi, "UDI_MORE": udi_more}
+summary_results = {"ZONE": zone_name, "X": x, "Y": y, "Z": z, "DF": df, "DA": da, "CDA": cda, "UDI_LESS": udi_less,
+                   "UDI": udi, "UDI_MORE": udi_more}
 
 # Write results to single summary file
 with open("{0:}".format(summary_results_path), "w") as f:

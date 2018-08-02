@@ -13,9 +13,10 @@ Annotations:
     TODO - Add option for ground temperature inclusion from the Weatherfile if these are available
 """
 
+import argparse
 import json
 import sys
-import argparse
+
 from eppy.modeleditor import IDF
 from scipy import interpolate
 
@@ -31,6 +32,7 @@ parser.add_argument('config.json', type=str, default=None, help='')
 parser.add_argument('weatherfile.epw', type=str, default=None, help='')
 parser.add_argument('output.idf', type=str, default=None, help='')
 args = parser.parse_args()
+
 
 ##########################################
 # FREQUENTLY USED FUNCTIONS DEFINED HERE #

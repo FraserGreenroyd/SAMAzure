@@ -17,15 +17,17 @@ Annotations:
     TODO - Add method to extract glazing light transmittance from the IDF to pass to the Radiance case generation (rather than using the config file to get this data)
 """
 
+import argparse
+import json
 # Load necessary packages
 import os
-from eppy.modeleditor import IDF
-import json
-import argparse
-import numpy as np
-import matplotlib.patches as patches
-from scipy.spatial import Delaunay
 import sys
+
+import matplotlib.patches as patches
+import numpy as np
+from eppy.modeleditor import IDF
+from scipy.spatial import Delaunay
+
 sys.path.insert(0, 'ladybug')
 sys.path.insert(0, 'honeybee')
 
@@ -36,7 +38,6 @@ from honeybee.radiance.material.glass import Glass
 from honeybee.radiance.material.plastic import Plastic
 from honeybee.radiance.properties import RadianceProperties
 from honeybee.radiance.sky.skymatrix import SkyMatrix
-
 
 ##############################################
 # Helper text to assist in running this file #
@@ -50,6 +51,7 @@ parser.add_argument('config.json', type=str, default=None, help='')
 parser.add_argument('weatherfile.epw', type=str, default=None, help='')
 parser.add_argument('output_directory', type=str, default=None, help='')
 args = parser.parse_args()
+
 
 ##########################################
 # FREQUENTLY USED FUNCTIONS DEFINED HERE #
@@ -82,10 +84,10 @@ def surface_normal(points, flip=False):
     """
     U = np.array(points[1]) - np.array(points[0])
     V = np.array(points[2]) - np.array(points[0])
-    Nx = U[1]*V[2] - U[2]*V[1]
-    Ny = U[2]*V[0] - U[0]*V[2]
-    Nz = U[0]*V[1] - U[1]*V[0]
-    mag = np.sqrt(Nx**2 + Ny**2 + Nz**2)
+    Nx = U[1] * V[2] - U[2] * V[1]
+    Ny = U[2] * V[0] - U[0] * V[2]
+    Nz = U[0] * V[1] - U[1] * V[0]
+    mag = np.sqrt(Nx ** 2 + Ny ** 2 + Nz ** 2)
 
     if flip:
         return (np.array([Nx, Ny, Nz]) / mag).tolist()
@@ -144,8 +146,10 @@ def triangulate_3d_surfaces(parent_surface_vertices, child_surfaces_vertices):
     uv = unit_vector(parent_surface_vertices[0], parent_surface_vertices[1])
     uw = unit_vector(parent_surface_vertices[0], parent_surface_vertices[3])
 
-    parent_surface_vertices_translated = np.array([translated_point(uv, uw, parent_surface_vertices[0], i) for i in parent_surface_vertices])
-    child_surfaces_vertices_translated = np.array([[translated_point(uv, uw, parent_surface_vertices[0], i) for i in ch] for ch in child_surfaces_vertices])
+    parent_surface_vertices_translated = np.array(
+        [translated_point(uv, uw, parent_surface_vertices[0], i) for i in parent_surface_vertices])
+    child_surfaces_vertices_translated = np.array(
+        [[translated_point(uv, uw, parent_surface_vertices[0], i) for i in ch] for ch in child_surfaces_vertices])
 
     parent_points = parent_surface_vertices_translated
     child_points = [item for sublist in child_surfaces_vertices_translated for item in sublist]
@@ -225,6 +229,7 @@ def load_json(path):
     """
     with open(path) as data_file:
         return json.load(data_file)
+
 
 idf_filepath = sys.argv[1]
 config_filepath = sys.argv[2]
@@ -343,7 +348,8 @@ print("Materials defined from properties in {0:}\n".format(config_filepath))
 
 fenestration_surfaces = []
 interior_wall_surfaces = []
-for wall_n, wall in enumerate([i for i in idf.idfobjects["BUILDINGSURFACE:DETAILED"] if i.Construction_Name == "Interior Wall"]):
+for wall_n, wall in enumerate(
+        [i for i in idf.idfobjects["BUILDINGSURFACE:DETAILED"] if i.Construction_Name == "Interior Wall"]):
     fen_coords = []
     for fen_n, fen in enumerate(idf.idfobjects["FENESTRATIONSURFACE:DETAILED"]):
         if wall.Name in fen.Name:
@@ -362,7 +368,7 @@ for wall_n, wall in enumerate([i for i in idf.idfobjects["BUILDINGSURFACE:DETAIL
             )
     try:
         for i_n, i in enumerate(triangulate_3d_surfaces(wall.coords, fen_coords)):
-            #faces.append(i.tolist())
+            # faces.append(i.tolist())
             interior_wall_surfaces.append(
                 HBSurface(
                     "wall_{0:}_{1:}_srfP_{2:}".format(wall_n, wall.Name, i_n),
@@ -391,7 +397,8 @@ for wall_n, wall in enumerate([i for i in idf.idfobjects["BUILDINGSURFACE:DETAIL
 print("{0:} interior wall surfaces generated".format(len(interior_wall_surfaces)))
 
 exterior_wall_surfaces = []
-for wall_n, wall in enumerate([i for i in idf.idfobjects["BUILDINGSURFACE:DETAILED"] if i.Construction_Name == "Exterior Wall"]):
+for wall_n, wall in enumerate(
+        [i for i in idf.idfobjects["BUILDINGSURFACE:DETAILED"] if i.Construction_Name == "Exterior Wall"]):
     # angle_to_north = np.degrees(angle_between(north_vector, surface_normal(wall.coords[:3], flip=False)))
     # if (angle_to_north > 315) or (angle_to_north <= 45):
     #     glass_material = glass_material_N
@@ -419,7 +426,7 @@ for wall_n, wall in enumerate([i for i in idf.idfobjects["BUILDINGSURFACE:DETAIL
             )
     try:
         for i_n, i in enumerate(triangulate_3d_surfaces(wall.coords, fen_coords)):
-            #faces.append(i.tolist())
+            # faces.append(i.tolist())
             exterior_wall_surfaces.append(
                 HBSurface(
                     "wall_{0:}_{1:}_srfP_{2:}".format(wall_n, wall.Name, i_n),
@@ -448,26 +455,28 @@ for wall_n, wall in enumerate([i for i in idf.idfobjects["BUILDINGSURFACE:DETAIL
 print("{0:} exterior wall surfaces generated".format(len(exterior_wall_surfaces)))
 
 floor_surfaces = []
-for wall_n, wall in enumerate([i for i in idf.idfobjects["BUILDINGSURFACE:DETAILED"] if ((i.Construction_Name == "Interior Floor") or (i.Construction_Name == "Exterior Floor") or (i.Construction_Name == "Exposed Floor"))]):
+for wall_n, wall in enumerate([i for i in idf.idfobjects["BUILDINGSURFACE:DETAILED"] if (
+        (i.Construction_Name == "Interior Floor") or (i.Construction_Name == "Exterior Floor") or (
+        i.Construction_Name == "Exposed Floor"))]):
     fen_coords = []
     fenestration_surfaces.append(
         HBSurface(
-                "fenestration_{0:}".format(fen.Name),
-                fen_coords,
-                surface_type=0,
-                is_name_set_by_user=True,
-                is_type_set_by_user=True,
-                rad_properties=RadianceProperties(
-                    material=glass_material_skylight
-                )
+            "fenestration_{0:}".format(fen.Name),
+            fen_coords,
+            surface_type=0,
+            is_name_set_by_user=True,
+            is_type_set_by_user=True,
+            rad_properties=RadianceProperties(
+                material=glass_material_skylight
             )
         )
+    )
     for fen_n, fen in enumerate(idf.idfobjects["FENESTRATIONSURFACE:DETAILED"]):
         if wall.Name in fen.Name:
             fen_coords.append(fen.coords)
     try:
         for i_n, i in enumerate(triangulate_3d_surfaces(wall.coords, fen_coords)):
-            #faces.append(i.tolist())
+            # faces.append(i.tolist())
             floor_surfaces.append(
                 HBSurface(
                     "floor_{0:}_{1:}_srfP_{2:}".format(wall_n, wall.Name, i_n),
@@ -497,7 +506,9 @@ for wall_n, wall in enumerate([i for i in idf.idfobjects["BUILDINGSURFACE:DETAIL
 print("{0:} floor surfaces generated".format(len(floor_surfaces)))
 
 ceiling_surfaces = []
-for wall_n, wall in enumerate([i for i in idf.idfobjects["BUILDINGSURFACE:DETAILED"] if ((i.Construction_Name == "Interior Ceiling") or (i.Construction_Name == "Exterior Ceiling") or (i.Construction_Name == "Roof"))]):
+for wall_n, wall in enumerate([i for i in idf.idfobjects["BUILDINGSURFACE:DETAILED"] if (
+        (i.Construction_Name == "Interior Ceiling") or (i.Construction_Name == "Exterior Ceiling") or (
+        i.Construction_Name == "Roof"))]):
     fen_coords = []
     fenestration_surfaces.append(
         HBSurface(
@@ -516,7 +527,7 @@ for wall_n, wall in enumerate([i for i in idf.idfobjects["BUILDINGSURFACE:DETAIL
             fen_coords.append(fen.coords)
     try:
         for i_n, i in enumerate(triangulate_3d_surfaces(wall.coords, fen_coords)):
-            #faces.append(i.tolist())
+            # faces.append(i.tolist())
             ceiling_surfaces.append(
                 HBSurface(
                     "ceiling_{0:}_{1:}_srfP_{2:}".format(wall_n, wall.Name, i_n),
@@ -547,12 +558,16 @@ print("{0:} ceiling surfaces generated".format(len(ceiling_surfaces)))
 
 context_surfaces = []
 for context_n, context in enumerate([i for i in idf.idfobjects["SHADING:BUILDING:DETAILED"]]):
-    srf = HBSurface("context_{0:}_{1:}".format(context_n, context.Name), context.coords, surface_type=6, is_name_set_by_user=True, is_type_set_by_user=True, rad_properties=RadianceProperties(material=wall_material))
+    srf = HBSurface("context_{0:}_{1:}".format(context_n, context.Name), context.coords, surface_type=6,
+                    is_name_set_by_user=True, is_type_set_by_user=True,
+                    rad_properties=RadianceProperties(material=wall_material))
     context_surfaces.append(srf)
 
 print("{0:} shading surfaces generated".format(len(context_surfaces)))
 print("{0:} fenestration surfaces generated\n".format(len(fenestration_surfaces)))
-hb_objects = np.concatenate([exterior_wall_surfaces, interior_wall_surfaces, floor_surfaces, ceiling_surfaces, context_surfaces, fenestration_surfaces]).tolist()  # , AIRWALL_SURFACES
+hb_objects = np.concatenate(
+    [exterior_wall_surfaces, interior_wall_surfaces, floor_surfaces, ceiling_surfaces, context_surfaces,
+     fenestration_surfaces]).tolist()  # , AIRWALL_SURFACES
 
 # Define analysis grids for each zone for simulation in Radiance
 print("Generating analysis grids: ")
@@ -568,13 +583,16 @@ for floor_srf in [i for i in idf.idfobjects["BUILDINGSURFACE:DETAILED"] if ("Flo
         np.arange(min_y - (y_range / 2), max_y + (y_range / 2), config["daylight_analysis_grid_spacing"])
     )
     coords = list(zip(*(c.flat for c in g)))
-    analysis_points = np.vstack([p for p in coords if patch.contains_point(p, radius=config["daylight_analysis_grid_edge_offset"])])
-    grid_points = list(zip(*[np.array(list(zip(*analysis_points)))[0], np.array(list(zip(*analysis_points)))[1], np.repeat(max_z + config["daylight_analysis_grid_surface_offset"], len(analysis_points))]))
+    analysis_points = np.vstack(
+        [p for p in coords if patch.contains_point(p, radius=config["daylight_analysis_grid_edge_offset"])])
+    grid_points = list(zip(*[np.array(list(zip(*analysis_points)))[0], np.array(list(zip(*analysis_points)))[1],
+                             np.repeat(max_z + config["daylight_analysis_grid_surface_offset"], len(analysis_points))]))
     hb_analysis_grids.append(AnalysisGrid.from_points_and_vectors(grid_points, name=floor_srf.Zone_Name))
     print("Analysis grid for {0:} generated ({1:} points)".format(floor_srf.Zone_Name, len(analysis_points)))
 
 # Generate sky matrix for annual analysis
-sky_matrix = SkyMatrix.from_epw_file(epw_file, sky_density=2, north=north_angle_deg, hoys=range(0, 8760), mode=0, suffix="")
+sky_matrix = SkyMatrix.from_epw_file(epw_file, sky_density=2, north=north_angle_deg, hoys=range(0, 8760), mode=0,
+                                     suffix="")
 print("Sky matrix ({0:}) generated\n".format(sky_matrix))
 
 # Generate an output directory to store the JSON recipe constituent parts
