@@ -113,10 +113,10 @@ namespace AzureEngine
         public void InstallRadiance()
         {
             messageContainer.AddInformationMessage("Installing Radiance on all Batch Clients");
-            blobContainer.SendFile(System.IO.Path.GetDirectoryName(RadianceUtility.ShellFile) + @"\", System.IO.Path.GetFileName(RadianceUtility.ShellFile));
+            //blobContainer.SendFile(System.IO.Path.GetDirectoryName(RadianceUtility.ShellFile) + @"\", System.IO.Path.GetFileName(RadianceUtility.ShellFile));
 
             foreach (AzureBatchClient client in batchContainer)
-                client.InstallRadiance(masterBlobContainer.GenerateResourceFile("rad5R1all.tar.gz"), blobContainer.GenerateResourceFile("radInstall.sh"));
+                client.InstallRadiance(masterBlobContainer.GenerateResourceFile("radiance-5.1.0-Linux.tar.gz")/*, blobContainer.GenerateResourceFile("radInstall.sh")*/);
 
             messageContainer.AddStatusMessage("Radiance successfully installed on all Batch Clients!");
         }
@@ -156,7 +156,32 @@ namespace AzureEngine
         {
             //For each analysis grid - create a task, send the honeybee, ladybug, and python script from master blob, the analysis grid, sky matrix, and surface JSON from this blob, unzip the honeybee/ladybug folders and run the python script...
 
-            ResourceFile radTar = masterBlobContainer.GenerateResourceFile("radiance-5.1.0-Linux.tar.gz");
+            ResourceFile skyMatrix = blobContainer.GenerateResourceFile(skyMatrixFile);
+            ResourceFile surfaceFile = blobContainer.GenerateResourceFile(surfaceFileName);
+            ResourceFile honeybeeFolder = masterBlobContainer.GenerateResourceFile("honeybee.zip");
+            ResourceFile ladybugFolder = masterBlobContainer.GenerateResourceFile("ladybug.zip");
+            ResourceFile pythonScript = masterBlobContainer.GenerateResourceFile("02_run_radiance_case.py");
+
+            for (int x = 0; x < analysisGridFiles.Count; x++)
+            {
+                ResourceFile analysisGridFile = blobContainer.GenerateResourceFile(System.IO.Path.GetFileName(analysisGridFiles[x]));
+
+                List<ResourceFile> resourceFiles = new List<ResourceFile>();
+                resourceFiles.Add(skyMatrix);
+                resourceFiles.Add(surfaceFile);
+                resourceFiles.Add(honeybeeFolder);
+                resourceFiles.Add(ladybugFolder);
+                resourceFiles.Add(pythonScript);
+                resourceFiles.Add(analysisGridFile);
+
+                command = "sudo bash -c 'find / -iname gensky; sudo apt-get install unzip; sudo unzip -o honeybee.zip; sudo unzip -o ladybug.zip; sudo python 02_run_radiance_case.py " + System.IO.Path.GetFileName(analysisGridFiles[x]) + " " + surfaceFileName + " " + skyMatrixFile + " results.json'";
+                //command = "sudo bash -c 'find / -iname gensky;'";
+
+                int batchIndex = (int)Math.Floor((double)x / 100);
+                batchContainer[batchIndex].AddTask(command, resourceFiles);
+            }
+
+            /*ResourceFile radTar = masterBlobContainer.GenerateResourceFile("radiance-5.1.0-Linux.tar.gz");
             
             ResourceFile skyMatrix = blobContainer.GenerateResourceFile(skyMatrixFile);
             ResourceFile surfaceFile = blobContainer.GenerateResourceFile(surfaceFileName);
@@ -185,11 +210,6 @@ namespace AzureEngine
                 resourceFiles.Add(ladybugFolder);
                 resourceFiles.Add(pythonScript);
                 resourceFiles.Add(analysisGridFile);
-
-                /*resourceFiles.Add(pyMSI);
-                resourceFiles.Add(radWin);
-                resourceFiles.Add(zip7);
-                resourceFiles.Add(runRad);*/
 
                 resourceFiles.Add(oct);
                 resourceFiles.Add(shell);

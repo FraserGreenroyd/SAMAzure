@@ -222,9 +222,11 @@ namespace AzureEngine.AzureObjects
                 messageContainer.AddInformationMessage("EnergyPlus successfully installed...");
         }
 
-        public void InstallRadiance(ResourceFile rdZip, ResourceFile rdInstallFile)
+        public void InstallRadiance(ResourceFile rdZip /*, ResourceFile rdInstallFile*/)
         {
             messageContainer.AddInformationMessage("Starting installation of Radiance on batch " + batchClient.ToString() + "...");
+
+            AddTask("sudo /bin/sh -c 'sudo apt-get update; sudo apt-get install nano -y; sudo apt-get install rsync -y; sudo apt-get install python-setuptools -y; sudo apt-get install python-pip -y; sudo apt-get install python-dev -y; sudo apt-get install build-essential -y; tar xzf ./radiance-5.1.0-Linux.tar.gz; rsync -av radiance-5.1.0-Linux/usr/local/radiance/bin/ /usr/local/bin/; rsync -av radiance-5.1.0-Linux/usr/local/radiance/lib/ /usr/local/lib/ray/ --remove-source-files;'", new List<ResourceFile> { rdZip /*, rdInstallFile*/ });
             //AddTask("sudo /bin/sh -c ./radInstall.sh", new List<ResourceFile> { rdZip, rdInstallFile });
             //AddTask("sudo apt-get -y install radiance");
             //AddTask("sudo apt-get install unzip");
