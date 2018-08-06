@@ -1,94 +1,87 @@
-"""
-Description:
-    Load an IDF file and modify according to settings in a config file
-    To run enter the command:
-    python 00_ModifyIDF_FullConstructions.py <path to IDF for modification> <path to config JSON file>
-Arguments:
-    path [string]: JSON config file (and referenced zone_conditions_library within that config file)
-Returns:
-    idf file [file object]: Modified IDF file
+# TODO - Fix the glazing solar heat gain assignment from the config file for different orientations
+# TODO - Add option for ground temperature inclusion from the weather file if these are available
+# TODO - Fix the system check for Linux EnergyPlus
 
-Annotations:
-    TODO - Fix the glazing solar heat gain assignment from the config file for different orientations
-    TODO - Add option for ground temperature inclusion from the Weatherfile if these are available
-"""
 
 import argparse
 import json
 import sys
-
 from eppy.modeleditor import IDF
 from scipy import interpolate
 
-##############################################
-# Helper text to assist in running this file #
-##############################################
 
-parser = argparse.ArgumentParser(
-    description='''Modify an IDF file generated using Grasshopper/Honeybee using a config file to specify fabric performance and space thermal profile data.''',
-    epilog="""Best of luck!""")
-parser.add_argument('source.idf', type=str, default=None, help='')
-parser.add_argument('config.json', type=str, default=None, help='')
-parser.add_argument('weatherfile.epw', type=str, default=None, help='')
-parser.add_argument('output.idf', type=str, default=None, help='')
-args = parser.parse_args()
-
-
-##########################################
-# FREQUENTLY USED FUNCTIONS DEFINED HERE #
-##########################################
+# ************************************************** #
+# ***   Public methods                           *** #
+# ************************************************** #
 
 def load_json(path):
     """
     Description:
         Load a JSON file into a dictionary object
     Arguments:
-        path [string]: The location of the JSON file being loaded
+        :type path: string
     Returns:
-        dictionary [dict]: Dictionary containing contents of loaded JSON file
+        :type path: dictionary
     """
     with open(path) as data_file:
         return json.load(data_file)
 
 
-#########################################################################
-# LOAD THE IDF TO BE MODIFIED AND THE CONFIG FILE USED TO MODIFY VALUES #
-#########################################################################
+def check_os():
+    """
+    Description:
+        Check the operating system and return it's name
+    Returns:
+        :type path: dictionary
+    """
+    if "win" in sys.platform.lower() and "dar" not in sys.platform.lower():
+        return "Windows"
+        # IDF.setiddname("C:/EnergyPlusV8-8-0/Energy+.idd")
+    elif "dar" in sys.platform.lower():
+        return "OS"
+        # IDF.setiddname("/Applications/EnergyPlus-8-8-0/Energy+.idd")
+    elif "lin" in sys.platform.lower():
+        return "Linux"
+        # IDF.setiddname("idd_location")
 
-idf_filepath = sys.argv[1]
-config_filepath = sys.argv[2]
-epw_filepath = sys.argv[3]
-modified_idf_filepath = sys.argv[4]
+# ************************************************** #
+# ***   Main execution                           *** #
+# ************************************************** #
 
-with open(config_filepath, "r") as f:
-    config = json.load(f)
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Tool to modify an IDF using a config file")
+    parser.add_argument("-i", "--inputIDF")
+    parser.add_argument("-w", "--weatherFile")
+    parser.add_argument("-c", "--configFile")
+    parser.add_argument("-o", "--outputIDF")
+    args = parser.parse_args()
 
-print("\nConfig loaded from {0:}\n".format(config_filepath))
+    # Load inputs
+    idf_filepath = args.inputIDF
+    epw_filepath = args.weatherFile
+    config_filepath = args.configFile
+    modified_idf_filepath = args.outputIDF
 
-if "win" in sys.platform.lower() and "dar" not in sys.platform.lower():
-    IDF.setiddname("C:/EnergyPlusV8-8-0/Energy+.idd")
-elif "dar" in sys.platform.lower():
-    IDF.setiddname("/Applications/EnergyPlus-8-8-0/Energy+.idd")
-elif "lin" in sys.platform.lower():
-    IDF.setiddname("idd_location")  # TODO - This will break - I need to find where linux installs the IDD and amend
+    with open(config_filepath, "r") as f:
+        config = json.load(f)
 
-#########################################################################
-# LOAD THE EPW SPECIFIED IN THE CONFIG FILE AND ASSIGN IDF TO IDFOBJECT #
-#########################################################################
+    print("\nConfig loaded from {0:}\n".format(config_filepath))
 
-idf = IDF(idf_filepath)
+    if check_os() == "Windows":
+        IDF.setiddname("C:/EnergyPlusV8-8-0/Energy+.idd")
+    elif check_os() == "OS":
+        IDF.setiddname("/Applications/EnergyPlus-8-8-0/Energy+.idd")
+    else:
+        IDF.setiddname("idd_location")
 
-print("IDF loaded from {0:}\n".format(idf_filepath))
-print("EPW loaded from {0:}\n".format(epw_filepath))
+    idf = IDF(idf_filepath)
 
-####################################################################################
-# LOAD THE JSON SPECIFIED IN THE CONFIG FILE THAT CONTAINS ZONE PROFILES AND GAINS #
-####################################################################################
+    print("IDF loaded from {0:}\n".format(idf_filepath))
+    print("EPW loaded from {0:}\n".format(epw_filepath))
 
-zone_conditions = load_json(config["zone_conditions_library"])[config["zone_template"]]
+    zone_conditions = load_json(config["zone_conditions_library"])[config["zone_template"]]
 
-print("Zone conditions loaded from {1:}\nZone conditions set to {0:}\n".format(config["zone_template"],
-                                                                               config["zone_conditions_library"]))
+    print("Zone conditions loaded from {1:}\nZone conditions set to {0:}\n".format(config["zone_template"], config["zone_conditions_library"]))
 
 #######################################################################
 # MODIFY IDF SITE INFORMATION USING DATA FROM THE REFERENCED EPW FILE #
