@@ -9,8 +9,5 @@
     "exterior_roof_u_value": 0.18,
     "glass_g_value": 0.65,
     "glass_visible_transmittance": 0.65,
-    "glass_u_value": 1.6,
-    "daylight_analysis_grid_spacing": 0.2,
-    "daylight_analysis_grid_edge_offset": 0.1,
-    "daylight_analysis_grid_surface_offset": 0.8
+    "glass_u_value": 1.6
 }
