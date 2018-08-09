@@ -32,12 +32,9 @@ from honeybee.radiance.sky.skymatrix import SkyMatrix
 
 def load_json(path):
     """
-    Description:
-        Load a JSON file into a dictionary object
-    Arguments:
-        :type path: string
-    Returns:
-        :type : dictionary
+    Load a JSON file into a dictionary object
+    :type path: Path to JSON file
+    :return: Dictionary representing content of JSON file
     """
     with open(path) as data_file:
         return json.load(data_file)
@@ -45,10 +42,8 @@ def load_json(path):
 
 def os_idd():
     """
-    Description:
-        Check the operating system and return it's name
-    Returns:
-        :type path: dictionary
+    Check the operating system and return it's name
+    :return: Standard location of EnergyPlus IDD file
     """
     if "win" in sys.platform.lower() and "dar" not in sys.platform.lower():
         return "C:/EnergyPlusV8-8-0/Energy+.idd"
@@ -60,15 +55,11 @@ def os_idd():
 
 def unit_vector(start, end):
     """
-    Description:
-        Returns the unit vector of a line described by its start and end points
-    Arguments:
-        :type start: array
-        :type end: array
-    Returns:
-        :type : array
+    Returns the unit vector of a line described by its start and end points
+    :type start: [x, y] coordinate array
+    :type end: [x, y] coordinate array
+    :return: [x, y] vector array
     """
-
     pt_distance = np.array(end) - np.array(start)
     vector = pt_distance / np.sqrt(np.sum(pt_distance * pt_distance))
     return vector
@@ -76,25 +67,19 @@ def unit_vector(start, end):
 
 def unit_vector2(vector):
     """
-    Description:
-        Returns the unit vector of a vector
-    Arguments:
-        :type vector: array
-    Returns:
-        :type : array
+    Returns the unit vector of a vector
+    :type vector: array
+    :return: array
     """
     return vector / np.linalg.norm(vector)
 
 
 def surface_normal(points, flip=False):
     """
-    Description:
-        Given 3 points from a surface, return the surface normal
-    Arguments:
-        :type points: array
-        :type flip: bool
-    Returns:
-        :type : array
+    Given 3 points from a surface, return the surface normal
+    :type points: array
+    :type flip: bool
+    :return: array
     """
     U = np.array(points[1]) - np.array(points[0])
     V = np.array(points[2]) - np.array(points[0])
@@ -111,15 +96,12 @@ def surface_normal(points, flip=False):
 
 def translated_point(uv, uw, origin, point):
     """
-    Description:
-        Translates a 3D point into a 2D point
-    Arguments:
-        :type uv: array
-        :type uw: array
-        :type origin: array
-        :type point: array
-    Returns:
-        :type : array
+    Translates a 3D point into a 2D point
+    :type uv: array
+    :type uw: array
+    :type origin: array
+    :type point: array
+    :return: array
     """
     x = (point[0] - origin[0]) * uv[0] + (point[1] - origin[1]) * uv[1] + (point[2] - origin[2]) * uv[2]
     y = (point[0] - origin[0]) * uw[0] + (point[1] - origin[1]) * uw[1] + (point[2] - origin[2]) * uw[2]
@@ -128,15 +110,12 @@ def translated_point(uv, uw, origin, point):
 
 def untranslated_point(uv, uw, origin, point):
     """
-    Description:
-        Translates a 2D point into a 3D point
-    Arguments:
-        :type uv: array
-        :type uw: array
-        :type origin: array
-        :type point: array
-    Returns:
-        :type : array
+    Translates a 2D point into a 3D point
+    :type uv: array
+    :type uw: array
+    :type origin: array
+    :type point: array
+    :return: array
     """
     x = origin[0] + uv[0] * point[0] + uw[0] * point[1]
     y = origin[1] + uv[1] * point[0] + uw[1] * point[1]
@@ -146,13 +125,10 @@ def untranslated_point(uv, uw, origin, point):
 
 def triangulate_3d_surfaces(parent_surface_vertices, child_surfaces_vertices):
     """
-    Description:
-        Returns a set of vertices describing the delaunay mesh of a parent surface minus the child surfaces
-    Arguments:
-        :type parent_surface_vertices: array
-        :type child_surfaces_vertices: array
-    Returns:
-        :type : array
+    Returns a set of vertices describing the delaunay mesh of a parent surface minus the child surfaces
+    :type parent_surface_vertices: array
+    :type child_surfaces_vertices: array
+    :return: array
     """
     uv = unit_vector(parent_surface_vertices[0], parent_surface_vertices[1])
     uw = unit_vector(parent_surface_vertices[0], parent_surface_vertices[3])
@@ -190,13 +166,10 @@ def triangulate_3d_surfaces(parent_surface_vertices, child_surfaces_vertices):
 
 def angle_between(vector_1, vector_2):
     """
-    Description:
-        Returns the angle in radians between vectors 'vector_1' and 'vector_2'
-    Arguments:
-        :type vector_1: object
-        :type vector_2: object
-    Returns:
-        :type : float
+    Returns the angle in radians between vectors 'vector_1' and 'vector_2'
+    :type vector_1: object
+    :type vector_2: object
+    :return: Angle in radians
     """
     vector_1_u = unit_vector2(vector_1)
     vector_2_u = unit_vector2(vector_2)
@@ -205,14 +178,11 @@ def angle_between(vector_1, vector_2):
 
 def rotate(origin, point, angle_rad):
     """
-    Description:
-        Rotate a point counterclockwise by a given angle around a given origin. The angle should be given in radians.
-    Arguments:
-        :type origin: object
-        :type point: object
-        :type angle_rad: object
-    Returns:
-        :type : array
+    Rotate a point counterclockwise by a given angle around a given origin. The angle should be given in radians.
+    :type origin: object
+    :type point: object
+    :type angle_rad: Angle in radians
+    :return: array
     """
     o_x, o_y = origin
     p_x, p_y = point

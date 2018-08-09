@@ -3,6 +3,7 @@
 # TODO - Fix the system check for Linux EnergyPlus
 # TODO - Remove shading calculation output for final version -  used for exporting shade calculation for passing to TAS
 # TODO - Add different glazing configurations for different orientations (and elevation to account for skylights)
+# Add "Zone Total Internal Total Cooling Energy"
 
 
 import argparse
@@ -19,12 +20,9 @@ from scipy import interpolate
 
 def load_json(path):
     """
-    Description:
-        Load a JSON file into a dictionary object
-    Arguments:
-        :type path: string
-    Returns:
-        :type : dictionary
+    Load a JSON file into a dictionary object
+    :type path: Path to JSON file
+    :return: Dictionary representing content of JSON file
     """
     with open(path) as data_file:
         return json.load(data_file)
@@ -32,10 +30,8 @@ def load_json(path):
 
 def os_idd():
     """
-    Description:
-        Check the operating system and return it's name
-    Returns:
-        :type path: dictionary
+    Check the operating system and return it's name
+    :return: Standard location of EnergyPlus IDD file
     """
     if "win" in sys.platform.lower() and "dar" not in sys.platform.lower():
         return "C:/EnergyPlusV8-8-0/Energy+.idd"
@@ -53,8 +49,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Tool to modify an IDF using a config file")
     parser.add_argument("-i", "--inputIDF", help="Path to the source IDF from which geometry is obtained")
     parser.add_argument("-w", "--weatherFile", help="Path to the EPW weather file for the location being simulated")
-    parser.add_argument("-t", "--internalGainsTemplate", help="Path to the JSON internal gains template from which zone conditions can be obtained")
-    parser.add_argument("-c", "--configFile", help="Path to the config file containing target construction U and g-values, and internal gains profile")
+    parser.add_argument("-t", "--internalGainsTemplate",
+                        help="Path to the JSON internal gains template from which zone conditions can be obtained")
+    parser.add_argument("-c", "--configFile",
+                        help="Path to the config file containing target construction U and g-values, and internal gains profile")
     parser.add_argument("-o", "--outputIDF", help="Path to the target output IDF inheriting changes from inputs")
     args = parser.parse_args()
 
@@ -63,7 +61,7 @@ if __name__ == "__main__":
     epw_filepath = args.weatherFile
     config_filepath = args.configFile
     modified_idf_filepath = args.outputIDF
-    zone_conditions_library = args.internalgainstemplates
+    zone_conditions_library = args.internalGainsTemplate
 
     with open(config_filepath, "r") as f:
         config = json.load(f)

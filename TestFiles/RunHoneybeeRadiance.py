@@ -1,5 +1,16 @@
 # TODO - Update DF and Annual Radiance simulation parameters for detailed simulation
 # TODO - All results saved as JSON file
+# TODO - Fix error at Adding zone1\annual\gridbased_annual\result/scene..default.ill and zone1\annual\gridbased_annual\result\sun..scene..default.ill to result files for zone1
+# TODO
+#
+# Loading the results from result files.
+# Traceback (most recent call last):
+#   File "RunHoneybeeRadiance.py", line 119, in <module>
+#     occupancy_schedule)
+#   File "honeybee\honeybee\radiance\analysisgrid.py", line 493, in annual_metrics
+#     values = (int(float(r)) for r in inf.next().split())
+# StopIteration
+
 
 import argparse
 import json
@@ -20,16 +31,12 @@ from honeybee.futil import bat_to_sh
 
 def load_json(path):
     """
-    Description:
-        Load a JSON file into a dictionary object
-    Arguments:
-        :type path: string
-    Returns:
-        :type : dictionary
+    Load a JSON file into a dictionary object
+    :type path: Path to JSON file
+    :return: Dictionary representing content of JSON file
     """
     with open(path) as data_file:
         return json.load(data_file)
-
 
 # ************************************************** #
 # ***   Main execution                           *** #
@@ -53,6 +60,7 @@ if __name__ == "__main__":
     low_quality = "-aa 0.25 -dj 0.0 -ds 0.5 -dr 0 -ss 0.0 -dp 64 -ad 512 -st 0.85 -as 128 -dc 0.25 -dt 0.5 -ab 2 -lw 0.05 -lr 4 -ar 16"
     medium_quality = "-aa 0.2 -dj 0.5 -ds 0.25 -dr 1 -ss 0.7 -dp 256 -ad 2048 -st 0.5 -as 2048 -dc 0.5 -dt 0.25 -ab 3 -lw 0.01 -lr 6 -ar 64"
     high_quality = "-aa 0.1 -dj 1.0 -ds 0.05 -dr 3 -ss 1.0 -dp 512 -ad 4096 -st 0.15 -as 4096 -dc 0.75 -dt 0.15 -ab 6 -lw 0.005 -lr 8 -ar 128"
+    custom = ""
 
     try:
         if args.quality == "medium":
