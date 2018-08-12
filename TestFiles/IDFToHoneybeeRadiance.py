@@ -204,6 +204,8 @@ if __name__ == "__main__":
                         help="Path to the config file containing construction reflectances and glazing transmissivities")
     parser.add_argument("-o", "--outputDir", help="Path to the target output directory")
     parser.add_argument("-gs", "--gridSize", type=float, help="Optional grid size (default is 0.5m)")
+    parser.add_argument("-so", "--surfaceOffset", type=float, help="Optional analysis grid surface offset (default is 0.765m)")
+    parser.add_argument("-eo", "--edgeOffset", type=float, help="Optional analysis grid room boundary offset (default is 0.1m)")
 
     args = parser.parse_args()
 
@@ -216,12 +218,14 @@ if __name__ == "__main__":
         config = json.load(f)
     print("\nConfig loaded from {0:}\n".format(config_filepath))
 
-    try:
-        analysis_grid_spacing = args.gridSize
-    except:
-        analysis_grid_spacing = 0.5
-    analysis_grid_surface_offset = 0.1
-    analysis_grid_edge_offset = 0.765
+    analysis_grid_spacing = 0.5 if args.gridSize == None else args.gridSize
+    print("\nCAnalysis grid spacing set to {0:}".format(analysis_grid_spacing))
+
+    analysis_grid_surface_offset = 0.765 if args.surfaceOffset == None else args.surfaceOffset
+    print("\nCAnalysis grid offset from surface set to {0:}".format(analysis_grid_surface_offset))
+
+    analysis_grid_edge_offset = 0.1 if args.edgeOffset == None else args.edgeOffset
+    print("\nCAnalysis grid boundary offset set to {0:}\n".format(analysis_grid_edge_offset))
 
     IDF.setiddname(os_idd())
     idf = IDF(idf_filepath)
