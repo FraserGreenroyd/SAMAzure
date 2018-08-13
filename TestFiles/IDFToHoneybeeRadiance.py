@@ -5,6 +5,8 @@
 # TODO - Check the fenestration surface normal is point teh right direction for correct window angle for G value assignment
 # TODO - Add method to extract glazing light transmittance from the IDF to pass to the Radiance case generation (rather than using the config file to get this data)
 
+# from __future__ import absolute_import, division, print_function, unicode_literals
+
 import argparse
 import json
 import os
@@ -216,7 +218,7 @@ if __name__ == "__main__":
 
     with open(config_filepath, "r") as f:
         config = json.load(f)
-    print("\nConfig loaded from {0:}\n".format(config_filepath))
+    print("\nConfig loaded from {0:}\n".format(os.path.normpath(config_filepath)))
 
     analysis_grid_spacing = 0.5 if args.gridSize == None else args.gridSize
     print("\nCAnalysis grid spacing set to {0:}".format(analysis_grid_spacing))
@@ -230,8 +232,8 @@ if __name__ == "__main__":
     IDF.setiddname(os_idd())
     idf = IDF(idf_filepath)
 
-    print("IDF loaded from {0:}\n".format(idf_filepath))
-    print("EPW loaded from {0:}\n".format(epw_filepath))
+    print("IDF loaded from {0:}\n".format(os.path.normpath(idf_filepath)))
+    print("EPW loaded from {0:}\n".format(os.path.normpath(epw_filepath)))
 
     # Obtain building orientation to ascertain surface direction
     north_angle_deg = idf.idfobjects["BUILDING"][0].North_Axis
@@ -259,7 +261,7 @@ if __name__ == "__main__":
     floor_material = Plastic("FloorMaterial", r_reflectance=config["floor_reflectivity"],
                              g_reflectance=config["floor_reflectivity"], b_reflectance=config["floor_reflectivity"],
                              specularity=0, roughness=0)
-    print("Materials defined from properties in {0:}\n".format(config_filepath))
+    print("Materials defined from properties in {0:}\n".format(os.path.normpath(config_filepath)))
 
     # Define surfaces for radiation oclusion
     fenestration_surfaces = []
@@ -398,24 +400,24 @@ if __name__ == "__main__":
     if not os.path.exists(output_directory):
         os.makedirs(output_directory)
         os.makedirs("{0:}/AnalysisGrids".format(output_directory))
-    print("Output directory set to {0:}/AnalysisGrids\n".format(output_directory))
+    print("Output directory set to {0:}\\AnalysisGrids\n".format(os.path.normpath(output_directory)))
 
     # Write the sky matrix for annual simulation to file
     sky_matrix_path = "{0:}/sky_mtx.json".format(output_directory)
     with open(sky_matrix_path, "w") as f:
         json.dump({"sky_mtx": sky_matrix.to_json()}, f)
-    print("Sky matrix written to {0:}\n".format(sky_matrix_path))
+    print("Sky matrix written to {0:}\n".format(os.path.normpath(sky_matrix_path)))
 
     # Write the analysis grids to a directory for processing
     for hb_analysis_grid in hb_analysis_grids:
         analysis_grid_path = "{0:}/AnalysisGrids/{1:}.json".format(output_directory, hb_analysis_grid.name)
         with open(analysis_grid_path, "w") as f:
             json.dump({"analysis_grids": [hb_analysis_grid.to_json()]}, f)
-        print("Analysis grid for {0:} written to {1:}".format(hb_analysis_grid.name, analysis_grid_path))
+        print("Analysis grid for {0:} written to {1:}".format(hb_analysis_grid.name, os.path.normpath(analysis_grid_path)))
 
     # Write the context geometry (surfaces) around the analysis grids
-    surfaces_path = "{0:}/surfaces.json".format(output_directory)
+    surfaces_path = "{0:}/surfaces.json".format(os.path.normpath(output_directory))
     with open(surfaces_path, "w") as f:
         f.write(
             repr({"surfaces": [i.to_json() for i in hb_objects]}).replace("'", '"').replace("(", '[').replace(")", ']'))
-    print("\nSurfaces written to {0:}\n".format(surfaces_path))
+    print("\nSurfaces written to {0:}\n".format(os.path.normpath(surfaces_path)))

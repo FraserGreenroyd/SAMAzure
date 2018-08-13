@@ -1,10 +1,9 @@
-# TODO - Fix the glazing solar heat gain assignment from the config file for different orientations
 # TODO - Add option for ground temperature inclusion from the weather file if these are available
-# TODO - Fix the system check for Linux EnergyPlus
 # TODO - Remove shading calculation output for final version -  used for exporting shade calculation for passing to TAS
 # TODO - Add different glazing configurations for different orientations (and elevation to account for skylights)
-# Add "Zone Total Internal Total Cooling Energy"
+# TODO - Add "Zone Total Internal Total Cooling Energy"
 
+# from __future__ import absolute_import, division, print_function, unicode_literals
 
 import argparse
 import json
@@ -38,7 +37,7 @@ def os_idd():
     elif "dar" in sys.platform.lower():
         return "/Applications/EnergyPlus-8-8-0/Energy+.idd"
     elif "lin" in sys.platform.lower():
-        raise NameError("No IDD location specified - check the TODO list")
+        return "/usr/local/EnergyPlus-8-8-0/Energy+/idd"
 
 
 # ************************************************** #
