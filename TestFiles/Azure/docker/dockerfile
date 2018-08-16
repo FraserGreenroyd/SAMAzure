@@ -7,18 +7,19 @@ RUN apt-get update
 # Install Python 2, 3, text editor and file move utilities
 RUN apt-get install -y python2.7
 RUN apt-get install -y python-pip
-RUN apt-get install -y nano
+# RUN apt-get install -y nano
 RUN apt-get install -y rsync
-
 RUN pip install azure-storage==0.32.0
 
-ADD /resources .
+# ADD /resources .
+COPY copy_to_blob.py copy_to_blob.py
+COPY lb_hb.tar.gz lb_hb.tar.gz
+COPY radiance-5.1.0-Linux.tar.gz radiance-5.1.0-Linux.tar.gz
+COPY RunHoneybeeRadiance.py RunHoneybeeRadiance.py
 
-RUN tar xzf ./lb_hb.tar.gz
-RUN tar xzf ./radiance-5.1.0-Linux.tar.gz
+RUN tar xzf lb_hb.tar.gz
+RUN tar xzf radiance-5.1.0-Linux.tar.gz
 RUN rsync -av /radiance-5.1.0-Linux/usr/local/radiance/bin/ /usr/local/bin/
 RUN rsync -av /radiance-5.1.0-Linux/usr/local/radiance/lib/ /usr/local/lib/ray/
 
-# Copy files to be processed into the node (analysis_grid, sky_matrix and surfaces) -- docker cp "C:\Users\tgerrish\Documents\GitHub\SAMAzure\TestFiles\Azure\radfiles" a4a:/
-# Run using -- python RunHoneybeeRadiance.py -p ./radfiles/AnalysisGrids/zone1.json -sm ./radfiles/sky_mtx.json -s ./radfiles/surfaces.json -o ./radfiles
-# Copy result back to blob using -- python upload_to_blob.py -o ./radfiles/zone1_result.json -c azure_credentials.json -t "0000000-jobname-3513"
+RUN rm ./lb_hb.tar.gz ./radiance-5.1.0-Linux.tar.gz

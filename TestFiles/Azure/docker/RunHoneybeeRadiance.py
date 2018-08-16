@@ -39,7 +39,6 @@ if __name__ == "__main__":
     parser.add_argument("-p", "--analysisPoints", help="Path to the JSON analysis points to simulate")
     parser.add_argument("-sm", "--skyMatrix", help="Path to the sky matrix")
     parser.add_argument("-s", "--surfaces", help="Path to the context opaque and transparent surfaces")
-    parser.add_argument("-o", "--outputSummary", help="Path to the target output directory for summary results")
     parser.add_argument("-q", "--quality", type=str,
                         help="Optional simulation quality ['low', 'medium', 'high']. Default is 'low'")
     args = parser.parse_args()
@@ -47,7 +46,6 @@ if __name__ == "__main__":
     analysis_grid_path = args.analysisPoints
     surfaces_path = args.surfaces
     sky_matrix_path = args.skyMatrix
-    summary_results_path = args.outputSummary
 
     low_quality = "-aa 0.25 -dj 0.0 -ds 0.5 -dr 0 -ss 0.0 -dp 64 -ad 512 -st 0.85 -as 128 -dc 0.25 -dt 0.5 -ab 2 -lw 0.05 -lr 4 -ar 16"
     medium_quality = "-aa 0.2 -dj 0.5 -ds 0.25 -dr 1 -ss 0.7 -dp 256 -ad 2048 -st 0.5 -as 2048 -dc 0.5 -dt 0.25 -ab 3 -lw 0.01 -lr 6 -ar 64"
@@ -108,7 +106,7 @@ if __name__ == "__main__":
     print("Daylight Factor results obtained")
 
     # Generate an occupancy schedule for the annual metrics calculation
-    occupancy_schedule = Schedule.from_workday_hours(occ_hours=(8, 17), off_hours=(12, 13), weekend=(6, 7),
+    occupancy_schedule = Schedule.from_workday_hours(occ_hours=(9, 18), off_hours=(), weekend=(6, 7),
                                                      default_value=1)
     print("Annual occupancy schedule defined\n")
 
@@ -123,12 +121,11 @@ if __name__ == "__main__":
                        "udi": udi, "udi_more": udi_more}
 
     # Create a location for the results summary to be saved
-    summary_loc = os.path.join(summary_results_path,
-                               os.path.basename(analysis_grid_path).replace(".json", "_result.json"))
+    results_path = os.path.basename(analysis_grid_path).replace(".json", "_result.json")
 
     # Write results to single summary file
-    with open("{0:}".format(summary_loc), "w") as f:
+    with open("{0:}".format(results_path), "w") as f:
         json.dump(summary_results, f)
-    print("Results written to {0:}".format(summary_loc))
+    print("Results written to {0:}".format(results_path))
 
     # print(json.dumps(RESULTS, indent=4))
