@@ -121,7 +121,7 @@ if __name__ == "__main__":
                        "udi": udi, "udi_more": udi_more}
 
     # Create a location for the results summary to be saved
-    results_path = os.path.basename(analysis_grid_path).replace(".json", "_result.json")
+    results_path = analysis_grid_path.replace(".json", "_result.json")
 
     # Write results to single summary file
     with open("{0:}".format(results_path), "w") as f:
