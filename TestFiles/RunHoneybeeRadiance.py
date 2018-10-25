@@ -36,11 +36,33 @@ def load_json(path):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run a Radiance case from a Honeybee recipe generated using inputs")
-    parser.add_argument("-p", "--analysisPoints", help="Path to the JSON analysis points to simulate")
-    parser.add_argument("-sm", "--skyMatrix", help="Path to the sky matrix")
-    parser.add_argument("-s", "--surfaces", help="Path to the context opaque and transparent surfaces")
-    parser.add_argument("-q", "--quality", type=str,
-                        help="Optional simulation quality ['low', 'medium', 'high']. Default is 'low'")
+    parser.add_argument(
+        "-p",
+        "--analysisPoints",
+        type=str,
+        help="Path to the JSON analysis points to simulate"
+    )
+    parser.add_argument(
+        "-sm",
+        "--skyMatrix",
+        type=str,
+        help="Path to the sky matrix",
+        # default="case/surfaces.json"
+    )
+    parser.add_argument(
+        "-s",
+        "--surfaces",
+        type=str,
+        help="Path to the context opaque and transparent surfaces",
+        # default="case/surfaces.json"
+    )
+    parser.add_argument(
+        "-q",
+        "--quality",
+        type=str,
+        help="Optional simulation quality ['low', 'medium', 'high']. Default is 'low'",
+        default="low"
+    )
     args = parser.parse_args()
 
     analysis_grid_path = args.analysisPoints

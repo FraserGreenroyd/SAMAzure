@@ -43,7 +43,7 @@ def upload_file_to_container(block_blob_client, container_name, file_path):
     sas_url = block_blob_client.make_blob_url(container_name, blob_name, sas_token=sas_token)
     return batchmodels.ResourceFile(file_path=blob_name, blob_source=sas_url)
 
-def upload_dir_to_container(block_blob_client, container_name, dirpath):
+def upload_dir_to_container(block_blob_client, container_name, dirpath: str):
     """
     Uploads a local directory to an Azure Blob storage container.
 

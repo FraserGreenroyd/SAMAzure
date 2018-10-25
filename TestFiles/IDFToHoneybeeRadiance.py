@@ -199,41 +199,73 @@ def rotate(origin, point, angle_rad):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Create a Radiance case (using Honeybee) from an IDF file!")
-    parser.add_argument("-i", "--inputIDF",
-                        help="Path to the source IDF from which geometry and constructions are obtained")
-    parser.add_argument("-w", "--weatherFile", help="Path to the EPW weather file for the location being simulated")
-    parser.add_argument("-c", "--configFile",
-                        help="Path to the config file containing construction reflectances and glazing transmissivities")
-    parser.add_argument("-o", "--outputDir", help="Path to the target output directory")
-    parser.add_argument("-gs", "--gridSize", type=float, help="Optional grid size (default is 0.5m)")
-    parser.add_argument("-so", "--surfaceOffset", type=float, help="Optional analysis grid surface offset (default is 0.765m)")
-    parser.add_argument("-eo", "--edgeOffset", type=float, help="Optional analysis grid room boundary offset (default is 0.1m)")
+    parser.add_argument(
+        "-i",
+        "--inputIDF",
+        type=str,
+        help="Path to the source IDF from which geometry and constructions are obtained",
+        default="output.idf"  # TODO - remove post testing
+    )
+    parser.add_argument(
+        "-w",
+        "--weatherFile",
+        type=str,
+        help="Path to the EPW weather file for the location being simulated",
+        default="GBR_Cardiff_CIBSE_TRY.epw"  # TODO - remove post testing
+    )
+    parser.add_argument(
+        "-c",
+        "--configFile",
+        type=str,
+        help="Path to the config file containing construction reflectances and glazing transmissivities",
+        default="idf_config.json"  # TODO - remove post testing
+    )
+    parser.add_argument(
+        "-o",
+        "--outputDir",
+        type=str,
+        help="Path to the target output directory",
+        default=os.path.join(os.getcwd(), "case")  # TODO - remove post testing
+    )
+    parser.add_argument(
+        "-gs",
+        "--gridSize",
+        type=float,
+        help="Optional grid size (default is 0.5m)",
+        default=0.5
+    )
+    parser.add_argument(
+        "-so",
+        "--surfaceOffset",
+        type=float,
+        help="Optional analysis grid surface offset (default is 0.765m)",
+        default=0.765
+    )
+    parser.add_argument(
+        "-eo",
+        "--edgeOffset",
+        type=float,
+        help="Optional analysis grid room boundary offset (default is 0.1m)",
+        default=0.1
+    )
 
     args = parser.parse_args()
 
-    idf_filepath = args.inputIDF
-    epw_filepath = args.weatherFile
-    config_filepath = args.configFile
-    output_directory = args.outputDir
-
-    with open(config_filepath, "r") as f:
+    with open(args.configFile, "r") as f:
         config = json.load(f)
-    print("\nConfig loaded from {0:}\n".format(os.path.normpath(config_filepath)))
+    print("\nConfig loaded from {0:}\n".format(os.path.normpath(args.configFile)))
 
-    analysis_grid_spacing = 0.5 if args.gridSize == None else args.gridSize
-    print("\nCAnalysis grid spacing set to {0:}".format(analysis_grid_spacing))
+    print("\nAnalysis grid spacing set to {0:}".format(args.gridSize))
 
-    analysis_grid_surface_offset = 0.765 if args.surfaceOffset == None else args.surfaceOffset
-    print("\nCAnalysis grid offset from surface set to {0:}".format(analysis_grid_surface_offset))
+    print("\nAnalysis grid offset from surface set to {0:}".format(args.surfaceOffset))
 
-    analysis_grid_edge_offset = 0.1 if args.edgeOffset == None else args.edgeOffset
-    print("\nCAnalysis grid boundary offset set to {0:}\n".format(analysis_grid_edge_offset))
+    print("\nAnalysis grid boundary offset set to {0:}\n".format(args.edgeOffset))
 
     IDF.setiddname(os_idd())
-    idf = IDF(idf_filepath)
+    idf = IDF(args.inputIDF)
 
-    print("IDF loaded from {0:}\n".format(os.path.normpath(idf_filepath)))
-    print("EPW loaded from {0:}\n".format(os.path.normpath(epw_filepath)))
+    print("IDF loaded from {0:}\n".format(os.path.normpath(args.inputIDF)))
+    print("EPW loaded from {0:}\n".format(os.path.normpath(args.weatherFile)))
 
     # Obtain building orientation to ascertain surface direction
     north_angle_deg = idf.idfobjects["BUILDING"][0].North_Axis
@@ -261,7 +293,7 @@ if __name__ == "__main__":
     floor_material = Plastic("FloorMaterial", r_reflectance=config["floor_reflectivity"],
                              g_reflectance=config["floor_reflectivity"], b_reflectance=config["floor_reflectivity"],
                              specularity=0, roughness=0)
-    print("Materials defined from properties in {0:}\n".format(os.path.normpath(config_filepath)))
+    print("Materials defined from properties in {0:}\n".format(os.path.normpath(args.configFile)))
 
     # Define surfaces for radiation oclusion
     fenestration_surfaces = []
@@ -374,6 +406,12 @@ if __name__ == "__main__":
         [exterior_wall_surfaces, interior_wall_surfaces, floor_surfaces, ceiling_surfaces, context_surfaces,
          fenestration_surfaces]).tolist()
 
+    # Generate an output directory to store the JSON recipe constituent parts
+    if not os.path.exists(args.outputDir):
+        os.makedirs(args.outputDir)
+        os.makedirs("{0:}/AnalysisGrids".format(args.outputDir))
+    print("Output directory set to {0:}\\AnalysisGrids\n".format(os.path.normpath(args.outputDir)))
+
     # Define analysis grids for each zone for simulation in Radiance
     hb_analysis_grids = []
     for floor_srf in [i for i in idf.idfobjects["BUILDINGSURFACE:DETAILED"] if ("Floor" in i.Construction_Name)]:
@@ -382,41 +420,36 @@ if __name__ == "__main__":
         min_x, max_x, min_y, max_y, max_z = min(vert_xs), max(vert_xs), min(vert_ys), max(vert_ys), max(vert_zs)
         x_range = max_x - min_x
         y_range = max_y - min_y
-        g = np.meshgrid(np.arange(min_x - (x_range / 2), max_x + (x_range / 2), analysis_grid_spacing),
-                        np.arange(min_y - (y_range / 2), max_y + (y_range / 2), analysis_grid_spacing))
+        g = np.meshgrid(np.arange(min_x - (x_range / 2), max_x + (x_range / 2), args.gridSize),
+                        np.arange(min_y - (y_range / 2), max_y + (y_range / 2), args.gridSize))
         coords = list(zip(*(c.flat for c in g)))
-        analysis_points = np.vstack([p for p in coords if patch.contains_point(p, radius=analysis_grid_edge_offset)])
+        analysis_points = np.vstack([p for p in coords if patch.contains_point(p, radius=args.edgeOffset)])
         grid_points = list(zip(*[np.array(list(zip(*analysis_points)))[0], np.array(list(zip(*analysis_points)))[1],
-                                 np.repeat(max_z + analysis_grid_surface_offset, len(analysis_points))]))
+                                 np.repeat(max_z + args.surfaceOffset, len(analysis_points))]))
         hb_analysis_grids.append(AnalysisGrid.from_points_and_vectors(grid_points, name=floor_srf.Zone_Name))
         print("Analysis grid for {0:} generated ({1:} points)".format(floor_srf.Zone_Name, len(analysis_points)))
 
-    # Generate sky matrix for annual analysis
-    sky_matrix = SkyMatrix.from_epw_file(epw_filepath, sky_density=2, north=north_angle_deg, hoys=range(0, 8760),
-                                         mode=0, suffix="")
-    print("Sky matrix ({0:}) generated\n".format(sky_matrix))
-
-    # Generate an output directory to store the JSON recipe constituent parts
-    if not os.path.exists(output_directory):
-        os.makedirs(output_directory)
-        os.makedirs("{0:}/AnalysisGrids".format(output_directory))
-    print("Output directory set to {0:}\\AnalysisGrids\n".format(os.path.normpath(output_directory)))
-
-    # Write the sky matrix for annual simulation to file
-    sky_matrix_path = "{0:}/sky_mtx.json".format(output_directory)
-    with open(sky_matrix_path, "w") as f:
-        json.dump({"sky_mtx": sky_matrix.to_json()}, f)
-    print("Sky matrix written to {0:}\n".format(os.path.normpath(sky_matrix_path)))
-
     # Write the analysis grids to a directory for processing
     for hb_analysis_grid in hb_analysis_grids:
-        analysis_grid_path = "{0:}/AnalysisGrids/{1:}.json".format(output_directory, hb_analysis_grid.name)
+        analysis_grid_path = "{0:}/AnalysisGrids/{1:}.json".format(args.outputDir, hb_analysis_grid.name)
         with open(analysis_grid_path, "w") as f:
             json.dump({"analysis_grids": [hb_analysis_grid.to_json()]}, f)
         print("Analysis grid for {0:} written to {1:}".format(hb_analysis_grid.name, os.path.normpath(analysis_grid_path)))
 
+
+    # Generate sky matrix for annual analysis
+    sky_matrix = SkyMatrix.from_epw_file(args.weatherFile, sky_density=2, north=north_angle_deg, hoys=range(0, 8760),
+                                         mode=0, suffix="")
+    print("Sky matrix ({0:}) generated\n".format(sky_matrix))
+
+    # Write the sky matrix for annual simulation to file
+    sky_matrix_path = "{0:}/sky_mtx.json".format(args.outputDir)
+    with open(sky_matrix_path, "w") as f:
+        json.dump({"sky_mtx": sky_matrix.to_json()}, f)
+    print("Sky matrix written to {0:}\n".format(os.path.normpath(sky_matrix_path)))
+
     # Write the context geometry (surfaces) around the analysis grids
-    surfaces_path = "{0:}/surfaces.json".format(os.path.normpath(output_directory))
+    surfaces_path = "{0:}/surfaces.json".format(os.path.normpath(args.outputDir))
     with open(surfaces_path, "w") as f:
         f.write(
             repr({"surfaces": [i.to_json() for i in hb_objects]}).replace("'", '"').replace("(", '[').replace(")", ']'))

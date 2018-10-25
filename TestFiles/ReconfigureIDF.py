@@ -46,13 +46,41 @@ def os_idd():
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Tool to modify an IDF using a config file")
-    parser.add_argument("-i", "--inputIDF", help="Path to the source IDF from which geometry is obtained")
-    parser.add_argument("-w", "--weatherFile", help="Path to the EPW weather file for the location being simulated")
-    parser.add_argument("-t", "--internalGainsTemplate",
-                        help="Path to the JSON internal gains template from which zone conditions can be obtained")
-    parser.add_argument("-c", "--configFile",
-                        help="Path to the config file containing target construction U and g-values, and internal gains profile")
-    parser.add_argument("-o", "--outputIDF", help="Path to the target output IDF inheriting changes from inputs")
+    parser.add_argument(
+        "-i",
+        "--inputIDF",
+        type=str,
+        help="Path to the source IDF from which geometry is obtained",
+        default="4_zone_test.idf"  # TODO - Remove post testing
+    )
+    parser.add_argument(
+        "-w",
+        "--weatherFile",
+        type=str,
+        help="Path to the EPW weather file for the location being simulated",
+        default="GBR_Cardiff_CIBSE_TRY.epw"  # TODO - Remove post testing
+    )
+    parser.add_argument(
+        "-t",
+        "--internalGainsTemplate",
+        type=str,
+        help="Path to the JSON internal gains template from which zone conditions can be obtained",
+        default="internal_gains_library.json"  # TODO - Remove post testing
+    )
+    parser.add_argument(
+        "-c",
+        "--configFile",
+        type=str,
+        help="Path to the config file containing target construction U and g-values, and internal gains profile",
+        default="idf_config.json"  # TODO - Remove post testing
+    )
+    parser.add_argument(
+        "-o",
+        "--outputIDF",
+        type=str,
+        help="Path to the target output IDF inheriting changes from inputs",
+        default="output.idf"  # TODO - Remove post testing
+    )
     args = parser.parse_args()
 
     # Load inputs
