@@ -104,7 +104,7 @@ if __name__ == "__main__":
     # _UPLOAD = r"C:\Users\tgerrish\Desktop\temp_to_delete\test"
 
     parser = argparse.ArgumentParser(description="Run Azure batch daylight analysis")
-    # parser.add_argument("-p", "--analysisPoints", help="Path to the JSON analysis grid points to simulate")
+    # parser.add_argument("-p", "--analysisPoints", help="Path to the JSON analysis grid_file points to simulate")
     # parser.add_argument("-c", "--container", help="Container in which to store files for task/job")
     # parser.add_argument("-sm", "--skyMatrix", help="Path to the sky matrix")
     # parser.add_argument("-s", "--surfaces", help="Path to the context opaque and transparent surfaces")

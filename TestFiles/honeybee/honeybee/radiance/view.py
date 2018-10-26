@@ -62,7 +62,7 @@ class View(object):
         > -vtv -vp 0.000 0.000 0.000 -vd 0.000 0.000 1.000 -vu 0.000 1.000
            0.000 -vh 60.000 -vv 60.000 -x 600 -y 600 -vo 100.000
 
-        # split the view into a view grid
+        # split the view into a view grid_file
         gridViews = v.calculate_view_grid(2, 2)
         for g in gridViews:
             print(g)
@@ -242,7 +242,7 @@ class View(object):
                 return newx, max_y
 
     def calculate_view_grid(self, x_div_count=1, y_div_count=1):
-        """Return a list of views for grid of views.
+        """Return a list of views for grid_file of views.
 
         Views will be returned row by row from right to left.
         Args:

@@ -1,4 +1,4 @@
-# TODO - Orient analysis grid to longest edge of zone it's being generated for
+# TODO - Orient analysis grid_file to longest edge of zone it's being generated for
 # TODO - Create ability to visualise surfaces and analysis grids in context
 # TODO - Add radiance parameters to the config.json to put into the generated recipes
 # TODO - Add method interpreting results for SDA, DA, DF, UDI, UDILess, UDIMore
@@ -231,21 +231,21 @@ if __name__ == "__main__":
         "-gs",
         "--gridSize",
         type=float,
-        help="Optional grid size (default is 0.5m)",
+        help="Optional grid_file size (default is 0.5m)",
         default=0.5
     )
     parser.add_argument(
         "-so",
         "--surfaceOffset",
         type=float,
-        help="Optional analysis grid surface offset (default is 0.765m)",
+        help="Optional analysis grid_file surface offset (default is 0.765m)",
         default=0.765
     )
     parser.add_argument(
         "-eo",
         "--edgeOffset",
         type=float,
-        help="Optional analysis grid room boundary offset (default is 0.1m)",
+        help="Optional analysis grid_file room boundary offset (default is 0.1m)",
         default=0.1
     )
 
@@ -255,11 +255,11 @@ if __name__ == "__main__":
         config = json.load(f)
     print("\nConfig loaded from {0:}\n".format(os.path.normpath(args.configFile)))
 
-    print("\nAnalysis grid spacing set to {0:}".format(args.gridSize))
+    print("\nAnalysis grid_file spacing set to {0:}".format(args.gridSize))
 
-    print("\nAnalysis grid offset from surface set to {0:}".format(args.surfaceOffset))
+    print("\nAnalysis grid_file offset from surface set to {0:}".format(args.surfaceOffset))
 
-    print("\nAnalysis grid boundary offset set to {0:}\n".format(args.edgeOffset))
+    print("\nAnalysis grid_file boundary offset set to {0:}\n".format(args.edgeOffset))
 
     IDF.setiddname(os_idd())
     idf = IDF(args.inputIDF)
@@ -427,14 +427,14 @@ if __name__ == "__main__":
         grid_points = list(zip(*[np.array(list(zip(*analysis_points)))[0], np.array(list(zip(*analysis_points)))[1],
                                  np.repeat(max_z + args.surfaceOffset, len(analysis_points))]))
         hb_analysis_grids.append(AnalysisGrid.from_points_and_vectors(grid_points, name=floor_srf.Zone_Name))
-        print("Analysis grid for {0:} generated ({1:} points)".format(floor_srf.Zone_Name, len(analysis_points)))
+        print("Analysis grid_file for {0:} generated ({1:} points)".format(floor_srf.Zone_Name, len(analysis_points)))
 
     # Write the analysis grids to a directory for processing
     for hb_analysis_grid in hb_analysis_grids:
         analysis_grid_path = "{0:}/AnalysisGrids/{1:}.json".format(args.outputDir, hb_analysis_grid.name)
         with open(analysis_grid_path, "w") as f:
             json.dump({"analysis_grids": [hb_analysis_grid.to_json()]}, f)
-        print("Analysis grid for {0:} written to {1:}".format(hb_analysis_grid.name, os.path.normpath(analysis_grid_path)))
+        print("Analysis grid_file for {0:} written to {1:}".format(hb_analysis_grid.name, os.path.normpath(analysis_grid_path)))
 
 
     # Generate sky matrix for annual analysis

@@ -1,4 +1,4 @@
-"""Honeybee generic grid base analysis baseclass.
+"""Honeybee generic grid_file base analysis baseclass.
 
 This class is base class for common gridbased analysis recipes as well as
 sunlighthours recipe and annual analysis recipe.
@@ -16,7 +16,7 @@ import os
 
 
 class GenericGridBased(AnalysisRecipe):
-    """Honeybee generic grid base analysis base class.
+    """Honeybee generic grid_file base analysis base class.
 
     This class is base class for common gridbased analysis recipes as well as
     sunlighthours recipe and annual analysis recipe.
@@ -32,7 +32,7 @@ class GenericGridBased(AnalysisRecipe):
     __metaclass__ = ABCMeta
 
     def __init__(self, analysis_grids, hb_objects=None, sub_folder="gridbased"):
-        """Create grid-based recipe."""
+        """Create grid_file-based recipe."""
         # keep track of original points for re-structuring them later on
         AnalysisRecipe.__init__(self, hb_objects=hb_objects, sub_folder=sub_folder)
         self.analysis_grids = analysis_grids
@@ -94,7 +94,7 @@ class GenericGridBased(AnalysisRecipe):
 
     @property
     def legend_parameters(self):
-        """Legend parameters for grid based analysis."""
+        """Legend parameters for grid_file based analysis."""
         return LegendParameters([0, 3000])
 
     @staticmethod
@@ -130,7 +130,7 @@ class GenericGridBased(AnalysisRecipe):
             file_name: File name as string. Points will be saved as
                 file_name.pts
             merge: Merge all the grids into a single file. If the input is
-                False each file will be named based on the grid name (default: True).
+                False each file will be named based on the grid_file name (default: True).
         Returns:
             Path to file in case of success.
 
@@ -163,7 +163,7 @@ class GenericGridBased(AnalysisRecipe):
         return self.__repr__()
 
     def __repr__(self):
-        """Represent grid based recipe."""
+        """Represent grid_file based recipe."""
         return "%s\n#AnalysisGrids: %d #Points: %d" % \
             (self.__class__.__name__,
              self.analysis_grid_count,

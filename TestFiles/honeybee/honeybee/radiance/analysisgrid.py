@@ -24,7 +24,7 @@ class EmptyFileError(Exception):
 
 
 class AnalysisGrid(object):
-    """A grid of analysis points.
+    """A grid_file of analysis points.
 
     Attributes:
         analysis_points: A collection of analysis points.
@@ -38,7 +38,7 @@ class AnalysisGrid(object):
 
         analysis_points: A collection of AnalysisPoints.
         name: A unique name for this AnalysisGrid.
-        window_groups: A collection of window_groups which contribute to this grid.
+        window_groups: A collection of window_groups which contribute to this grid_file.
             This input is only meaningful in studies such as daylight coefficient
             and multi-phase studies that the contribution of each source will be
             calculated separately (default: None).
@@ -63,7 +63,7 @@ class AnalysisGrid(object):
 
     @classmethod
     def from_json(cls, ag_json):
-        """Create an analysis grid from json objects."""
+        """Create an analysis grid_file from json objects."""
         analysis_points = tuple(AnalysisPoint.from_json(pt)
                                 for pt in ag_json["analysis_points"])
         return cls(analysis_points=analysis_points, name=ag_json["name"],
@@ -72,7 +72,7 @@ class AnalysisGrid(object):
     @classmethod
     def from_points_and_vectors(cls, points, vectors=None,
                                 name=None, window_groups=None):
-        """Create an analysis grid from points and vectors.
+        """Create an analysis grid_file from points and vectors.
 
         Args:
             points: A flatten list of (x, y ,z) points.
@@ -86,7 +86,7 @@ class AnalysisGrid(object):
 
     @classmethod
     def from_file(cls, file_path):
-        """Create an analysis grid from a pts file.
+        """Create an analysis grid_file from a pts file.
 
         Args:
             file_path: Full path to points file
@@ -114,7 +114,7 @@ class AnalysisGrid(object):
 
     @property
     def window_groups(self):
-        """A list of window group names that are related to this analysis grid."""
+        """A list of window group names that are related to this analysis grid_file."""
         return self._wgroups
 
     @window_groups.setter
@@ -149,7 +149,7 @@ class AnalysisGrid(object):
 
     @property
     def has_values(self):
-        """Check if this analysis grid has result values."""
+        """Check if this analysis grid_file has result values."""
         return self.analysis_points[0].has_values
 
     @property
@@ -167,7 +167,7 @@ class AnalysisGrid(object):
 
     @property
     def is_results_point_in_time(self):
-        """Return True if the grid has the results only for an hour."""
+        """Return True if the grid_file has the results only for an hour."""
         return len(self.hoys) == 1
 
     @property
@@ -177,7 +177,7 @@ class AnalysisGrid(object):
 
     def add_result_files(self, file_path, hoys, start_line=None, is_direct=False,
                          header=True, mode=0):
-        """Add new result files to grid.
+        """Add new result files to grid_file.
 
         Use this methods if you want to get annual metrics without loading the values
         for each point. This method is only useful for cases with no window groups and
@@ -431,7 +431,7 @@ class AnalysisGrid(object):
         """
         results_loaded = True
         if not self.has_values and not self.result_files[0]:
-            raise ValueError('No values are assigned to this analysis grid.')
+            raise ValueError('No values are assigned to this analysis grid_file.')
         elif not self.has_values:
             # results are not loaded but are available
             assert len(self.result_files[0]) == 1, \
@@ -519,7 +519,7 @@ class AnalysisGrid(object):
         """
         results_loaded = True
         if not self.has_values and not self.result_files[0]:
-            raise ValueError('No values are assigned to this analysis grid.')
+            raise ValueError('No values are assigned to this analysis grid_file.')
         elif not self.has_values:
             # results are not loaded but are available
             assert len(self.result_files[0]) == 1, \
@@ -606,7 +606,7 @@ class AnalysisGrid(object):
         As per IES-LM-83-12 ase is the percent of sensors that are
         found to be exposed to more than 1000lux of direct sunlight for
         more than 250hrs per year. For LEED credits No more than 10% of
-        the points in the grid should fail this measure.
+        the points in the grid_file should fail this measure.
 
         Args:
             threshhold: Threshhold for for solar exposure in lux (default: 1000).
@@ -616,7 +616,7 @@ class AnalysisGrid(object):
                 to study the effect of different blind states.
             occ_schedule: An annual occupancy schedule.
             target_hours: Minimum targe hours for each point (default: 250).
-            target_area: Minimum target area percentage for this grid (default: 10).
+            target_area: Minimum target area percentage for this grid_file (default: 10).
 
         Returns:
             Success as a Boolean, ase values for each point, Percentage area,
@@ -697,7 +697,7 @@ class AnalysisGrid(object):
 
                             res[c].append(r)
 
-        # calculate ase for the grid
+        # calculate ase for the grid_file
         ap = self.analysis_points  # create a local copy of points for better performance
         problematic_point_count = 0
         problematic_points = []
@@ -731,7 +731,7 @@ class AnalysisGrid(object):
         return self.analysis_points[0].parse_blind_states(blinds_state_ids)
 
     def load_values_from_files(self):
-        """Load grid values from self.result_files."""
+        """Load grid_file values from self.result_files."""
         # remove old results
         for ap in self._analysis_points:
             ap._sources = OrderedDict()
@@ -824,14 +824,14 @@ class AnalysisGrid(object):
             TypeError('Expected an AnalysisGrid not {}.'.format(type(other)))
 
         assert self.hoys == other.hoys, \
-            ValueError('Two analysis grid must have the same hoys.')
+            ValueError('Two analysis grid_file must have the same hoys.')
 
         if not self.has_values:
             sources = self._sources.update(other._sources)
         else:
             assert self._sources == other._sources, \
                 ValueError(
-                    'Two analysis grid with values must have the same window_groups.'
+                    'Two analysis grid_file with values must have the same window_groups.'
                 )
             sources = self._sources
 

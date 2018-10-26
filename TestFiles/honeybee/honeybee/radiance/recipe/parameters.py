@@ -115,7 +115,7 @@ Parameters = namedtuple('Parameters', ['rad', 'vmtx', 'dmtx', 'smtx'])
 
 
 def get_radiance_parameters_grid_based(quality, rec_type):
-    """Get Radiance parameters for grid based recipes.
+    """Get Radiance parameters for grid_file based recipes.
 
     Args:
         quality: 0 > low, 1 > Medium, 2 > High

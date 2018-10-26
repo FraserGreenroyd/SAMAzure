@@ -64,7 +64,7 @@ if __name__ == "__main__":
 
     analysis_grid = load_json(analysis_grid_path)
     zone_name = analysis_grid["analysis_grids"][0]["name"]
-    print("Analysis grid for {0:} loaded from {1:}\n".format(zone_name, analysis_grid_path))
+    print("Analysis grid_file for {0:} loaded from {1:}\n".format(zone_name, analysis_grid_path))
 
     annual_config = {"type": "gridbased", "id": "annual", "simulation_type": 0,
                      "rad_parameters": {"gridbased_parameters": quality}}

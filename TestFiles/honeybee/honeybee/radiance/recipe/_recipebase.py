@@ -34,7 +34,7 @@ class AnalysisRecipe(object):
 
     @classmethod
     def from_json(cls):
-        """Create analysis grid from json object."""
+        """Create analysis grid_file from json object."""
         raise NotImplementedError(
             "from_json is not implemented for {}.".format(cls.__class__.__name__)
         )

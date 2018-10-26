@@ -87,10 +87,10 @@ class Room(HBZone):
                                               radiance_material)
 
     def generate_test_points(self, grid_size=1, height=0.75):
-        """Generate a grid of test points in the room.
+        """Generate a grid_file of test points in the room.
 
         Args:
-            grid_size: Size of test grid.
+            grid_size: Size of test grid_file.
             height: Test points height.
         """
         # find number of divisions in width

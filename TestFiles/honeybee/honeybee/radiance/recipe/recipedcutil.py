@@ -833,7 +833,7 @@ def sun_coeff_matrix_commands(output, point_file, scene_files, analemma, sunlist
 
     Args:
         output: Output daylight coefficient file (e.g. suncoeff.dc).
-        point_file: Path to point / analysis grid file. In case of multiple grid
+        point_file: Path to point / analysis grid_file file. In case of multiple grid_file
             put them together in a single file.
         scene_files: A list fo scene files. Usually black scene.
         analemma: Path to analemma file. You can generate analemma file using

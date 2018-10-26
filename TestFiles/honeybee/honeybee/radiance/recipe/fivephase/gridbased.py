@@ -201,7 +201,7 @@ class FivePhaseGridBased(ThreePhaseGridBased):
             counter = 2 + sum(wg.state_count for wg in self.window_groups[:count])
 
             # t_matrix - direct + analemma
-            # TODO(mostapha): send the enalysis grid and not the points file
+            # TODO(mostapha): send the enalysis grid_file and not the points file
             # otherwise we won't be able to support multiple grids.
             cmd, results = matrix_calculation_five_phase(
                 project_name, self.sky_matrix.sky_density, project_folder, wg, skyfiles,
