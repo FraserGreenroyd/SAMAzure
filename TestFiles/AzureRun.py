@@ -149,6 +149,24 @@ def get_container_sas_url(block_blob_client, container_name):
     return container_sas_url
 
 
+def print_batch_exception(batch_exception):
+    """
+    Prints the contents of the specified Batch exception.
+
+    :param batch_exception:
+    """
+    print('-------------------------------------------')
+    print('Exception encountered:')
+    if (batch_exception.error and batch_exception.error.message and
+            batch_exception.error.message.value):
+        print(batch_exception.error.message.value)
+        if batch_exception.error.values:
+            print()
+            for mesg in batch_exception.error.values:
+                print('{}:\t{}'.format(mesg.key, mesg.value))
+    print('-------------------------------------------')
+
+
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description="Send job to Azure")
@@ -208,18 +226,31 @@ if __name__ == '__main__':
     _DELETE_JOB = global_config.getboolean("Default", "shoulddeletejob")
     _DELETE_POOL = global_config.getboolean("Default", "shoulddeletepool")
 
+    print("\n\n\nStarting ... \n\n\n")
+
+    ####################
+    # Upload the files #
+    ####################
+
     # File accessibility expiry time
     expiry = datetime.datetime.utcnow() + datetime.timedelta(minutes=global_config.getint("Default", "blobreadtimeout"))
+    print("Files accessible until: {0:}".format(expiry.strftime("%Y-%m-%d %H:%M")))
 
     # Create the blob client
     blob_client = azureblob.BlockBlobService(account_name=_STORAGE_ACCOUNT_NAME, account_key=_STORAGE_ACCOUNT_KEY)
+    print("Blob client generated")
+
+    # # Tidying up - if the files already exist
+    # try:
+    #     blob_client.delete_container(_JOB_ID)
+    # except:
+    #     pass
+
+    print("")
 
     # Create a job container
     blob_client.create_container(_JOB_ID, fail_on_exist=False)
-    container_sas_token = blob_client.generate_container_shared_access_signature(
-        _JOB_ID,
-        permission=azureblob.BlobPermissions(read=True, write=True),
-        expiry=expiry)
+    container_sas_token = blob_client.generate_container_shared_access_signature(_JOB_ID, permission=azureblob.BlobPermissions(read=True, write=True), expiry=expiry)
     output_container_sas_url = "https://{0:}.blob.core.windows.net/{1:}?{2:}".format(_STORAGE_ACCOUNT_NAME, _JOB_ID, container_sas_token)
     print('[{0:}] container created.'.format(_JOB_ID))
 
@@ -229,71 +260,67 @@ if __name__ == '__main__':
     sky_mtx_file = upload_file_to_container(blob_client, _JOB_ID, _SKY_MTX_FILEPATH)
     analysis_grid_files = [upload_file_to_container(blob_client, _JOB_ID, file_path) for file_path in _ANALYSIS_GRIDS_FILEPATHS]
 
+    print("")
+
     # Generate batch credentials and client
     batch_credentials = batchauth.SharedKeyCredentials(_BATCH_ACCOUNT_NAME, _BATCH_ACCOUNT_KEY)
     batch_client = batch.BatchServiceClient(batch_credentials, base_url=_BATCH_ACCOUNT_URL)
+    print("Batch client generated")
 
+    #################
+    # Create a pool #
+    #################
 
-
-
-    #
-    # # Get the node agent SKU and image reference for the virtual machine configuration.
-    # sku_to_use, image_ref_to_use = select_latest_verified_vm_image_with_node_agent_sku(batch_client, _NODE_OS_PUBLISHER, _NODE_OS_OFFER, _NODE_OS_SKU)
-    #
-    # # Specify the user permissions and level
-    # user = batchmodels.AutoUserSpecification(scope=batchmodels.AutoUserScope.pool, elevation_level=batchmodels.ElevationLevel.admin)
-    #
-    # # Define the start task for the pool
-    # start_task = batch.models.StartTask(
-    #     command_line=wrap_commands_in_shell("linux", start_commands),
-    #     user_identity=batchmodels.UserIdentity(auto_user=user),
-    #     wait_for_success=True,
-    #     resource_files=resources
-    # )
-    #
-    # # Define the pool
-    # new_pool = batch.models.PoolAddParameter(
-    #     id=_POOL_ID,
-    #     virtual_machine_configuration=batchmodels.VirtualMachineConfiguration(
-    #         image_reference=image_ref_to_use,
-    #         node_agent_sku_id=sku_to_use
-    #     ),
-    #     vm_size=_POOL_VM_SIZE,
-    #     enable_auto_scale=True,
-    #     auto_scale_formula='pendingTaskSamplePercent =$PendingTasks.GetSamplePercent(180 * TimeInterval_Second);pendingTaskSamples = pendingTaskSamplePercent < 70 ? 1 : avg($PendingTasks.GetSample(180 * TimeInterval_Second)); $TargetDedicatedNodes = min(100, pendingTaskSamples);',
-    #     auto_scale_evaluation_interval=datetime.timedelta(minutes=5),
-    #     start_task=start_task,
-    # )
-    #
-    # # Try to create the pool, and tell us why not
+    # # Tidying up - if the pool already exists
     # try:
-    #     batch_client.pool.add(new_pool)
-    # except batchmodels.batch_error.BatchErrorException as err:
-    #     print_batch_exception(err)
-    #     raise
-    #
-    # print('[{0:}] pool created'.format(_POOL_ID))
-    #
-    #
-    #
-    #
-    #
-    #
-    # # Create a pool
-    # # Get the node agent SKU and image reference for the virtual machine configuration.
-    # sku_to_use, image_ref_to_use = select_latest_verified_vm_image_with_node_agent_sku(batch_client, _NODE_OS_PUBLISHER, _NODE_OS_OFFER, _NODE_OS_SKU)
-    #
-    # # Specify the user permissions and level
-    # user = batchmodels.AutoUserSpecification(scope=batchmodels.AutoUserScope.pool, elevation_level=batchmodels.ElevationLevel.admin)
-    #
-    # # Define the start task for the pool
-    # start_task = batch.models.StartTask(
-    #     command_line=wrap_commands_in_shell("linux", ["sudo touch ./do_i_exist.txt", "sudo cp -p do_i_exist.txt $AZ_BATCH_NODE_SHARED_DIR"]),
-    #     user_identity=batchmodels.UserIdentity(auto_user=user),
-    #     wait_for_success=True,
-    #     resource_files=[]
-    # )
-    #
+    #     batch_client.pool.delete(_POOL_ID)
+    #     blob_client.delete_container(_JOB_ID)
+    # except:
+    #     pass
+
+    # Get the node agent SKU and image reference for the virtual machine configuration.
+    sku_to_use, image_ref_to_use = select_latest_verified_vm_image_with_node_agent_sku(batch_client, _NODE_OS_PUBLISHER, _NODE_OS_OFFER, _NODE_OS_SKU)
+
+    # Define the start task for the pool
+    node_start_command = [
+        "sudo touch ./do_i_exist.txt",
+        "sudo cp -p do_i_exist.txt $AZ_BATCH_NODE_SHARED_DIR"
+    ]
+
+    start_task = batchmodels.StartTask(
+        command_line=wrap_commands_in_shell("linux", node_start_command),
+        user_identity=batchmodels.UserIdentity(user_name="yoda", auto_user=batchmodels.AutoUserSpecification(scope=batchmodels.AutoUserScope.pool, elevation_level=batchmodels.ElevationLevel.admin)),
+        wait_for_success=True,
+        resource_files=[]
+    )
+
+    # Define the pool
+    new_pool = batch.models.PoolAddParameter(
+        id=_POOL_ID,
+        virtual_machine_configuration=batchmodels.VirtualMachineConfiguration(
+            image_reference=image_ref_to_use,
+            node_agent_sku_id=sku_to_use
+        ),
+        vm_size=_POOL_VM_SIZE,
+        enable_auto_scale=True,
+        auto_scale_formula='pendingTaskSamplePercent = $PendingTasks.GetSamplePercent(180 * TimeInterval_Second);pendingTaskSamples = pendingTaskSamplePercent < 70 ? 1 : avg($PendingTasks.GetSample(180 * TimeInterval_Second)); $TargetDedicatedNodes = min(100, pendingTaskSamples);',
+        auto_scale_evaluation_interval=datetime.timedelta(minutes=5),
+        start_task=start_task,
+    )
+
+    # Try to create the pool, and tell us why not
+    try:
+        batch_client.pool.add(new_pool)
+    except batchmodels.batch_error.BatchErrorException as err:
+        print_batch_exception(err)
+        raise
+
+    print('[{0:}] pool created'.format(_POOL_ID))
+
+    print('[{0:}] pool created'.format(_POOL_ID))
+
+    print("\n\n\nFinishing ... \n\n\n")
+
     # # Create a job
     # batch_client.job.add(job=_JOB_ID)
     # print('[{}] job created...'.format(_JOB_ID))
