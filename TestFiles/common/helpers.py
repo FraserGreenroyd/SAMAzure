@@ -154,11 +154,10 @@ def print_configuration(config):
     :type config: `configparser.ConfigParser`
     """
     configuration_dict = {s: dict(config.items(s)) for s in
-                          config.sections() + ['DEFAULT']}
+                          config.sections() + ['Default']}
 
     print("Configuration is:")
     print(json.dumps(configuration_dict, indent=4))
-
 
 
 def _read_stream_as_string(stream, encoding):

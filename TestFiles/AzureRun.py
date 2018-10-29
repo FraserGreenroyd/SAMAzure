@@ -16,8 +16,8 @@ import azure.batch.models as batchmodels
 
 import common.helpers
 
-_CONFIGURATION_PATH = os.path.join('resources', 'configuration.cfg')
-_CONTAINER_NAME = 'batch_container'
+_CONFIGURATION_PATH = os.path.join('common', 'configuration.cfg')
+_CONTAINER_NAME = 'test-batch-container'
 _SIMPLE_TASK_NAME = 'simple_task.py'
 _SIMPLE_TASK_PATH = os.path.join('resources', 'simple_task.py')
 
@@ -103,19 +103,19 @@ def execute_sample(config):
     :type config: `configparser.ConfigParser`
     """
     # Set up the configuration
-    batch_account_key = config.get('Batch', 'batchaccountkey')
-    batch_account_name = config.get('Batch', 'batchaccountname')
-    batch_service_url = config.get('Batch', 'batchserviceurl')
+    batch_account_key = config.get('Batch', 'batchaccountkey').replace("%", "%%")
+    batch_account_name = config.get('Batch', 'batchaccountname').replace("%", "%%")
+    batch_service_url = config.get('Batch', 'batchserviceurl').replace("%", "%%")
 
-    storage_account_key = config.get('Storage', 'storageaccountkey')
-    storage_account_name = config.get('Storage', 'storageaccountname')
-    storage_account_suffix = config.get('Storage', 'storageaccountsuffix')
+    storage_account_key = config.get('Storage', 'storageaccountkey').replace("%", "%%")
+    storage_account_name = config.get('Storage', 'storageaccountname').replace("%", "%%")
+    storage_account_suffix = config.get('Storage', 'storageaccountsuffix').replace("%", "%%")
 
-    should_delete_container = config.getboolean('DEFAULT', 'shoulddeletecontainer')
-    should_delete_job = config.getboolean('DEFAULT', 'shoulddeletejob')
-    should_delete_pool = config.getboolean('DEFAULT', 'shoulddeletepool')
-    pool_vm_size = config.get('DEFAULT', 'poolvmsize')
-    pool_vm_count = config.getint('DEFAULT', 'poolvmcount')
+    should_delete_container = config.getboolean('Default', 'shoulddeletecontainer')
+    should_delete_job = config.getboolean('Default', 'shoulddeletejob')
+    should_delete_pool = config.getboolean('Default', 'shoulddeletepool')
+    pool_vm_size = config.get('Default', 'poolvmsize')
+    pool_vm_count = config.getint('Default', 'poolvmcount')
 
     # Print the settings we are running with
     common.helpers.print_configuration(config)
@@ -133,6 +133,7 @@ def execute_sample(config):
 
     job_id = common.helpers.generate_unique_resource_name("batch_job")
     pool_id = "batch_pool"
+    
     try:
         create_pool(batch_client, block_blob_client, pool_id, pool_vm_size, pool_vm_count)
 
@@ -157,10 +158,23 @@ def execute_sample(config):
 
 
 if __name__ == '__main__':
-    config = configparser.ConfigParser()
+
+    print("\n\n")
+    print("###############################")
+    print("########### START #############")
+    print("###############################")
+    print("\n")
+
+    config = configparser.RawConfigParser()
     config.read(_CONFIGURATION_PATH)
 
     execute_sample(config)
+
+    print("\n")
+    print("###############################")
+    print("########### FINISH ############")
+    print("###############################")
+    print("\n\n")
 
 # if __name__ == '__main__':
 #
