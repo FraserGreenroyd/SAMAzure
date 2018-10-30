@@ -505,3 +505,17 @@ def wrap_commands_in_shell(ostype, commands):
         return 'cmd.exe /c "{}"'.format('&'.join(commands))
     else:
         raise ValueError('unknown ostype: {}'.format(ostype))
+
+
+def find_files(directory, extension):
+    """Lists files of a specified extension in the target directory.
+
+    :param str directory: The directory to explore
+    :param str extension: The file extension to search for
+    :return str: List of files in the directory with the specified extension
+    """
+    files = []
+    for file in os.listdir(directory):
+        if file.endswith(extension):
+            files.append(os.path.abspath(os.path.join(directory, file)))
+    return sorted(files)
