@@ -261,7 +261,7 @@ if __name__ == '__main__':
         endpoint_suffix=storage_account_suffix)
 
     job_id = common.helpers.generate_unique_resource_name("batch_job")
-    pool_id = "batch_pool_1"#"batch_pool"
+    pool_id = "batch_pool_2"#"batch_pool"
 
     # Upload files to blob
     block_blob_client.create_container(_CONTAINER_NAME, fail_on_exist=False)
@@ -299,13 +299,13 @@ if __name__ == '__main__':
 
     pool_start_commands = [
         "cd / ",
-        "wget --no-check-certificate https://github.com/FraserGreenroyd/SAMAzure/raw/master/TestFiles/resources/azure_common/radiance-5.1.0-Linux.tar.gz ",
-        "tar xzf radiance-5.1.0-Linux.tar.gz ",
-        "rsync -av /radiance-5.1.0-Linux/usr/local/radiance/bin/ /usr/local/bin/ ",
-        "rsync -av /radiance-5.1.0-Linux/usr/local/radiance/lib/ /usr/local/lib/ray/ ",
-        "wget --no-check-certificate https://github.com/FraserGreenroyd/SAMAzure/raw/master/TestFiles/resources/azure_common/lb_hb.tar.gz ",
-        "tar xzf lb_hb.tar.gz ",
-        "wget --no-check-certificate https://github.com/FraserGreenroyd/SAMAzure/raw/master/TestFiles/resources/azure_common/RunHoneybeeRadiance.py"
+        "sudo wget --no-check-certificate https://github.com/FraserGreenroyd/SAMAzure/raw/master/TestFiles/resources/azure_common/radiance-5.1.0-Linux.tar.gz",
+        "sudo tar xzf radiance-5.1.0-Linux.tar.gz",
+        "sudo rsync -av /radiance-5.1.0-Linux/usr/local/radiance/bin/ /usr/local/bin/",
+        "sudo rsync -av /radiance-5.1.0-Linux/usr/local/radiance/lib/ /usr/local/lib/ray/",
+        "sudo wget --no-check-certificate https://github.com/FraserGreenroyd/SAMAzure/raw/master/TestFiles/resources/azure_common/lb_hb.tar.gz",
+        "sudo tar xzf lb_hb.tar.gz",
+        "sudo wget --no-check-certificate https://github.com/FraserGreenroyd/SAMAzure/raw/master/TestFiles/resources/azure_common/RunHoneybeeRadiance.py"
     ]
 
     pool = batchmodels.PoolAddParameter(
