@@ -313,7 +313,7 @@ if __name__ == '__main__':
         virtual_machine_configuration=batchmodels.VirtualMachineConfiguration(
             image_reference=image_ref_to_use,
             node_agent_sku_id=sku_to_use),
-        vm_size=vm_size,
+        vm_size=pool_vm_size,
         target_dedicated_nodes=vm_count,
         start_task=batchmodels.StartTask(
             command_line=common.helpers.wrap_commands_in_shell("linux", pool_start_commands),
