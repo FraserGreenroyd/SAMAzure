@@ -37,6 +37,9 @@ _LB_HB_SAS_URL = "https://radfiles.blob.core.windows.net/0000000-common/lb_hb.ta
 _SCRIPT_NAME = "RunHoneybeeRadiance.py"
 _SCRIPT_SAS_URL = "https://radfiles.blob.core.windows.net/0000000-common/RunHoneybeeRadiance.py?sp=r&st=2018-10-26T12:29:33Z&se=2030-01-01T00:00:00Z&spr=https&sv=2017-11-09&sig=s8l9BRRtx%2FTHJBHdZAc73JUCNrx8f7ndCE2nkjCWY4c%3D&sr=b"
 
+config = configparser.RawConfigParser()
+config.read(_CONFIGURATION_PATH)
+
 def create_pool(batch_client, block_blob_client, pool_id, vm_size, vm_count):
     """Creates an Azure Batch pool with the specified id.
 
@@ -289,6 +292,34 @@ if __name__ == '__main__':
                 _GRID_FILE,
                 datetime.datetime.utcnow() + datetime.timedelta(hours=12)))
         analysis_grid_names.append(_GRID_NAME)
+
+    sku_to_use, image_ref_to_use = \
+        common.helpers.select_latest_verified_vm_image_with_node_agent_sku(
+            batch_client, 'Canonical', 'UbuntuServer', '16.04')
+
+    pool_start_commands = [
+        "cd / ",
+        "wget --no-check-certificate https://github.com/FraserGreenroyd/SAMAzure/raw/TQECFiles/TestFiles/resources/azure_common/radiance-5.1.0-Linux.tar.gz ",
+        "tar xzf radiance-5.1.0-Linux.tar.gz ",
+        "rsync -av /radiance-5.1.0-Linux/usr/local/radiance/bin/ /usr/local/bin/ ",
+        "rsync -av /radiance-5.1.0-Linux/usr/local/radiance/lib/ /usr/local/lib/ray/ ",
+        "wget --no-check-certificate https://github.com/FraserGreenroyd/SAMAzure/raw/TQECFiles/TestFiles/resources/azure_common/lb_hb.tar.gz ",
+        "tar xzf lb_hb.tar.gz ",
+        "wget --no-check-certificate https://github.com/FraserGreenroyd/SAMAzure/raw/TQECFiles/TestFiles/resources/azure_common/RunHoneybeeRadiance.py"
+    ]
+
+    pool = batchmodels.PoolAddParameter(
+        id=pool_id,
+        virtual_machine_configuration=batchmodels.VirtualMachineConfiguration(
+            image_reference=image_ref_to_use,
+            node_agent_sku_id=sku_to_use),
+        vm_size=vm_size,
+        target_dedicated_nodes=vm_count,
+        start_task=batchmodels.StartTask(
+            command_line=common.helpers.wrap_commands_in_shell("linux", pool_start_commands),
+            resource_files=[]))
+
+    common.helpers.create_pool_if_not_exist(batch_client, pool)
 
     # # Create a job for each group of 100 analysis grids (maximum number of task per job = 100)
     # job = batchmodels.JobAddParameter(id=job_id, pool_info=batchmodels.PoolInformation(pool_id=pool_id))
