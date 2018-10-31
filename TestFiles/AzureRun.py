@@ -261,7 +261,7 @@ if __name__ == '__main__':
         endpoint_suffix=storage_account_suffix)
 
     job_id = common.helpers.generate_unique_resource_name("batch_job")
-    pool_id = "batch_pool"
+    pool_id = "batch_pool_1"#"batch_pool"
 
     # Upload files to blob
     block_blob_client.create_container(_CONTAINER_NAME, fail_on_exist=False)
@@ -299,13 +299,13 @@ if __name__ == '__main__':
 
     pool_start_commands = [
         "cd / ",
-        "wget --no-check-certificate https://github.com/FraserGreenroyd/SAMAzure/raw/TQECFiles/TestFiles/resources/azure_common/radiance-5.1.0-Linux.tar.gz ",
+        "wget --no-check-certificate https://github.com/FraserGreenroyd/SAMAzure/raw/master/TestFiles/resources/azure_common/radiance-5.1.0-Linux.tar.gz ",
         "tar xzf radiance-5.1.0-Linux.tar.gz ",
         "rsync -av /radiance-5.1.0-Linux/usr/local/radiance/bin/ /usr/local/bin/ ",
         "rsync -av /radiance-5.1.0-Linux/usr/local/radiance/lib/ /usr/local/lib/ray/ ",
-        "wget --no-check-certificate https://github.com/FraserGreenroyd/SAMAzure/raw/TQECFiles/TestFiles/resources/azure_common/lb_hb.tar.gz ",
+        "wget --no-check-certificate https://github.com/FraserGreenroyd/SAMAzure/raw/master/TestFiles/resources/azure_common/lb_hb.tar.gz ",
         "tar xzf lb_hb.tar.gz ",
-        "wget --no-check-certificate https://github.com/FraserGreenroyd/SAMAzure/raw/TQECFiles/TestFiles/resources/azure_common/RunHoneybeeRadiance.py"
+        "wget --no-check-certificate https://github.com/FraserGreenroyd/SAMAzure/raw/master/TestFiles/resources/azure_common/RunHoneybeeRadiance.py"
     ]
 
     pool = batchmodels.PoolAddParameter(
@@ -317,7 +317,8 @@ if __name__ == '__main__':
         target_dedicated_nodes=pool_vm_count,
         start_task=batchmodels.StartTask(
             command_line=common.helpers.wrap_commands_in_shell("linux", pool_start_commands),
-            resource_files=[]))
+            resource_files=[])
+    )
 
     common.helpers.create_pool_if_not_exist(batch_client, pool)
 
