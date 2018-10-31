@@ -167,13 +167,74 @@ def submit_job_and_add_task(batch_client, block_blob_client, job_id, pool_id):
     [batch_client.task.add(job_id=job.id, task=task) for task in tasks]
 
 
-def execute_sample(config):
-    """Executes the sample with the specified configurations.
+# def execute_sample(config):
+#     """Executes the sample with the specified configurations.
+#
+#     :param config: The global configuration to use.
+#     :type config: `configparser.ConfigParser`
+#     """
+#     # Set up the configuration
+#     batch_account_key = config.get('Batch', 'batchaccountkey').replace("%", "%%")
+#     batch_account_name = config.get('Batch', 'batchaccountname').replace("%", "%%")
+#     batch_service_url = config.get('Batch', 'batchserviceurl').replace("%", "%%")
+#
+#     storage_account_key = config.get('Storage', 'storageaccountkey').replace("%", "%%")
+#     storage_account_name = config.get('Storage', 'storageaccountname').replace("%", "%%")
+#     storage_account_suffix = config.get('Storage', 'storageaccountsuffix').replace("%", "%%")
+#
+#     should_delete_container = config.getboolean('Default', 'shoulddeletecontainer')
+#     should_delete_job = config.getboolean('Default', 'shoulddeletejob')
+#     should_delete_pool = config.getboolean('Default', 'shoulddeletepool')
+#     pool_vm_size = config.get('Default', 'poolvmsize')
+#     pool_vm_count = config.getint('Default', 'poolvmcount')
+#
+#     # Print the settings we are running with
+#     # common.helpers.print_configuration(config)
+#
+#     credentials = batchauth.SharedKeyCredentials(batch_account_name, batch_account_key)
+#     batch_client = batch.BatchServiceClient(credentials, base_url=batch_service_url)
+#
+#     # Retry 5 times -- default is 3
+#     batch_client.config.retry_policy.retries = 3
+#
+#     block_blob_client = azureblob.BlockBlobService(
+#         account_name=storage_account_name,
+#         account_key=storage_account_key,
+#         endpoint_suffix=storage_account_suffix)
+#
+#     job_id = common.helpers.generate_unique_resource_name("batch_job")
+#     pool_id = "batch_pool"
+#
+#     try:
+#         create_pool(batch_client, block_blob_client, pool_id, pool_vm_size, pool_vm_count)
+#
+#         submit_job_and_add_task(batch_client, block_blob_client, job_id, pool_id)
+#
+#         common.helpers.wait_for_tasks_to_complete(batch_client, job_id, datetime.timedelta(minutes=25))
+#
+#         tasks = batch_client.task.list(job_id)
+#         task_ids = [task.id for task in tasks]
+#
+#         common.helpers.print_task_output(batch_client, job_id, task_ids)
+#     finally:
+#         # clean up
+#         if should_delete_container:
+#             block_blob_client.delete_container(_CONTAINER_NAME, fail_not_exist=False)
+#         if should_delete_job:
+#             print("Deleting job: ", job_id)
+#             batch_client.job.delete(job_id)
+#         if should_delete_pool:
+#             print("Deleting pool: ", pool_id)
+#             batch_client.pool.delete(pool_id)
 
-    :param config: The global configuration to use.
-    :type config: `configparser.ConfigParser`
-    """
-    # Set up the configuration
+
+if __name__ == '__main__':
+
+    print("\n\n")
+    print("###############################")
+    print("########### START #############")
+    print("###############################")
+
     batch_account_key = config.get('Batch', 'batchaccountkey').replace("%", "%%")
     batch_account_name = config.get('Batch', 'batchaccountname').replace("%", "%%")
     batch_service_url = config.get('Batch', 'batchserviceurl').replace("%", "%%")
@@ -188,14 +249,8 @@ def execute_sample(config):
     pool_vm_size = config.get('Default', 'poolvmsize')
     pool_vm_count = config.getint('Default', 'poolvmcount')
 
-    # Print the settings we are running with
-    # common.helpers.print_configuration(config)
-
     credentials = batchauth.SharedKeyCredentials(batch_account_name, batch_account_key)
     batch_client = batch.BatchServiceClient(credentials, base_url=batch_service_url)
-
-    # Retry 5 times -- default is 3
-    batch_client.config.retry_policy.retries = 3
 
     block_blob_client = azureblob.BlockBlobService(
         account_name=storage_account_name,
@@ -204,41 +259,60 @@ def execute_sample(config):
 
     job_id = common.helpers.generate_unique_resource_name("batch_job")
     pool_id = "batch_pool"
-    
-    try:
-        create_pool(batch_client, block_blob_client, pool_id, pool_vm_size, pool_vm_count)
 
-        submit_job_and_add_task(batch_client, block_blob_client, job_id, pool_id)
+    # Upload files to blob
+    block_blob_client.create_container(_CONTAINER_NAME, fail_on_exist=False)
 
-        common.helpers.wait_for_tasks_to_complete(batch_client, job_id, datetime.timedelta(minutes=25))
+    surfaces_sas_url = common.helpers.upload_blob_and_create_sas(
+        block_blob_client,
+        _CONTAINER_NAME,
+        "surfaces.json",
+        _SURFACES_PATH,
+        datetime.datetime.utcnow() + datetime.timedelta(hours=12))
 
-        tasks = batch_client.task.list(job_id)
-        task_ids = [task.id for task in tasks]
+    sky_mtx_sas_url = common.helpers.upload_blob_and_create_sas(
+        block_blob_client,
+        _CONTAINER_NAME,
+        "sky_mtx.json",
+        _SKY_MTX_PATH,
+        datetime.datetime.utcnow() + datetime.timedelta(hours=12))
 
-        common.helpers.print_task_output(batch_client, job_id, task_ids)
-    finally:
-        # clean up
-        if should_delete_container:
-            block_blob_client.delete_container(_CONTAINER_NAME, fail_not_exist=False)
-        if should_delete_job:
-            print("Deleting job: ", job_id)
-            batch_client.job.delete(job_id)
-        if should_delete_pool:
-            print("Deleting pool: ", pool_id)
-            batch_client.pool.delete(pool_id)
+    analysis_grid_sas_urls = []
+    analysis_grid_names = []
+    for _GRID_FILE in _ANALYSIS_GRID_PATHS:
+        _GRID_NAME = os.path.basename(_GRID_FILE)
+        analysis_grid_sas_urls.append(
+            common.helpers.upload_blob_and_create_sas(
+                block_blob_client,
+                _CONTAINER_NAME,
+                _GRID_NAME,
+                _GRID_FILE,
+                datetime.datetime.utcnow() + datetime.timedelta(hours=12)))
+        analysis_grid_names.append(_GRID_NAME)
 
-
-if __name__ == '__main__':
-
-    print("\n\n")
-    print("###############################")
-    print("########### START #############")
-    print("###############################")
-
-    config = configparser.RawConfigParser()
-    config.read(_CONFIGURATION_PATH)
-
-    execute_sample(config)
+    # # Create a job for each group of 100 analysis grids (maximum number of task per job = 100)
+    # job = batchmodels.JobAddParameter(id=job_id, pool_info=batchmodels.PoolInformation(pool_id=pool_id))
+    #
+    # batch_client.job.add(job)
+    #
+    # # Create a task per analysis grid
+    # tasks = []
+    # for n, grid_sas_url in enumerate(analysis_grid_sas_urls):
+    #     tasks.append(batchmodels.TaskAddParameter(
+    #         id=analysis_grid_names[n].replace(".json", ""),
+    #         command_line="cd && cd / && python RunRadiance.py",
+    #         resource_files=[
+    #             batchmodels.ResourceFile(file_path=analysis_grid_names[n], blob_source=grid_sas_url),
+    #             batchmodels.ResourceFile(file_path="sky_mtx.json", blob_source=sky_mtx_sas_url),
+    #             batchmodels.ResourceFile(file_path="surfaces.json", blob_source=surfaces_sas_url),
+    #         ],
+    #         output_files=[
+    #             batchmodels.OutputFile(
+    #                 file_pattern=analysis_grid_names[n].replace(".json", "_result.json"),
+    #                 destination=batchmodels.OutputFileDestination(container=_CONTAINER_NAME),
+    #                 upload_options=batchmodels.OutputFileUploadOptions(upload_condition="taskCompletion"))]))
+    #
+    # [batch_client.task.add(job_id=job.id, task=task) for task in tasks]
 
     print("###############################")
     print("########### FINISH ############")
