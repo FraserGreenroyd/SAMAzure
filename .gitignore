@@ -2,6 +2,7 @@
 *.suo
 *.user
 *.sln.docstates
+.idea
 HoneybeeRecipeJSONs/
 Test_4ZoneIES/
 IDFs/
@@ -316,3 +317,4 @@ project.lock.json
 #####
 # End of core ignore list, below put you custom 'per project' settings (patterns or path)
 #####
+/TestFiles/.ipynb_checkpoints/
