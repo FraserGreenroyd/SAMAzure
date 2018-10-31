@@ -137,16 +137,18 @@ def execute_sample(config):
     pool_id = "batch_pool"
     
     try:
+
         create_pool(batch_client, block_blob_client, pool_id, pool_vm_size, pool_vm_count)
-
+        print("submitting job")
         submit_job_and_add_task(batch_client, block_blob_client, job_id, pool_id)
-
+        print("job submitted")
         common.helpers.wait_for_tasks_to_complete(batch_client, job_id, datetime.timedelta(minutes=25))
-
+        print("adding task/s")
         tasks = batch_client.task.list(job_id)
         task_ids = [task.id for task in tasks]
 
         common.helpers.print_task_output(batch_client, job_id, task_ids)
+        print("tasks complete")
     finally:
         # clean up
         if should_delete_container:
