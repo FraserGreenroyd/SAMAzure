@@ -308,6 +308,11 @@ if __name__ == '__main__':
         "wget --no-check-certificate https://github.com/FraserGreenroyd/SAMAzure/raw/master/TestFiles/resources/azure_common/RunHoneybeeRadiance.py"
     ]
 
+    user = batchmodels.UserIdentity(
+        auto_user=batchmodels.AutoUserSpecification(
+            elevation_level=batchmodels.ElevationLevel.admin,
+            scope=batchmodels.AutoUserScope.pool))
+
     pool = batchmodels.PoolAddParameter(
         id=pool_id,
         virtual_machine_configuration=batchmodels.VirtualMachineConfiguration(
@@ -316,7 +321,7 @@ if __name__ == '__main__':
         vm_size=pool_vm_size,
         target_dedicated_nodes=pool_vm_count,
         start_task=batchmodels.StartTask(
-            user_identity=batchmodels.AutoUserSpecification(scope="pool", elevation_level="admin"),
+            user_identity=user,
             command_line=common.helpers.wrap_commands_in_shell("linux", pool_start_commands),
             resource_files=[]
         ),
