@@ -1,3 +1,4 @@
+# coding=utf-8
 from .location import Location
 from .analysisperiod import AnalysisPeriod
 from .datatype import DataPoint  # Temperature, RelativeHumidity, Radiation, Illuminance
@@ -6,6 +7,17 @@ from .datacollection import DataCollection
 from .dt import DateTime
 
 import os
+import copy
+import sys
+if (sys.version_info > (3, 0)):
+    # https://docs.python.org/3/tutorial/inputoutput.html#reading-and-writing-files
+    # python 3
+    readmode = 'r'
+    writemode = 'w'
+    xrange = range
+else:
+    readmode = 'rb'
+    writemode = 'wb'
 
 
 class EPW(object):
@@ -45,6 +57,7 @@ class EPW(object):
         albedo
         liquid_precipitation_depth
         liquid_precipitation_quantity
+        sky_temperature
     """
 
     def __init__(self, file_path=None):
@@ -58,7 +71,7 @@ class EPW(object):
 
     @property
     def file_path(self):
-        """Get or set path to epw file."""
+        """Get path to epw file."""
         return self._file_path
 
     @property
@@ -73,6 +86,7 @@ class EPW(object):
 
     @file_path.setter
     def file_path(self, epw_file_path):
+        """Get path to epw file."""
         self._file_path = os.path.normpath(epw_file_path)
 
         if not os.path.isfile(self._file_path):
@@ -98,24 +112,24 @@ class EPW(object):
     def header(self):
         """Return epw file header."""
         if not self.is_location_loaded:
-            self.import_data(import_location_only=True)
+            self._import_data(import_location_only=True)
         return self._header
 
     @property
     def location(self):
         """Return location data."""
         if not self.is_location_loaded:
-            self.import_data(import_location_only=True)
+            self._import_data(import_location_only=True)
         return self._location
 
     # TODO: import EPW header. Currently I just ignore header data
-    def import_data(self, import_location_only=False):
+    def _import_data(self, import_location_only=False):
         """Import data from an epw file.
 
         Hourly data will be saved in self.data and location data
         will be saved in self.location
         """
-        with open(self.file_path, 'rb') as epwin:
+        with open(self.file_path, readmode) as epwin:
             line = epwin.readline()
 
             # import location data
@@ -155,9 +169,9 @@ class EPW(object):
                 # create header
                 field = EPWFields.field_by_number(field_number)
                 # the header of data collection
-                header = Header(location=self.location,
-                                analysis_period=analysis_period,
-                                data_type=field.name, unit=field.unit)
+                header = Header(location=self.location, analysis_period=analysis_period,
+                                data_type=field.name, unit=field.unit,
+                                middle_hour=field.middle_hour)
 
                 # create an empty data list with the header
                 self._data.append(DataCollection(header=header))
@@ -187,6 +201,22 @@ class EPW(object):
 
                 line = epwin.readline()
 
+            # move last item to start position for fields on the hour
+            for field_number in xrange(self._num_of_fields):
+                middle_hour = EPWFields.field_by_number(field_number).middle_hour
+                if middle_hour is False:
+                    # shift datetimes for an hour
+                    for data in self._data[field_number]:
+                        try:
+                            data.datetime = data.datetime.add_hour(1)
+                        except ValueError:
+                            # this is the last hour
+                            data.datetime = DateTime(1, 1, 0)
+
+                    # now move the last hour to first
+                    last_hour = self._data[field_number].pop()
+                    self._data[field_number].insert(0, last_hour)
+
             self._is_data_loaded = True
 
     def _get_data_by_field(self, field_number):
@@ -203,7 +233,7 @@ class EPW(object):
             An annual Ladybug list
         """
         if not self.is_data_loaded:
-            self.import_data()
+            self._import_data()
 
         # check input data
         if not 0 <= field_number < self._num_of_fields:
@@ -225,13 +255,20 @@ class EPW(object):
 
         # load data if it's  not loaded
         if not self.is_data_loaded:
-            self.import_data()
+            self._import_data()
 
         # write the file
-        with open(full_path, 'wb') as modEpwFile:
+        with open(full_path, writemode) as modEpwFile:
             modEpwFile.writelines(self._header)
             lines = []
             try:
+                # move first item to end position for fields on the hour
+                for field in range(0, self._num_of_fields):
+                    middle_hour = EPWFields.field_by_number(field).middle_hour
+                    if middle_hour is False:
+                        first_hour = self._data[field].pop(0)
+                        self._data[field].append(first_hour)
+
                 for hour in xrange(0, 8760):
                     line = []
                     for field in range(0, self._num_of_fields):
@@ -247,6 +284,12 @@ class EPW(object):
                 modEpwFile.writelines(lines)
             finally:
                 del(lines)
+                # move last item to start position for fields on the hour
+                for field in range(0, self._num_of_fields):
+                    middle_hour = EPWFields.field_by_number(field).middle_hour
+                    if middle_hour is False:
+                        last_hour = self._data[field].pop()
+                        self._data[field].insert(0, last_hour)
 
         return full_path
 
@@ -703,6 +746,31 @@ class EPW(object):
         """
         return self._get_data_by_field(34)
 
+    @property
+    def sky_temperature(self):
+        """Return annual Sky Temperature as a Ladybug Data List.
+
+        This value in degrees Celcius is derived from the Horizontal Infrared
+        Radiation Intensity in Wh/m2. It represents the long wave radiant
+        temperature of the sky
+        Read more at: https://bigladdersoftware.com/epx/docs/8-9/engineering-reference
+            /climate-calculations.html#energyplus-sky-temperature-calculation
+        """
+        # create sky temperature data collection from horizontal infrared
+        horiz_ir = self._get_data_by_field(12)
+        sky_temp_header = copy.copy(horiz_ir.header)
+        sky_temp_header.data_type = 'Sky Temperature'
+        sky_temp_header.unit = 'C'
+
+        # calculate sy temperature for each hour
+        sky_temp_data = []
+        for hor_ir in horiz_ir.values:
+            dat = hor_ir.datetime
+            temp = ((float(hor_ir) / (5.6697 * (10**(-8))))**(0.25)) - 273.15
+            sky_temp_data.append(DataPoint(temp, dat))
+        sky_temp = DataCollection(sky_temp_data, sky_temp_header)
+        return sky_temp
+
     def _get_wea_header(self):
         return "place %s\n" % self.location.city + \
             "latitude %.2f\n" % self.location.latitude + \
@@ -765,27 +833,33 @@ class EPWFields(object):
 
     FIELDS = {
         0: {'name': 'Year',
-            'type': int
+            'type': int,
+            'middle_hour': False
             },
 
         1: {'name': 'Month',
-            'type': int
+            'type': int,
+            'middle_hour': False
             },
 
         2: {'name': 'Day',
-            'type': int
+            'type': int,
+            'middle_hour': False
             },
 
         3: {'name': 'Hour',
-            'type': int
+            'type': int,
+            'middle_hour': False
             },
 
         4: {'name': 'Minute',
-            'type': int
+            'type': int,
+            'middle_hour': False
             },
 
         5: {'name': 'Uncertainty Flags',
-            'type': str
+            'type': str,
+            'middle_hour': False
             },
 
         6: {'name': 'Dry Bulb Temperature',
@@ -793,7 +867,8 @@ class EPWFields(object):
             'unit': 'C',
             'min': -70,
             'max': 70,
-            'missing': 99.9
+            'missing': 99.9,
+            'middle_hour': False
             },
 
         7: {'name': 'Dew Point Temperature',
@@ -801,7 +876,8 @@ class EPWFields(object):
             'unit': 'C',
             'min': -70,
             'max': 70,
-            'missing': 99.9
+            'missing': 99.9,
+            'middle_hour': False
             },
 
         8: {'name': 'Relative Humidity',
@@ -809,7 +885,8 @@ class EPWFields(object):
             'unit': '%',
             'missing': 999,
             'min': 0,
-            'max': 110
+            'max': 110,
+            'middle_hour': False
             },
 
         9: {'name': 'Atmospheric Station Pressure',
@@ -817,77 +894,88 @@ class EPWFields(object):
             'unit': 'Pa',
             'missing': 999999,
             'min': 31000,
-            'max': 120000
+            'max': 120000,
+            'middle_hour': False
             },
 
         10: {'name': 'Extraterrestrial Horizontal Radiation',
              'type': int,
              'unit': 'Wh/m2',
              'missing': 9999,
-             'min': 0
+             'min': 0,
+             'middle_hour': True
              },
 
         11: {'name': 'Extraterrestrial Direct Normal Radiation',
              'type': int,
              'unit': 'Wh/m2',
              'missing': 9999,
-             'min': 0
+             'min': 0,
+             'middle_hour': True
              },
 
         12: {'name': 'Horizontal Infrared Radiation Intensity',
              'type': int,
              'unit': 'Wh/m2',
              'missing': 9999,
-             'min': 0
+             'min': 0,
+             'middle_hour': False
              },
 
         13: {'name': 'Global Horizontal Radiation',
              'type': int,
              'unit': 'Wh/m2',
              'missing': 9999,
-             'min': 0
+             'min': 0,
+             'middle_hour': True
              },
 
         14: {'name': 'Direct Normal Radiation',
              'type': int,
              'unit': 'Wh/m2',
              'missing': 9999,
-             'min': 0
+             'min': 0,
+             'middle_hour': True
              },
 
         15: {'name': 'Diffuse Horizontal Radiation',
              'type': int,
              'unit': 'Wh/m2',
              'missing': 9999,
-             'min': 0
+             'min': 0,
+             'middle_hour': True
              },
 
         16: {'name': 'Global Horizontal Illuminance',
              'type': int,
              'unit': 'lux',
              'missing': 999999,  # note will be missing if >= 999900
-             'min': 0
+             'min': 0,
+             'middle_hour': True
              },
 
         17: {'name': 'Direct Normal Illuminance',
              'type': int,
              'unit': 'lux',
              'missing': 999999,  # note will be missing if >= 999900
-             'min': 0
+             'min': 0,
+             'middle_hour': True
              },
 
         18: {'name': 'Diffuse Horizontal Illuminance',
              'type': int,
              'unit': 'lux',
              'missing': 999999,  # note will be missing if >= 999900
-             'min': 0
+             'min': 0,
+             'middle_hour': True
              },
 
         19: {'name': 'Zenith Luminance',
              'type': int,
              'unit': 'Cd/m2',
              'missing': 9999,  # note will be missing if >= 9999
-             'min': 0
+             'min': 0,
+             'middle_hour': True
              },
 
         20: {'name': 'Wind Direction',
@@ -895,7 +983,8 @@ class EPWFields(object):
              'unit': 'degrees',
              'missing': 999,
              'min': 0,
-             'max': 360
+             'max': 360,
+             'middle_hour': False
              },
 
         21: {'name': 'Wind Speed',
@@ -903,79 +992,93 @@ class EPWFields(object):
              'unit': 'm/s',
              'missing': 999,
              'min': 0,
-             'max': 40
+             'max': 40,
+             'middle_hour': False
              },
 
         22: {'name': 'Total Sky Cover',  # (used if Horizontal IR Intensity missing)
              'type': int,
              'missing': 99,
              'min': 0,
-             'max': 10
+             'max': 10,
+             'middle_hour': False
              },
 
         23: {'name': 'Opaque Sky Cover',  # (used if Horizontal IR Intensity missing)
              'type': int,
-             'missing': 99
+             'missing': 99,
+             'middle_hour': False
              },
 
         24: {'name': 'Visibility',
              'type': float,
              'unit': 'km',
-             'missing': 9999
+             'missing': 9999,
+             'middle_hour': False
              },
 
         25: {'name': 'Ceiling Height',
              'type': int,
              'unit': 'm',
-             'missing': 99999
+             'missing': 99999,
+             'middle_hour': False
              },
 
         26: {'name': 'Present Weather Observation',
-             'type': int
+             'type': int,
+             'middle_hour': False
              },
 
         27: {'name': 'Present Weather Codes',
-             'type': int
+             'type': int,
+             'middle_hour': False
              },
 
         28: {'name': 'Precipitable Water',
              'type': int,
              'unit': 'mm',
-             'missing': 999
+             'missing': 999,
+             'middle_hour': False
              },
 
         29: {'name': 'Aerosol Optical Depth',
              'type': float,
              'unit': 'thousandths',
-             'missing': 999
+             'missing': 999,
+             'middle_hour': False
              },
 
         30: {'name': 'Snow Depth',
              'type': int,
              'unit': 'cm',
-             'missing': 999
+             'missing': 999,
+             'middle_hour': False
              },
 
         31: {'name': 'Days Since Last Snowfall',
              'type': int,
-             'missing': 99
+             'missing': 99,
+             'middle_hour': False
              },
 
         32: {'name': 'Albedo',
              'type': float,
-             'missing': 999
+             'missing': 999,
+             'middle_hour': False
              },
 
         33: {'name': 'Liquid Precipitation Depth',
              'type': float,
              'unit': 'mm',
-             'missing': 999
+             'missing': 999,
+             'middle_hour': False
              },
 
         34: {'name': 'Liquid Precipitation Quantity',
              'type': float,
              'unit': 'hr',
-             'missing': 99
+             'missing': 99,
+             'middle_hour': False
              }
     }
 
@@ -1025,7 +1128,7 @@ class EPWFields(object):
         """EPW fields representation."""
         fields = (
             '{}: {}'.format(key, value['name'])
-            for key, value in self.FIELDS.iteritems()
+            for key, value in self.FIELDS.items()
         )
 
         return '\n'.join(fields)
@@ -1043,6 +1146,7 @@ class EPWField(object):
     def __init__(self, field_dict):
         self.name = field_dict['name']
         self.value_type = field_dict['type']
+        self.middle_hour = field_dict['middle_hour']
         if 'unit' in field_dict:
             self.unit = field_dict['unit']
         else:

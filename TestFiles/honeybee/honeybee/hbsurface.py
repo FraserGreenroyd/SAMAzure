@@ -289,17 +289,3 @@ class HBSurface(HBAnalysisSurface):
 
         # set up parent object if it's not set
         fenestration_surface._parent = self
-
-    def to_json(self):
-        """Get HBSurface as a dictionary.
-            {"name": "",
-            "vertices": [[(x, y, z), (x1, y1, z1), (x2, y2, z2)]],
-            "surface_material": {},  // radiance material json file
-            "surface_type": null  // 0: wall, 5: window
-            }
-        """
-        return {"name": self.name,
-                "vertices": [[tuple(pt) for pt in ptgroup] for ptgroup in self.points],
-                "surface_material": self.radiance_material.to_json(),
-                "surface_type": self.surface_type.typeId
-                }

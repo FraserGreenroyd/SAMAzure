@@ -1,4 +1,5 @@
 """Ladybug datetime."""
+# coding=utf-8
 from datetime import datetime
 
 
@@ -6,26 +7,31 @@ class DateTime(datetime):
     """Create Ladybug Date time.
 
     Args:
-        month: A value for month between 1-12. (Defualt: 1)
-        day: A value for day between 1-31. (Defualt: 1)
-        hour: A value for hour between 0-23. (Defualt: 0)
-        minute: A value for month between 0-59. (Defualt: 0)
+        month: A value for month between 1-12 (Defualt: 1).
+        day: A value for day between 1-31 (Defualt: 1).
+        hour: A value for hour between 0-23 (Defualt: 0).
+        minute: A value for month between 0-59 (Defualt: 0).
+        leap_year: A boolean to indicate if datetime is for a leap year
+            (Default: False).
     """
 
     __slots__ = ()
 
-    def __new__(cls, month=1, day=1, hour=0, minute=0):
+    def __new__(cls, month=1, day=1, hour=0, minute=0, leap_year=False):
         """Create Ladybug datetime.
 
         Args:
-            month: A value for month between 1-12. (Defualt: 1)
-            day: A value for day between 1-31. (Defualt: 1)
-            hour: A value for hour between 0-23. (Defualt: 0)
-            minute: A value for month between 0-59. (Defualt: 0)
+            month: A value for month between 1-12 (Defualt: 1).
+            day: A value for day between 1-31 (Defualt: 1).
+            hour: A value for hour between 0-23 (Defualt: 0).
+            minute: A value for month between 0-59 (Defualt: 0).
+            leap_year: A boolean to indicate if datetime is for a leap year
+                (Default: False).
         """
+        year = 2016 if leap_year else 2017
         hour, minute = cls._calculate_hour_and_minute(hour + minute / 60.0)
         try:
-            return datetime.__new__(cls, 2017, month, day, hour, minute)
+            return datetime.__new__(cls, year, month, day, hour, minute)
         except ValueError as e:
             raise ValueError("{}:\n\t({}/{}@{}:{})(m/d@h:m)".format(
                 e, month, day, hour, minute
@@ -55,28 +61,37 @@ class DateTime(datetime):
         if 'minute' not in data:
             data['minute'] = 0
 
-        return cls(data['month'], data['day'], data['hour'], data['minute'])
+        if 'year' not in data:
+            data['year'] = 2017
+
+        leap_year = True if int(data['year']) == 2016 else False
+        return cls(data['month'], data['day'], data['hour'], data['minute'], leap_year)
 
     @classmethod
-    def from_hoy(cls, hoy):
+    def from_hoy(cls, hoy, leap_year=False):
         """Create Ladybug Datetime from an hour of the year.
 
         Args:
             hoy: A float value 0 <= and < 8760
         """
-        return cls.from_moy(round(hoy * 60))
+        return cls.from_moy(round(hoy * 60), leap_year)
 
     @classmethod
-    def from_moy(cls, moy):
+    def from_moy(cls, moy, leap_year=False):
         """Create Ladybug Datetime from a minute of the year.
 
         Args:
             moy: An integer value 0 <= and < 525600
         """
-        num_of_minutes_until_month = (0, 44640, 84960, 129600, 172800, 217440,
-                                      260640, 305280, 349920, 393120, 437760,
-                                      480960, 525600)
-
+        if not leap_year:
+            num_of_minutes_until_month = (0, 44640, 84960, 129600, 172800, 217440,
+                                          260640, 305280, 349920, 393120, 437760,
+                                          480960, 525600)
+        else:
+            num_of_minutes_until_month = (0, 44640, 84960 + 1440, 129600 + 1440,
+                                          172800 + 1440, 217440 + 1440, 260640 + 1440,
+                                          305280 + 1440, 349920 + 1440, 393120 + 1440,
+                                          437760 + 1440, 480960 + 1440, 525600 + 1440)
         # find month
         for monthCount in range(12):
             if int(moy) < num_of_minutes_until_month[monthCount + 1]:
@@ -92,10 +107,10 @@ class DateTime(datetime):
             hour = int((moy / 60) % 24)
             minute = int(moy % 60)
 
-            return cls(month, day, hour, minute)
+            return cls(month, day, hour, minute, leap_year)
 
     @classmethod
-    def from_date_time_string(cls, datetime_string):
+    def from_date_time_string(cls, datetime_string, leap_year=False):
         """Create Ladybug DateTime from a DateTime string.
 
         Usage:
@@ -103,7 +118,7 @@ class DateTime(datetime):
             dt = DateTime.from_date_time_string("31 Dec 12:00")
         """
         dt = datetime.strptime(datetime_string, '%d %b %H:%M')
-        return cls(dt.month, dt.day, dt.hour, dt.minute)
+        return cls(dt.month, dt.day, dt.hour, dt.minute, leap_year)
 
     @property
     def isDateTime(self):
@@ -170,7 +185,7 @@ class DateTime(datetime):
         Args:
             hours: A float value in hours (e.g. .5 = half an hour)
         """
-        return self.add_minute((self.hoy + hour) * 60)
+        return self.add_minute(hour * 60)
 
     def sub_hour(self, hour):
         """Create a new DateTime from this time - timedelta.
@@ -190,7 +205,8 @@ class DateTime(datetime):
 
     def to_json(self):
         """Get date time as a dictionary."""
-        return {'month': self.month,
+        return {'year': self.year,
+                'month': self.month,
                 'day': self.day,
                 'hour': self.hour,
                 'minute': self.minute}

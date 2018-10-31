@@ -10,6 +10,7 @@ from .hbsurface import HBSurface
 from .hbzone import HBZone
 from .vectormath.euclid import Point3, Vector3
 from .radiance.view import View
+from .radiance.analysisgrid import AnalysisGrid
 
 
 # TODO: Room should be re-calculated on change of origin, width, depth, height,
@@ -86,10 +87,10 @@ class Room(HBZone):
                                               radiance_material)
 
     def generate_test_points(self, grid_size=1, height=0.75):
-        """Generate a grid of test points in the room.
+        """Generate a grid_file of test points in the room.
 
         Args:
-            grid_size: Size of test grid.
+            grid_size: Size of test grid_file.
             height: Test points height.
         """
         # find number of divisions in width
@@ -106,10 +107,12 @@ class Room(HBZone):
 
         z = float(height) / self.height
 
-        return tuple(self.get_location(u, v, z)
-                     for v in v_values
-                     for u in u_values
-                     )
+        points = tuple(self.get_location(u, v, z)
+                       for v in v_values
+                       for u in u_values
+                       )
+
+        return AnalysisGrid.from_points_and_vectors(points)
 
     def get_location(self, u=0.5, v=0.5, z=0.5):
         """Get location as a point based on u, v, z.

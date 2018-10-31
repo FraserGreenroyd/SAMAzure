@@ -2,6 +2,10 @@
 *.suo
 *.user
 *.sln.docstates
+HoneybeeRecipeJSONs/
+Test_4ZoneIES/
+IDFs/
+ss/
 
 # Rhino/Grasshopper and backup files
 *.3dm

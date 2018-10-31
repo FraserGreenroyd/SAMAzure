@@ -1,9 +1,16 @@
+# coding=utf-8
 import math
-from location import Location
-from dt import DateTime
-from euclid import Vector3
 from collections import namedtuple
+from .location import Location
+from .dt import DateTime
 
+import sys
+if (sys.version_info > (3, 0)):
+    # python 3
+    from euclid3 import Vector3
+    xrange = range
+else:
+    from euclid import Vector3
 
 import ladybug
 try:
@@ -41,7 +48,7 @@ class Sunpath(object):
     """
 
     __slots__ = ('_longitude', '_latitude', 'north_angle', 'time_zone',
-                 'daylight_saving_period')
+                 'daylight_saving_period', '_is_leap_year')
     PI = math.pi
 
     def __init__(self, latitude=0, longitude=0, time_zone=0, north_angle=0,
@@ -68,6 +75,7 @@ class Sunpath(object):
         self.longitude = longitude
         self.north_angle = north_angle
         self.daylight_saving_period = daylight_saving_period
+        self._is_leap_year = False
 
     @classmethod
     def from_location(cls, location, north_angle=0, daylight_saving_period=None):
@@ -103,6 +111,16 @@ class Sunpath(object):
             # if time_zone doesn't match the longitude update the time_zone
             self.time_zone = value / 15.0
 
+    @property
+    def is_leap_year(self):
+        """Indicate is sunpath calculated for a leap year."""
+        return self._is_leap_year
+
+    @is_leap_year.setter
+    def is_leap_year(self, value):
+        """set sunpath to be calculated for a leap year."""
+        self._is_leap_year = bool(value)
+
     def is_daylight_saving_hour(self, datetime):
         """Check if a datetime is a daylight saving time."""
         if not self.daylight_saving_period:
@@ -122,8 +140,9 @@ class Sunpath(object):
         Returns:
             A sun object for this particular time
         """
-        datetime = DateTime(month, day, *self._calculate_hour_and_minute(hour))
-        return self.calculate_sun_from_data_time(datetime, is_solar_time)
+        datetime = DateTime(month, day, *self._calculate_hour_and_minute(hour),
+                            leap_year=self.is_leap_year)
+        return self.calculate_sun_from_date_time(datetime, is_solar_time)
 
     def calculate_sun_from_hoy(self, hoy, is_solar_time=False):
         """Get Sun data for an hour of the year.
@@ -136,10 +155,10 @@ class Sunpath(object):
         Returns:
             A sun object for this particular time
         """
-        datetime = DateTime.from_hoy(hoy)
-        return self.calculate_sun_from_data_time(datetime, is_solar_time)
+        datetime = DateTime.from_hoy(hoy, self.is_leap_year)
+        return self.calculate_sun_from_date_time(datetime, is_solar_time)
 
-    def calculate_sun_from_data_time(self, datetime, is_solar_time=False):
+    def calculate_sun_from_date_time(self, datetime, is_solar_time=False):
         """Get Sun for an hour of the year.
 
         This code is originally written by Trygve Wastvedt \
@@ -154,6 +173,11 @@ class Sunpath(object):
         Returns:
             A sun object for this particular time
         """
+        # TODO(mostapha): This should be more generic and based on a method
+        if datetime.year != 2016 and self.is_leap_year:
+            datetime = DateTime(datetime.month, datetime.day, datetime.hour,
+                                datetime.minute, True)
+
         sol_dec, eq_of_time = self._calculate_solar_geometry(datetime)
 
         hour = datetime.float_hour
@@ -171,7 +195,6 @@ class Sunpath(object):
         else:
             hour_angle = sol_time / 4 - 180
 
-
         # Degrees
         zenith = math.degrees(math.acos
                               (math.sin(self._latitude) *
@@ -179,7 +202,6 @@ class Sunpath(object):
                                math.cos(self._latitude) *
                                math.cos(math.radians(sol_dec)) *
                                math.cos(math.radians(hour_angle))))
-
 
         altitude = 90 - zenith
 
@@ -242,7 +264,7 @@ class Sunpath(object):
         Return:
             A dictionary. Keys are ("sunrise", "noon", "sunset")
         """
-        datetime = DateTime(month, day, hour=12)
+        datetime = DateTime(month, day, hour=12, leap_year=self.is_leap_year)
 
         return self.calculate_sunrise_sunset_from_datetime(datetime,
                                                            depression,
@@ -252,6 +274,10 @@ class Sunpath(object):
     def calculate_sunrise_sunset_from_datetime(self, datetime, depression=0.833,
                                                is_solar_time=False):
         """Calculate sunrise, sunset and noon for a day of year."""
+        # TODO(mostapha): This should be more generic and based on a method
+        if datetime.year != 2016 and self.is_leap_year:
+            datetime = DateTime(datetime.month, datetime.day, datetime.hour,
+                                datetime.minute, True)
         sol_dec, eq_of_time = self._calculate_solar_geometry(datetime)
         # calculate sunrise and sunset hour
         if is_solar_time:
@@ -272,7 +298,8 @@ class Sunpath(object):
             return {
                 "sunrise": None,
                 "noon": DateTime(datetime.month, datetime.day,
-                                 *self._calculate_hour_and_minute(noon)),
+                                 *self._calculate_hour_and_minute(noon),
+                                 leap_year=self.is_leap_year),
                 "sunset": None
             }
         else:
@@ -284,14 +311,17 @@ class Sunpath(object):
 
             return {
                 "sunrise": DateTime(datetime.month, datetime.day,
-                                    *self._calculate_hour_and_minute(sunrise)),
+                                    *self._calculate_hour_and_minute(sunrise),
+                                    leap_year=self.is_leap_year),
                 "noon": DateTime(datetime.month, datetime.day,
-                                 *self._calculate_hour_and_minute(noon)),
+                                 *self._calculate_hour_and_minute(noon),
+                                 leap_year=self.is_leap_year),
                 "sunset": DateTime(datetime.month, datetime.day,
-                                   *self._calculate_hour_and_minute(sunset))
+                                   *self._calculate_hour_and_minute(sunset),
+                                   leap_year=self.is_leap_year)
             }
 
-    def _calculate_solar_geometry(self, datetime, year=2017):
+    def _calculate_solar_geometry(self, datetime):
         """Calculate Solar geometry for an hour of the year.
 
         Attributes:
@@ -305,6 +335,7 @@ class Sunpath(object):
         day = datetime.day
         hour = datetime.hour
         minute = datetime.minute
+        year = 2016 if self.is_leap_year else 2017
 
         def find_fraction_of_24(hour, minute):
             """
@@ -359,7 +390,7 @@ class Sunpath(object):
 
             """Making the total of all the days in preceding months\
             in the same year"""
-            keys = month_dict.keys()
+            keys = tuple(month_dict.keys())
             days_in_precending_months = 0
             for i in range(month - 1):
                 days_in_precending_months += month_dict[keys[i]]
@@ -435,8 +466,8 @@ class Sunpath(object):
         """Calculate hour angle for sunrise time in degrees."""
 
         hour_angle_arg = math.degrees(math.acos(
-            math.cos(math.radians(90 + depression))
-            / (math.cos(math.radians(self.latitude)) * math.cos(
+            math.cos(math.radians(90 + depression)) /
+            (math.cos(math.radians(self.latitude)) * math.cos(
                 math.radians(solar_dec))) -
             math.tan(math.radians(self.latitude)) *
             math.tan(math.radians(solar_dec))
@@ -469,7 +500,6 @@ class Sunpath(object):
         """Calculate hour and minutes as integers from a float hour."""
         hour = int(float_hour)
         minute = int(round((float_hour - int(float_hour)) * 60))
-
 
         if minute == 60:
             return hour + 1, 0
@@ -592,12 +622,13 @@ class Sunpath(object):
                 chours = []
                 # this is an hour that not all the hours are day or night
                 prevhour = self.latitude <= 0
-                for hoy in xrange(h, 8760, 24):
+                num_of_days = 8760 if not self.is_leap_year else 8760 + 24
+                for hoy in xrange(h, num_of_days, 24):
                     thishour = self.calculate_sun_from_hoy(hoy).is_during_day
                     if thishour != prevhour:
                         if not thishour:
                             hoy -= 24
-                        dt = DateTime.from_hoy(hoy)
+                        dt = DateTime.from_hoy(hoy, self.is_leap_year)
                         chours.append((dt.month, dt.day, dt.hour))
                     prevhour = thishour
                 tt = []
@@ -644,7 +675,7 @@ class Sunpath(object):
                     False
             else:
                 # Arc
-                yield (self.calculate_sun_from_data_time(dt) for dt in dts), True
+                yield (self.calculate_sun_from_date_time(dt) for dt in dts), True
 
 
 class Sun(object):
@@ -773,7 +804,14 @@ class Sun(object):
             .rotate_around(z_axis, self.azimuth_in_radians) \
             .rotate_around(z_axis, math.radians(-1 * self.north_angle))
 
-        _sun_vector.normalize().flip()
+        _sun_vector.normalize()
+        try:
+            _sun_vector.flip()
+        except AttributeError:
+            # euclid3
+            _sun_vector = Vector3(-1 * _sun_vector.x,
+                                  -1 * _sun_vector.y,
+                                  -1 * _sun_vector.z)
 
         self._sun_vector = _sun_vector
 

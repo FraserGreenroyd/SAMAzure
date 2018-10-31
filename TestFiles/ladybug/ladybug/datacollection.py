@@ -3,7 +3,12 @@ from .header import Header
 from .datatype import DataPoint
 
 from collections import OrderedDict
-from itertools import izip
+
+try:
+    from itertools import izip as zip
+except ImportError:
+    # python 3
+    xrange = range
 
 
 class DataCollection(object):
@@ -18,6 +23,8 @@ class DataCollection(object):
         if not data:
             data = []
         elif not hasattr(data, '__iter__'):
+            assert hasattr(data, 'isDataPoint'), \
+                'Expected DataPoint got {}'.format(type(data))
             data = [data]
 
         for d in data:
@@ -65,13 +72,13 @@ class DataCollection(object):
         if analysis_period:
             return cls.from_data_and_datetimes(lst, analysis_period.datetimes, header)
         else:
-            data = (DataPoint.from_data(d) for d in lst)
+            data = tuple(DataPoint.from_data(d) for d in lst)
             return cls(data, header)
 
     @classmethod
     def from_data_and_datetimes(cls, data, datetimes, header=None):
         """Create a list from data and dateteimes."""
-        _d = (DataPoint(v, d) for v, d in izip(data, datetimes))
+        _d = tuple(DataPoint(v, d) for v, d in zip(data, datetimes))
         return cls(_d, header)
 
     @classmethod
@@ -101,6 +108,27 @@ class DataCollection(object):
                 'Expected DataPoint got {}'.format(type(d))
         self._data.extend(new_data)
 
+    def insert(self, i, d):
+        """Insert an item at a given position."""
+        assert hasattr(d, 'isDataPoint'), \
+            'Expected DataPoint got {}'.format(type(d))
+        assert isinstance(i, int), \
+            'Expected Integer got {}'.format(type(i))
+        self._data.insert(i, d)
+
+    def pop(self, i=-1):
+        """Remove the item at the given position in the data collection, and return it.
+
+        If no index is specified, a.pop() removes and returns the last
+        item in the list.
+        """
+        assert isinstance(i, int), \
+            'Expected Integer got {}'.format(type(i))
+        assert i < len(self._data), \
+            'Item({}) is larger than the length of the data collection({})' \
+            .format(i, len(self._data))
+        return self._data.pop(i)
+
     @property
     def datetimes(self):
         """Return datetimes for this collection as a tuple."""
@@ -108,14 +136,7 @@ class DataCollection(object):
 
     @property
     def values(self):
-        """Return the list of values.
-
-        Args:
-            header: A boolean that indicates if values should include the header
-
-        Return:
-            A list of values
-        """
+        """Return the list of values."""
         return self._data
 
     def duplicate(self):
@@ -312,29 +333,49 @@ class DataCollection(object):
         """
         return self.update_data_for_hours_of_year(values, analysis_period.hoys)
 
-    def interpolate_data(self, timestep):
-        """Interpolate data for a finer timestep.
+    def interpolate_data(self, timestep, cumulative=False):
+        """Interpolate data for a finer timestep using a linear interpolation.
 
         Args:
             timestep: Target timestep as an integer. Target timestep must be
                 divisable by current timestep.
+            cumulative: A boolean that sets whether the interpolation
+                should treat the data colection values as cumulative, in
+                which case the value at each timestep is the value over
+                that timestep (instead of over the hour). The default is set to
+                False to yeild average values in between each of the hours.
         """
+        assert self.header is not None, 'Header cannot be None for interpolation.'
         assert timestep % self.header.analysis_period.timestep == 0, \
             'Target timestep({}) must be divisable by current timestep({})' \
             .format(timestep, self.header.analysis_period.timestep)
+        assert isinstance(cumulative, bool), \
+            'Expected Boolean got {}'.format(type(cumulative))
 
-        _minutesStep = int(60 / int(timestep / self.header.analysis_period.timestep))
-        _dataLength = len(self.values)
+        _minutes_step = int(60 / int(timestep / self.header.analysis_period.timestep))
+        _data_length = len(self.values)
         # generate new data
         _data = tuple(
-            self[d].__class__(_v, self[d].datetime.add_minute(step * _minutesStep))
-            for d in xrange(_dataLength)
+            self[d].__class__(_v, self[d].datetime.add_minute(step * _minutes_step))
+            for d in xrange(_data_length)
             for _v, step in zip(self.xxrange(self[d],
-                                             self[(d + 1) % _dataLength],
+                                             self[(d + 1) % _data_length],
                                              timestep),
                                 xrange(timestep))
         )
-        # generate data for last hour
+
+        # divide cumulative values by timestep
+        if cumulative is True:
+            for i, d in enumerate(_data):
+                _data[i].value = d.value / timestep
+
+        # shift data if half-hour interpolation has been selected.
+        if self.header.middle_hour is True:
+            shift_dist = int(timestep / 2)
+            _data = _data[-shift_dist:] + _data[:-shift_dist]
+            for i, d in enumerate(_data):
+                _data[i - shift_dist].datetime = d.datetime
+
         return _data
 
     @staticmethod
@@ -507,10 +548,14 @@ class DataCollection(object):
         average_values = OrderedDict()
 
         # average values for each month
-        for month, values in monthly_values.iteritems():
+        for month, values in monthly_values.items():
             average_values[month] = self.average(values)
 
         return average_values
+
+    def average_data(self):
+        """Return average value for data collection."""
+        return self.average(self.values)
 
     def average_monthly(self):
         """Return a dictionary of values for average values for available months."""
@@ -526,7 +571,7 @@ class DataCollection(object):
 
         # group data for each hour in each month and collect them in a dictionary
         averaged_monthly_values_per_hour = OrderedDict()
-        for month, monthly_values in monthly_hourly_values.iteritems():
+        for month, monthly_values in monthly_hourly_values.items():
             if month not in averaged_monthly_values_per_hour:
                 averaged_monthly_values_per_hour[month] = OrderedDict()
 
@@ -569,7 +614,7 @@ class DataCollection(object):
         """Convert data collection to a dictionary."""
         return {
             'data': [d.to_json() for d in self._data],
-            'header': self.header.to_json()
+            'header': self.header.to_json() if self.header else {}
         }
 
     def ToString(self):

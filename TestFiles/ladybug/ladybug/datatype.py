@@ -1,3 +1,4 @@
+# coding=utf-8
 """Ladybug data types."""
 # from abc import ABCMeta, abstractmethod
 import math
@@ -17,7 +18,7 @@ class DataTypeBase(object):
         nickname: Optional nickname for data (e.g. Dew Point Temperature)
     """
 
-    __slots__ = ('standard', '_value', 'datetime', 'nickname')
+    __slots__ = ('_standard', '_value', 'datetime', 'nickname')
 
     minimum = float('-inf')
     maximum = float('+inf')
@@ -78,13 +79,25 @@ class DataTypeBase(object):
                 if self.value_type is str:
                     _v = str(v)
                 else:
-                    _v = map(self.value_type, (v,))[0]
+                    _v = self.value_type(v)
             except Exception:
                 raise ValueError(
                     "Failed to convert {} to {}".format(v, self.value_type))
             else:
-                self.is_in_range(_v, True)
                 self._value = _v
+                self.is_in_range(_v, True)
+
+    @property
+    def standard(self):
+        """standard SI/IP"""
+        return self._standard
+
+    @standard.setter
+    def standard(self, value):
+        value = value or 'SI'
+        if value not in ('SI', 'IP'):
+            raise ValueError('Invalid standard: {}. Choose SI or IP.'.format(value))
+        self._standard = value
 
     @property
     def unit(self):
@@ -174,7 +187,7 @@ class DataTypeBase(object):
         "Get data point as a json object"
         return {
             'value': self.value,
-            'datetime': self.datetime.to_json(),
+            'datetime': self.datetime.to_json() if self.datetime else {},
             'standard': self.standard,
             'nickname': self.nickname,
             'type': self.__class__.__name__

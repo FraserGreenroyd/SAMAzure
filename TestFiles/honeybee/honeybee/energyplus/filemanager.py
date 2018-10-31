@@ -13,7 +13,7 @@ def get_energy_plus_objects_from_string(ep_file_string):
     Returns:
         A list of strings. Each string represents a differnt Radiance Object
     """
-    _epObjects = {"building": {}, "zone": {}, "buildingsurface:detailed": {},
+    _epObjects = {"zone": {}, "buildingsurface:detailed": {},
                   "fenestrationsurface:detailed": {}, "material": {},
                   "windowmaterial": {}, "construction": {}, "schedule": {},
                   "scheduletypelimits": {}, "globalgeometryrules": {},

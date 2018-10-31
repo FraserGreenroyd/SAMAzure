@@ -99,7 +99,7 @@ class DaylightCoeffGridBased(GenericGridBased):
             simulation_type=0, radiance_parameters=None, reuse_daylight_mtx=True,
             hb_objects=None,
             sub_folder="gridbased_daylightcoeff"):
-        """Create grid based daylight coefficient from weather file, points and vectors.
+        """Create grid_file based daylight coefficient from weather file, points and vectors.
 
         Args:
             epw_file: An EnergyPlus weather file.
@@ -129,7 +129,7 @@ class DaylightCoeffGridBased(GenericGridBased):
                          simulation_type=0, radiance_parameters=None,
                          reuse_daylight_mtx=True, hb_objects=None,
                          sub_folder="gridbased_daylightcoeff"):
-        """Create grid based daylight coefficient recipe from points file."""
+        """Create grid_file based daylight coefficient recipe from points file."""
         try:
             with open(points_file, "rb") as inf:
                 point_groups = tuple(line.split()[:3] for line in inf.readline())
@@ -268,7 +268,8 @@ class DaylightCoeffGridBased(GenericGridBased):
             "rad_parameters": self.radiance_parameters.to_json()
         }
 
-    def write(self, target_folder, project_name='untitled', header=True):
+    def write(self, target_folder, project_name='untitled', header=True,
+              transpose=False):
         """Write analysis files to target folder.
 
         Args:
@@ -315,10 +316,12 @@ class DaylightCoeffGridBased(GenericGridBased):
         commands, results = get_commands_scene_daylight_coeff(
             project_name, self.sky_matrix.sky_density, project_folder, skyfiles,
             inputfiles, points_file, self.total_point_count, self.radiance_parameters,
-            self.reuse_daylight_mtx, self.total_runs_count)
+            self.reuse_daylight_mtx, self.total_runs_count, transpose=transpose)
 
         self._result_files.extend(
-            os.path.join(project_folder, str(result)) for result in results
+            # os.path.join(project_folder, str(result)) for result in results :: this was removed and replaced with below to fix file reference error!
+            str(result) if project_folder in str(result) else os.path.join(project_folder, str(result)) for result in
+            results
         )
 
         self._add_commands(skycommands, commands)
@@ -329,7 +332,7 @@ class DaylightCoeffGridBased(GenericGridBased):
                 project_name, self.sky_matrix.sky_density, project_folder,
                 self.window_groups, skyfiles, inputfiles, points_file,
                 self.total_point_count, self.radiance_parameters,
-                self.reuse_daylight_mtx, self.total_runs_count)
+                self.reuse_daylight_mtx, self.total_runs_count, transpose=transpose)
 
             self._add_commands(skycommands, commands)
             self._result_files.extend(

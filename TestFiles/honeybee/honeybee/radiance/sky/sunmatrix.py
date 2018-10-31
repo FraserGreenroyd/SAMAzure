@@ -47,7 +47,12 @@ class SunMatrix(RadianceSky):
         RadianceSky.__init__(self)
         self.wea = wea
         self.north = north
-        self.hoys = hoys or range(8760)
+        self.hoys = hoys or wea.hoys
+        if not hoys and wea.timestep == 1:
+            # adjut for half an hour so all the annual metric methods work for now
+            # this is a design issue in Honeybe and should be fixed by removing defulting
+            # values to range(8760)
+            self.hoys = [hour - 0.5 for hour in wea.hoys]
         self._solar_values = []
         # collection of indices for sun up hours from hoys
         self._sun_up_hours_indices = []
@@ -188,17 +193,15 @@ class SunMatrix(RadianceSky):
         """
         wea = self.wea
         output_type = self.output_type
-
         month_date_time = (DateTime.from_hoy(idx) for idx in self.hoys)
 
         sp = Sunpath.from_location(wea.location, self.north)
 
         # use gendaylit to calculate radiation values for each hour.
         print('Calculating solar values...')
-        for timecount, timeStamp in enumerate(month_date_time):
-            month, day, hour = timeStamp.month, timeStamp.day, timeStamp.hour
-            dnr, dhr = int(wea.direct_normal_radiation[timeStamp.int_hoy]), \
-                int(wea.diffuse_horizontal_radiation[timeStamp.int_hoy])
+        for timecount, dt in enumerate(month_date_time):
+            month, day, hour = dt.month, dt.day, dt.float_hour
+            dnr, dhr = wea.get_radiation_values(month, day, hour)
             sun = sp.calculate_sun(month, day, hour)
             if sun.altitude < 0:
                 continue
