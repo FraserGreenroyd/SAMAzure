@@ -1,5 +1,7 @@
 # call "C:\Users\tgerrish\AppData\Local\Continuum\anaconda2\Scripts\activate.bat" && activate azurebatch
 
+# TODO: Add some prints for process feedback
+
 from __future__ import print_function
 
 try:
@@ -212,10 +214,8 @@ import common.helpers
 
 if __name__ == '__main__':
 
-    print("\n")
     print("###############################")
     print("########### START #############")
-    print("###############################")
 
     # Obtain locations of global configuration and radiance case
     _CONFIGURATION_PATH = os.path.join('common', 'configuration.cfg')
@@ -255,6 +255,8 @@ if __name__ == '__main__':
 
     # Upload files to blob, and obtain names and sas urls
     block_blob_client.create_container(_CONTAINER_NAME, fail_on_exist=False)
+    container_sas_url = "https://{0:}.blob.core.windows.net/{1:}?{2:}".format(storage_account_name, _CONTAINER_NAME, storage_account_key)
+    print(container_sas_url)
 
     surfaces_sas_url = common.helpers.upload_blob_and_create_sas(
         block_blob_client,
@@ -341,7 +343,9 @@ if __name__ == '__main__':
     # TODO: Remove hard coded grid file (once number of nodes made to match grid files)
     task_run_commands = [
         "cd /",
-        "sudo wget --no-check-certificate https://github.com/FraserGreenroyd/SAMAzure/raw/master/TestFiles/resources/azure_common/radiance-5.1.0-Linux.tar.gz",
+        # "sudo apt-get -y install python-pip",
+        # "sudo pip install azure-storage",
+        "sudo wget --no-check-certificate https://github.com/FraserGreenroyd/SAMAzure/raw/master/TestFiles/resources/azure_common/CopyToBlob.py",
         "sudo wget --no-check-certificate https://github.com/FraserGreenroyd/SAMAzure/raw/master/TestFiles/resources/azure_common/radiance-5.1.0-Linux.tar.gz",
         "sudo tar xzf radiance-5.1.0-Linux.tar.gz",
         "sudo rsync -av /radiance-5.1.0-Linux/usr/local/radiance/bin/ /usr/local/bin/",
@@ -350,6 +354,14 @@ if __name__ == '__main__':
         "sudo tar xzf lb_hb.tar.gz",
         "sudo wget --no-check-certificate https://github.com/FraserGreenroyd/SAMAzure/raw/master/TestFiles/resources/azure_common/RunHoneybeeRadiance.py",
         "sudo python RunHoneybeeRadiance.py -s ./mnt/batch/tasks/workitems/{0:}/job-1/{1:}/wd/surfaces.json -sm ./mnt/batch/tasks/workitems/{0:}/job-1/{1:}/wd/sky_mtx.json -p ./mnt/batch/tasks/workitems/{0:}/job-1/{1:}/wd/{2:}".format(job_id, task_id, analysis_grid_names[0]),
+        # "sudo python CopyToBlob.py -fp /mnt/batch/tasks/workitems/{0:}/job-1/{1:}/wd/{2:} -bn {2:} -sa {3:} -sc {4:} -st {5:}".format(
+        #     job_id,
+        #     task_id,
+        #     analysis_grid_names[0].replace(".json", "_result.json"),
+        #     storage_account_name,
+        #     _CONTAINER_NAME,
+        #     storage_account_key
+        # )
     ]
 
     task = batchmodels.TaskAddParameter(
@@ -360,11 +372,11 @@ if __name__ == '__main__':
             batchmodels.ResourceFile(file_path="sky_mtx.json", blob_source=sky_mtx_sas_url),
             batchmodels.ResourceFile(file_path="surfaces.json", blob_source=surfaces_sas_url),
         ],
-        # output_files=[
-        #     batchmodels.OutputFile(
-        #         file_pattern="/mnt/batch/tasks/workitems/{0:}/job-1/{1:}/wd/{2:}".format(job_id, task_id, analysis_grid_names[0].replace(".json", "_result.json")),
-        #         destination=batchmodels.OutputFileDestination(container=_CONTAINER_NAME),
-        #         upload_options=batchmodels.OutputFileUploadOptions(upload_condition="taskCompletion"))],
+        output_files=[
+            batchmodels.OutputFile(
+                file_pattern="*result.json",
+                destination=batchmodels.OutputFileDestination(container=batchmodels.OutputFileBlobContainerDestination(container_url=container_sas_url)),
+                upload_options=batchmodels.OutputFileUploadOptions(upload_condition="taskCompletion"))],
         user_identity=task_user)
 
     # print("Results written to ./mnt/batch/tasks/workitems/{0:}/job-1/{1:}/wd/{2:} on the node".format(job_id, task_id, analysis_grid_names[0].replace(".json", "_result.json")))
@@ -413,10 +425,8 @@ if __name__ == '__main__':
     #
     # [batch_client.task.add(job_id=job.id, task=task) for task in tasks]
 
-    print("###############################")
     print("########### FINISH ############")
     print("###############################")
-    print("\n")
 
 # if __name__ == '__main__':
 #

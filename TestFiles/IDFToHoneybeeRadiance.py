@@ -204,28 +204,28 @@ if __name__ == "__main__":
         "--inputIDF",
         type=str,
         help="Path to the source IDF from which geometry and constructions are obtained",
-        default="output.idf"  # TODO - remove post testing
+        default="./resources/idf_processing/output.idf"  # TODO - remove post testing
     )
     parser.add_argument(
         "-w",
         "--weatherFile",
         type=str,
         help="Path to the EPW weather file for the location being simulated",
-        default="GBR_Cardiff_CIBSE_TRY.epw"  # TODO - remove post testing
+        default="./resources/idf_processing/GBR_Cardiff_CIBSE_TRY.epw"  # TODO - remove post testing
     )
     parser.add_argument(
         "-c",
         "--configFile",
         type=str,
         help="Path to the config file containing construction reflectances and glazing transmissivities",
-        default="idf_config.json"  # TODO - remove post testing
+        default="./resources/idf_processing/idf_config.json"  # TODO - remove post testing
     )
     parser.add_argument(
         "-o",
         "--outputDir",
         type=str,
         help="Path to the target output directory",
-        default=os.path.join(os.getcwd(), "case")  # TODO - remove post testing
+        default="./radiance_case"  # TODO - remove post testing
     )
     parser.add_argument(
         "-gs",
