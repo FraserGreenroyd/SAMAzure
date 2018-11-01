@@ -252,11 +252,13 @@ if __name__ == '__main__':
         account_name=storage_account_name,
         account_key=storage_account_key,
         endpoint_suffix=storage_account_suffix)
+    block_blob_client.
 
     # Upload files to blob, and obtain names and sas urls
     block_blob_client.create_container(_CONTAINER_NAME, fail_on_exist=False)
-    container_sas_url = "https://{0:}.blob.core.windows.net/{1:}?{2:}".format(storage_account_name, _CONTAINER_NAME, storage_account_key)
-    print(container_sas_url)
+    block_blob_client.
+    # container_sas_url = "https://{0:}.blob.core.windows.net/{1:}?{2:}".format(storage_account_name, _CONTAINER_NAME, storage_account_key)
+    # print(container_sas_url)
 
     surfaces_sas_url = common.helpers.upload_blob_and_create_sas(
         block_blob_client,
