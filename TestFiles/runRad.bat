@@ -1,1 +1,0 @@
-python 02_RunRadianceJSON.py
