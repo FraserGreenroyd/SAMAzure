@@ -10,8 +10,7 @@ except ImportError:
 import datetime
 import os
 import argparse
-import uuid  # for file uniquing
-import re  # for tile renaming
+import re  # for file renaming
 
 import azure.storage.blob as azureblob
 import azure.batch.batch_service_client as batch
@@ -20,154 +19,134 @@ import azure.batch.models as batchmodels
 
 import common.helpers
 
-_CONFIGURATION_PATH = os.path.join('common', 'configuration.cfg')
-_CONTAINER_NAME = 'test-batch-container'
-_RADIANCE_CASE_PATH = os.path.join('resources', 'radiance_case')
-_SIMPLE_TASK_NAME = 'simple_task.py'
-_SIMPLE_TASK_PATH = os.path.join('resources', 'simple_task.py')
-
-_SURFACES_PATH = os.path.join(_RADIANCE_CASE_PATH, "surfaces.json")
-_SKY_MTX_PATH = os.path.join(_RADIANCE_CASE_PATH, "sky_mtx.json")
-_ANALYSIS_GRID_PATHS = common.helpers.find_files(os.path.join(_RADIANCE_CASE_PATH, "AnalysisGrids"), ".json")
-
-_RADIANCE_PROGRAM_NAME = "radiance-5.1.0-Linux.tar.gz"
-_RADIANCE_PROGRAM_SAS_URL = "https://radfiles.blob.core.windows.net/0000000-common/radiance-5.1.0-Linux.tar.gz?sp=r&st=2018-10-26T12:28:54Z&se=2030-01-01T00:00:00Z&spr=https&sv=2017-11-09&sig=OiUlxWrB0R7WaLNRZjp8dcg4z7guNBwf8G%2BBIZYXmOs%3D&sr=blbhbsastoken=sp=r&st=2018-10-26T12:28:05Z&se=2030-01-01T00:00:00Z&spr=https&sv=2017-11-09&sig=b8z18a7SWGBUr%2FAQmA%2BbicvPxctwn%2BXMs5XHHMC%2FLcQ%3D&sr=b"
-_LB_HB_NAME = "lb_hb.tar.gz"
-_LB_HB_SAS_URL = "https://radfiles.blob.core.windows.net/0000000-common/lb_hb.tar.gz?sp=r&st=2018-10-26T12:28:05Z&se=2030-01-01T00:00:00Z&spr=https&sv=2017-11-09&sig=b8z18a7SWGBUr%2FAQmA%2BbicvPxctwn%2BXMs5XHHMC%2FLcQ%3D&sr=b"
-_SCRIPT_NAME = "RunHoneybeeRadiance.py"
-_SCRIPT_SAS_URL = "https://radfiles.blob.core.windows.net/0000000-common/RunHoneybeeRadiance.py?sp=r&st=2018-10-26T12:29:33Z&se=2030-01-01T00:00:00Z&spr=https&sv=2017-11-09&sig=s8l9BRRtx%2FTHJBHdZAc73JUCNrx8f7ndCE2nkjCWY4c%3D&sr=b"
-
-config = configparser.RawConfigParser()
-config.read(_CONFIGURATION_PATH)
-
-def create_pool(batch_client, block_blob_client, pool_id, vm_size, vm_count):
-    """Creates an Azure Batch pool with the specified id.
-
-    :param batch_client: The batch client to use.
-    :type batch_client: `batchserviceclient.BatchServiceClient`
-    :param block_blob_client: The storage block blob client to use.
-    :type block_blob_client: `azure.storage.blob.BlockBlobService`
-    :param str pool_id: The id of the pool to create.
-    :param str vm_size: vm size (sku)
-    :param int vm_count: number of vms to allocate
-    """
-    # pick the latest supported 16.04 sku for UbuntuServer
-    sku_to_use, image_ref_to_use = \
-        common.helpers.select_latest_verified_vm_image_with_node_agent_sku(
-            batch_client, 'Canonical', 'UbuntuServer', '16.04')
-
-    block_blob_client.create_container(_CONTAINER_NAME, fail_on_exist=False)
-
-    # sas_url = common.helpers.upload_blob_and_create_sas(
-    #     block_blob_client,
-    #     _CONTAINER_NAME,
-    #     _SIMPLE_TASK_NAME,
-    #     _SIMPLE_TASK_PATH,
-    #     datetime.datetime.utcnow() + datetime.timedelta(hours=1))
-
-    # TODO - check to see where these files are on the node - make node accesible via CLI?
-    pool_start_commands = [
-        "cd",
-        "cd /",
-        "sudo cp -p radiance-5.1.0-Linux.tar.gz $AZ_BATCH_NODE_SHARED_DIR",
-        "sudo tar xzf radiance-5.1.0-Linux.tar.gz",
-        "sudo rsync -av /radiance-5.1.0-Linux/usr/local/radiance/bin/ /usr/local/bin/",
-        "sudo rsync -av /radiance-5.1.0-Linux/usr/local/radiance/lib/ /usr/local/lib/ray/",
-        "sudo cp -p lb_hb.tar.gz $AZ_BATCH_NODE_SHARED_DIR",
-        "sudo tar xzf lb_hb.tar.gz",
-        "sudo cp -p RunHoneybeeRadiance.py $AZ_BATCH_NODE_SHARED_DIR",
-    ]
-
-    pool = batchmodels.PoolAddParameter(
-        id=pool_id,
-        virtual_machine_configuration=batchmodels.VirtualMachineConfiguration(
-            image_reference=image_ref_to_use,
-            node_agent_sku_id=sku_to_use),
-        vm_size=vm_size,
-        target_dedicated_nodes=vm_count,
-        start_task=batchmodels.StartTask(
-            command_line=common.helpers.wrap_commands_in_shell("linux", pool_start_commands),
-            resource_files=[
-                batchmodels.ResourceFile(file_path=_RADIANCE_PROGRAM_NAME, blob_source=_RADIANCE_PROGRAM_SAS_URL),
-                batchmodels.ResourceFile(file_path=_LB_HB_NAME, blob_source=_LB_HB_SAS_URL),
-                batchmodels.ResourceFile(file_path=_SCRIPT_NAME, blob_source=_SCRIPT_SAS_URL),
-            ]))
-
-    common.helpers.create_pool_if_not_exist(batch_client, pool)
+# def create_pool(batch_client, block_blob_client, pool_id, vm_size, vm_count):
+#     """Creates an Azure Batch pool with the specified id.
+#
+#     :param batch_client: The batch client to use.
+#     :type batch_client: `batchserviceclient.BatchServiceClient`
+#     :param block_blob_client: The storage block blob client to use.
+#     :type block_blob_client: `azure.storage.blob.BlockBlobService`
+#     :param str pool_id: The id of the pool to create.
+#     :param str vm_size: vm size (sku)
+#     :param int vm_count: number of vms to allocate
+#     """
+#     # pick the latest supported 16.04 sku for UbuntuServer
+#     sku_to_use, image_ref_to_use = \
+#         common.helpers.select_latest_verified_vm_image_with_node_agent_sku(
+#             batch_client, 'Canonical', 'UbuntuServer', '16.04')
+#
+#     block_blob_client.create_container(_CONTAINER_NAME, fail_on_exist=False)
+#
+#     # sas_url = common.helpers.upload_blob_and_create_sas(
+#     #     block_blob_client,
+#     #     _CONTAINER_NAME,
+#     #     _SIMPLE_TASK_NAME,
+#     #     _SIMPLE_TASK_PATH,
+#     #     datetime.datetime.utcnow() + datetime.timedelta(hours=1))
+#
+#     # TODO - check to see where these files are on the node - make node accesible via CLI?
+#     pool_start_commands = [
+#         "cd",
+#         "cd /",
+#         "sudo cp -p radiance-5.1.0-Linux.tar.gz $AZ_BATCH_NODE_SHARED_DIR",
+#         "sudo tar xzf radiance-5.1.0-Linux.tar.gz",
+#         "sudo rsync -av /radiance-5.1.0-Linux/usr/local/radiance/bin/ /usr/local/bin/",
+#         "sudo rsync -av /radiance-5.1.0-Linux/usr/local/radiance/lib/ /usr/local/lib/ray/",
+#         "sudo cp -p lb_hb.tar.gz $AZ_BATCH_NODE_SHARED_DIR",
+#         "sudo tar xzf lb_hb.tar.gz",
+#         "sudo cp -p RunHoneybeeRadiance.py $AZ_BATCH_NODE_SHARED_DIR",
+#     ]
+#
+#     pool = batchmodels.PoolAddParameter(
+#         id=pool_id,
+#         virtual_machine_configuration=batchmodels.VirtualMachineConfiguration(
+#             image_reference=image_ref_to_use,
+#             node_agent_sku_id=sku_to_use),
+#         vm_size=vm_size,
+#         target_dedicated_nodes=vm_count,
+#         start_task=batchmodels.StartTask(
+#             command_line=common.helpers.wrap_commands_in_shell("linux", pool_start_commands),
+#             resource_files=[
+#                 batchmodels.ResourceFile(file_path=_RADIANCE_PROGRAM_NAME, blob_source=_RADIANCE_PROGRAM_SAS_URL),
+#                 batchmodels.ResourceFile(file_path=_LB_HB_NAME, blob_source=_LB_HB_SAS_URL),
+#                 batchmodels.ResourceFile(file_path=_SCRIPT_NAME, blob_source=_SCRIPT_SAS_URL),
+#             ]))
+#
+#     common.helpers.create_pool_if_not_exist(batch_client, pool)
 
 
-def submit_job_and_add_task(batch_client, block_blob_client, job_id, pool_id):
-    """Submits a job to the Azure Batch service and adds
-    a task that runs a python script.
-
-    :param batch_client: The batch client to use.
-    :type batch_client: `batchserviceclient.BatchServiceClient`
-    :param block_blob_client: The storage block blob client to use.
-    :type block_blob_client: `azure.storage.blob.BlockBlobService`
-    :param str job_id: The id of the job to create.
-    :param str pool_id: The id of the pool to use.
-    """
-
-    block_blob_client.create_container(_CONTAINER_NAME, fail_on_exist=False)
-
-    # Upload the surfaces and sky_mtx files
-    # sas_url = common.helpers.upload_blob_and_create_sas(
-    #     block_blob_client,
-    #     _CONTAINER_NAME,
-    #     _SIMPLE_TASK_NAME,
-    #     _SIMPLE_TASK_PATH,
-    #     datetime.datetime.utcnow() + datetime.timedelta(hours=1))
-
-    surfaces_sas_url = common.helpers.upload_blob_and_create_sas(
-        block_blob_client,
-        _CONTAINER_NAME,
-        "surfaces.json",
-        _SURFACES_PATH,
-        datetime.datetime.utcnow() + datetime.timedelta(hours=12))
-
-    sky_mtx_sas_url = common.helpers.upload_blob_and_create_sas(
-        block_blob_client,
-        _CONTAINER_NAME,
-        "sky_mtx.json",
-        _SKY_MTX_PATH,
-        datetime.datetime.utcnow() + datetime.timedelta(hours=12))
-
-    analysis_grid_sas_urls = []
-    analysis_grid_names = []
-    for _GRID_FILE in _ANALYSIS_GRID_PATHS:
-        _GRID_NAME = os.path.basename(_GRID_FILE)
-        analysis_grid_sas_urls.append(
-            common.helpers.upload_blob_and_create_sas(
-            block_blob_client,
-            _CONTAINER_NAME,
-            _GRID_NAME,
-            _GRID_FILE,
-            datetime.datetime.utcnow() + datetime.timedelta(hours=12)))
-        analysis_grid_names.append(_GRID_NAME)
-
-    # Create a job for each group of 100 analysis grids (maximum number of task per job = 100)
-    job = batchmodels.JobAddParameter(id=job_id, pool_info=batchmodels.PoolInformation(pool_id=pool_id))
-
-    batch_client.job.add(job)
-
-    # Create a task per analysis grid
-    tasks = []
-    for n, grid_sas_url in enumerate(analysis_grid_sas_urls):
-        tasks.append(batchmodels.TaskAddParameter(
-            id=analysis_grid_names[n].replace(".json", ""),
-            command_line="cd && cd / && python RunRadiance.py",
-            resource_files=[
-                batchmodels.ResourceFile(file_path=analysis_grid_names[n], blob_source=grid_sas_url),
-                batchmodels.ResourceFile(file_path="sky_mtx.json", blob_source=sky_mtx_sas_url),
-                batchmodels.ResourceFile(file_path="surfaces.json", blob_source=surfaces_sas_url),
-            ],
-            output_files=[
-                batchmodels.OutputFile(
-                    file_pattern=analysis_grid_names[n].replace(".json", "_result.json"),
-                    destination=batchmodels.OutputFileDestination(container=_CONTAINER_NAME),
-                    upload_options=batchmodels.OutputFileUploadOptions(upload_condition="taskCompletion"))]))
-
-    [batch_client.task.add(job_id=job.id, task=task) for task in tasks]
+# def submit_job_and_add_task(batch_client, block_blob_client, job_id, pool_id):
+#     """Submits a job to the Azure Batch service and adds
+#     a task that runs a python script.
+#
+#     :param batch_client: The batch client to use.
+#     :type batch_client: `batchserviceclient.BatchServiceClient`
+#     :param block_blob_client: The storage block blob client to use.
+#     :type block_blob_client: `azure.storage.blob.BlockBlobService`
+#     :param str job_id: The id of the job to create.
+#     :param str pool_id: The id of the pool to use.
+#     """
+#
+#     block_blob_client.create_container(_CONTAINER_NAME, fail_on_exist=False)
+#
+#     # Upload the surfaces and sky_mtx files
+#     # sas_url = common.helpers.upload_blob_and_create_sas(
+#     #     block_blob_client,
+#     #     _CONTAINER_NAME,
+#     #     _SIMPLE_TASK_NAME,
+#     #     _SIMPLE_TASK_PATH,
+#     #     datetime.datetime.utcnow() + datetime.timedelta(hours=1))
+#
+#     surfaces_sas_url = common.helpers.upload_blob_and_create_sas(
+#         block_blob_client,
+#         _CONTAINER_NAME,
+#         "surfaces.json",
+#         _SURFACES_PATH,
+#         datetime.datetime.utcnow() + datetime.timedelta(hours=12))
+#
+#     sky_mtx_sas_url = common.helpers.upload_blob_and_create_sas(
+#         block_blob_client,
+#         _CONTAINER_NAME,
+#         "sky_mtx.json",
+#         _SKY_MTX_PATH,
+#         datetime.datetime.utcnow() + datetime.timedelta(hours=12))
+#
+#     analysis_grid_sas_urls = []
+#     analysis_grid_names = []
+#     for _GRID_FILE in _ANALYSIS_GRID_PATHS:
+#         _GRID_NAME = os.path.basename(_GRID_FILE)
+#         analysis_grid_sas_urls.append(
+#             common.helpers.upload_blob_and_create_sas(
+#             block_blob_client,
+#             _CONTAINER_NAME,
+#             _GRID_NAME,
+#             _GRID_FILE,
+#             datetime.datetime.utcnow() + datetime.timedelta(hours=12)))
+#         analysis_grid_names.append(_GRID_NAME)
+#
+#     # Create a job for each group of 100 analysis grids (maximum number of task per job = 100)
+#     job = batchmodels.JobAddParameter(id=job_id, pool_info=batchmodels.PoolInformation(pool_id=pool_id))
+#
+#     batch_client.job.add(job)
+#
+#     # Create a task per analysis grid
+#     tasks = []
+#     for n, grid_sas_url in enumerate(analysis_grid_sas_urls):
+#         tasks.append(batchmodels.TaskAddParameter(
+#             id=analysis_grid_names[n].replace(".json", ""),
+#             command_line="cd && cd / && python RunRadiance.py",
+#             resource_files=[
+#                 batchmodels.ResourceFile(file_path=analysis_grid_names[n], blob_source=grid_sas_url),
+#                 batchmodels.ResourceFile(file_path="sky_mtx.json", blob_source=sky_mtx_sas_url),
+#                 batchmodels.ResourceFile(file_path="surfaces.json", blob_source=surfaces_sas_url),
+#             ],
+#             output_files=[
+#                 batchmodels.OutputFile(
+#                     file_pattern=analysis_grid_names[n].replace(".json", "_result.json"),
+#                     destination=batchmodels.OutputFileDestination(container=_CONTAINER_NAME),
+#                     upload_options=batchmodels.OutputFileUploadOptions(upload_condition="taskCompletion"))]))
+#
+#     [batch_client.task.add(job_id=job.id, task=task) for task in tasks]
 
 
 # def execute_sample(config):
@@ -233,37 +212,48 @@ def submit_job_and_add_task(batch_client, block_blob_client, job_id, pool_id):
 
 if __name__ == '__main__':
 
-    print("\n\n")
+    print("\n")
     print("###############################")
     print("########### START #############")
     print("###############################")
 
+    # Obtain locations of global configuration and radiance case
+    _CONFIGURATION_PATH = os.path.join('common', 'configuration.cfg')
+    _CONTAINER_NAME = 'test-batch-container'
+    _RADIANCE_CASE_PATH = os.path.join('resources', 'radiance_case')
+
+    # Get the case details from the _RADIANCE_CASE_PATH
+    _SURFACES_PATH = os.path.join(_RADIANCE_CASE_PATH, "surfaces.json")
+    _SKY_MTX_PATH = os.path.join(_RADIANCE_CASE_PATH, "sky_mtx.json")
+    _ANALYSIS_GRID_PATHS = common.helpers.find_files(os.path.join(_RADIANCE_CASE_PATH, "AnalysisGrids"), ".json")
+
+    # Obtain credentials and global variables from the configuration file
+    config = configparser.RawConfigParser()
+    config.read(_CONFIGURATION_PATH)
+
     batch_account_key = config.get('Batch', 'batchaccountkey').replace("%", "%%")
     batch_account_name = config.get('Batch', 'batchaccountname').replace("%", "%%")
     batch_service_url = config.get('Batch', 'batchserviceurl').replace("%", "%%")
-
     storage_account_key = config.get('Storage', 'storageaccountkey').replace("%", "%%")
     storage_account_name = config.get('Storage', 'storageaccountname').replace("%", "%%")
     storage_account_suffix = config.get('Storage', 'storageaccountsuffix').replace("%", "%%")
-
     should_delete_container = config.getboolean('Default', 'shoulddeletecontainer')
     should_delete_job = config.getboolean('Default', 'shoulddeletejob')
     should_delete_pool = config.getboolean('Default', 'shoulddeletepool')
     pool_vm_size = config.get('Default', 'poolvmsize')
     pool_vm_count = config.getint('Default', 'poolvmcount')
 
+    # Generate batch client
     credentials = batchauth.SharedKeyCredentials(batch_account_name, batch_account_key)
     batch_client = batch.BatchServiceClient(credentials, base_url=batch_service_url)
 
+    # Generate blob client
     block_blob_client = azureblob.BlockBlobService(
         account_name=storage_account_name,
         account_key=storage_account_key,
         endpoint_suffix=storage_account_suffix)
 
-    job_id = common.helpers.generate_unique_resource_name("batch_job")
-    pool_id = "batch_pool_8"#"batch_pool"
-
-    # Upload files to blob
+    # Upload files to blob, and obtain names and sas urls
     block_blob_client.create_container(_CONTAINER_NAME, fail_on_exist=False)
 
     surfaces_sas_url = common.helpers.upload_blob_and_create_sas(
@@ -293,10 +283,12 @@ if __name__ == '__main__':
                 datetime.datetime.utcnow() + datetime.timedelta(hours=12)))
         analysis_grid_names.append(_GRID_NAME)
 
+    # Get a verified VM image on which to run the job/s
     sku_to_use, image_ref_to_use = \
         common.helpers.select_latest_verified_vm_image_with_node_agent_sku(
             batch_client, 'Canonical', 'UbuntuServer', '16.04')
 
+    # Commands passed to all nodes in pool on creation
     pool_start_commands = [
         "cd / ",
         "wget --no-check-certificate https://github.com/FraserGreenroyd/SAMAzure/raw/master/TestFiles/resources/azure_common/radiance-5.1.0-Linux.tar.gz",
@@ -308,28 +300,55 @@ if __name__ == '__main__':
         "wget --no-check-certificate https://github.com/FraserGreenroyd/SAMAzure/raw/master/TestFiles/resources/azure_common/RunHoneybeeRadiance.py"
     ]
 
+    # Admin user identity for pool nodes
     user = batchmodels.UserIdentity(
         auto_user=batchmodels.AutoUserSpecification(
             elevation_level=batchmodels.ElevationLevel.admin,
             scope=batchmodels.AutoUserScope.pool))
 
+    # Unique Pool ID
+    pool_id = common.helpers.generate_unique_resource_name("batchpool")
+
+    # Create pool ready to populate with nodes
     pool = batchmodels.PoolAddParameter(
         id=pool_id,
-        virtual_machine_configuration=batchmodels.VirtualMachineConfiguration(
-            image_reference=image_ref_to_use,
-            node_agent_sku_id=sku_to_use),
         vm_size=pool_vm_size,
-        target_dedicated_nodes=pool_vm_count,
+        virtual_machine_configuration=batchmodels.VirtualMachineConfiguration(image_reference=image_ref_to_use, node_agent_sku_id=sku_to_use),
+        enable_auto_scale=True,
+        auto_scale_formula="pendingTaskSamplePercent = $PendingTasks.GetSamplePercent(180 * TimeInterval_Second);pendingTaskSamples = pendingTaskSamplePercent < 70 ? 1 : avg($PendingTasks.GetSample(180 * TimeInterval_Second)); $TargetDedicatedNodes = min(100, pendingTaskSamples);",
+        auto_scale_evaluation_interval=datetime.timedelta(minutes=5),
         start_task=batchmodels.StartTask(
             user_identity=user,
             command_line=common.helpers.wrap_commands_in_shell("linux", pool_start_commands),
             resource_files=[]
         ),
     )
-
     common.helpers.create_pool_if_not_exist(batch_client, pool)
 
-    # # Create a job for each group of 100 analysis grids (maximum number of task per job = 100)
+    # Unique Job ID
+    job_id = common.helpers.generate_unique_resource_name("batchjob")
+
+    # Create job ready to populate with tasks
+    job = batchmodels.JobAddParameter(id=job_id, pool_info=batchmodels.PoolInformation(pool_id=pool_id))
+    batch_client.job.add(job)
+
+    task = batchmodels.TaskAddParameter(
+        id=common.helpers.generate_unique_resource_name("task"),
+        command_line='touch "testfile.py"',
+        resource_files=[
+            batchmodels.ResourceFile(file_path=analysis_grid_names[0], blob_source=analysis_grid_sas_urls[0]),
+            batchmodels.ResourceFile(file_path="sky_mtx.json", blob_source=sky_mtx_sas_url),
+            batchmodels.ResourceFile(file_path="surfaces.json", blob_source=surfaces_sas_url),
+        ],
+        output_files=[
+            batchmodels.OutputFile(
+                file_pattern="testfile.py",
+                destination=batchmodels.OutputFileDestination(container=_CONTAINER_NAME),
+                upload_options=batchmodels.OutputFileUploadOptions(upload_condition="taskCompletion"))])
+
+    #batch_client.task.add(job_id=job.id, task=task)
+
+    # Create a job for each group of 100 analysis grids (maximum number of task per job = 100)
     # job = batchmodels.JobAddParameter(id=job_id, pool_info=batchmodels.PoolInformation(pool_id=pool_id))
     #
     # batch_client.job.add(job)
@@ -356,7 +375,7 @@ if __name__ == '__main__':
     print("###############################")
     print("########### FINISH ############")
     print("###############################")
-    print("\n\n")
+    print("\n")
 
 # if __name__ == '__main__':
 #
