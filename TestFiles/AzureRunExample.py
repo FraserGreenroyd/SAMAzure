@@ -351,7 +351,7 @@ if __name__ == '__main__':
 #     #         batchmodels.ResourceFile(file_path="radiance-5.1.0-Linux.tar.gz", blob_source=_RADIANCE_SAS_URL),
 #     #         batchmodels.ResourceFile(file_path="lb_hb.tar.gz", blob_source=_LB_HB_SAS_URL),
 #     #         batchmodels.ResourceFile(file_path="RunHoneybeeRadiance.py", blob_source=_SCRIPT_SAS_URL),
-#     #         batchmodels.ResourceFile(file_path="copy_to_blob.py", blob_source=_COPYTOBLOB_SAS_URL),
+#     #         batchmodels.ResourceFile(file_path="CopyToBlob.py", blob_source=_COPYTOBLOB_SAS_URL),
 #     #         surfaces_file,
 #     #         sky_mtx_file,
 #     #         grid_file,
@@ -371,14 +371,14 @@ if __name__ == '__main__':
 #     #         "sudo tar xzf lb_hb.tar.gz",
 #     #         # Get the script and files to be run
 #     #         "sudo cp -p RunHoneybeeRadiance.py $AZ_BATCH_NODE_SHARED_DIR",
-#     #         "sudo cp -p copy_to_blob.py $AZ_BATCH_NODE_SHARED_DIR",
+#     #         "sudo cp -p CopyToBlob.py $AZ_BATCH_NODE_SHARED_DIR",
 #     #         "sudo cp -p surfaces.json $AZ_BATCH_NODE_SHARED_DIR",
 #     #         "sudo cp -p sky_mtx.json $AZ_BATCH_NODE_SHARED_DIR",
 #     #         "sudo cp -p {0:} $AZ_BATCH_NODE_SHARED_DIR".format(grid_file.file_path),
 #     #         # Run the simulation
 #     #         "sudo python ./RunHoneybeeRadiance.py -s ./surfaces.json -sm ./sky_mtx.json -p ./{0:}".format(grid_file.file_path),
 #     #         # Copy the results back to the blob
-#     #         "sudo python copy_to_blob.py -fp {0:} -bn {1:} -sa {2:} -sc {0:} -st {3:}".format(
+#     #         "sudo python CopyToBlob.py -fp {0:} -bn {1:} -sa {2:} -sc {0:} -st {3:}".format(
 #     #             grid_file.file_path.replace(".json", "_results.json"),
 #     #             _JOB_ID,
 #     #             _STORAGE_ACCOUNT_NAME,

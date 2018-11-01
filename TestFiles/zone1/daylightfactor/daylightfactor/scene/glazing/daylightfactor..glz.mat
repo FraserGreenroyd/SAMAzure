@@ -1,0 +1,15 @@
+# Created by Honeybee[+] at 2018-11-01 12:08:26
+# www.ladybug.tools
+
+void glass GlassMaterialSkylight
+0
+0
+4 0.708456142849 0.708456142849 0.708456142849 1.52
+void glass GlassMaterialInternal
+0
+0
+4 0.708456142849 0.708456142849 0.708456142849 1.52
+void glass GlassMaterialInternal
+0
+0
+4 0.980122694501 0.980122694501 0.980122694501 1.52

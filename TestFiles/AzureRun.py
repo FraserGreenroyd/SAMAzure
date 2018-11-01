@@ -291,60 +291,101 @@ if __name__ == '__main__':
     # Commands passed to all nodes in pool on creation
     pool_start_commands = [
         "cd / ",
-        "wget --no-check-certificate https://github.com/FraserGreenroyd/SAMAzure/raw/master/TestFiles/resources/azure_common/radiance-5.1.0-Linux.tar.gz",
-        "tar xzf radiance-5.1.0-Linux.tar.gz",
-        "rsync -av /radiance-5.1.0-Linux/usr/local/radiance/bin/ /usr/local/bin/",
-        "rsync -av /radiance-5.1.0-Linux/usr/local/radiance/lib/ /usr/local/lib/ray/",
-        "wget --no-check-certificate https://github.com/FraserGreenroyd/SAMAzure/raw/master/TestFiles/resources/azure_common/lb_hb.tar.gz",
-        "tar xzf lb_hb.tar.gz",
-        "wget --no-check-certificate https://github.com/FraserGreenroyd/SAMAzure/raw/master/TestFiles/resources/azure_common/RunHoneybeeRadiance.py"
+        # "wget --no-check-certificate https://github.com/FraserGreenroyd/SAMAzure/raw/master/TestFiles/resources/azure_common/radiance-5.1.0-Linux.tar.gz",
+        # "tar xzf radiance-5.1.0-Linux.tar.gz",
+        # "rsync -av /radiance-5.1.0-Linux/usr/local/radiance/bin/ /usr/local/bin/",
+        # "rsync -av /radiance-5.1.0-Linux/usr/local/radiance/lib/ /usr/local/lib/ray/",
+        # "wget --no-check-certificate https://github.com/FraserGreenroyd/SAMAzure/raw/master/TestFiles/resources/azure_common/lb_hb.tar.gz",
+        # "tar xzf lb_hb.tar.gz",
+        # "wget --no-check-certificate https://github.com/FraserGreenroyd/SAMAzure/raw/master/TestFiles/resources/azure_common/RunHoneybeeRadiance.py"
     ]
 
-    # Admin user identity for pool nodes
-    user = batchmodels.UserIdentity(
+    pool_user = batchmodels.UserIdentity(
         auto_user=batchmodels.AutoUserSpecification(
             elevation_level=batchmodels.ElevationLevel.admin,
             scope=batchmodels.AutoUserScope.pool))
 
-    # Unique Pool ID
     pool_id = common.helpers.generate_unique_resource_name("batchpool")
 
-    # Create pool ready to populate with nodes
     pool = batchmodels.PoolAddParameter(
         id=pool_id,
         vm_size=pool_vm_size,
         virtual_machine_configuration=batchmodels.VirtualMachineConfiguration(image_reference=image_ref_to_use, node_agent_sku_id=sku_to_use),
-        enable_auto_scale=True,
-        auto_scale_formula="pendingTaskSamplePercent = $PendingTasks.GetSamplePercent(180 * TimeInterval_Second);pendingTaskSamples = pendingTaskSamplePercent < 70 ? 1 : avg($PendingTasks.GetSample(180 * TimeInterval_Second)); $TargetDedicatedNodes = min(100, pendingTaskSamples);",
-        auto_scale_evaluation_interval=datetime.timedelta(minutes=5),
+        target_dedicated_nodes=1,
+        # enable_auto_scale=True,
+        # auto_scale_formula="pendingTaskSamplePercent = $PendingTasks.GetSamplePercent(180 * TimeInterval_Second);pendingTaskSamples = pendingTaskSamplePercent < 70 ? 1 : avg($PendingTasks.GetSample(180 * TimeInterval_Second)); $TargetDedicatedNodes = min(100, pendingTaskSamples);",
+        # auto_scale_evaluation_interval=datetime.timedelta(minutes=5),
         start_task=batchmodels.StartTask(
-            user_identity=user,
+            user_identity=pool_user,
             command_line=common.helpers.wrap_commands_in_shell("linux", pool_start_commands),
             resource_files=[]
         ),
     )
+
     common.helpers.create_pool_if_not_exist(batch_client, pool)
 
-    # Unique Job ID
     job_id = common.helpers.generate_unique_resource_name("batchjob")
 
-    # Create job ready to populate with tasks
     job = batchmodels.JobAddParameter(id=job_id, pool_info=batchmodels.PoolInformation(pool_id=pool_id))
+
     batch_client.job.add(job)
 
+    task_user = batchmodels.UserIdentity(
+        auto_user=batchmodels.AutoUserSpecification(
+            elevation_level=batchmodels.ElevationLevel.admin,
+            scope=batchmodels.AutoUserScope.task))
+
+    task_id = common.helpers.generate_unique_resource_name("task")
+
+    # TODO: Check for "job-n" in mnt directory below when adding scalability
+    # TODO: Remove hard coded grid file (once number of nodes made to match grid files)
+    task_run_commands = [
+        "cd /",
+        "sudo wget --no-check-certificate https://github.com/FraserGreenroyd/SAMAzure/raw/master/TestFiles/resources/azure_common/radiance-5.1.0-Linux.tar.gz",
+        "sudo wget --no-check-certificate https://github.com/FraserGreenroyd/SAMAzure/raw/master/TestFiles/resources/azure_common/radiance-5.1.0-Linux.tar.gz",
+        "sudo tar xzf radiance-5.1.0-Linux.tar.gz",
+        "sudo rsync -av /radiance-5.1.0-Linux/usr/local/radiance/bin/ /usr/local/bin/",
+        "sudo rsync -av /radiance-5.1.0-Linux/usr/local/radiance/lib/ /usr/local/lib/ray/",
+        "sudo wget --no-check-certificate https://github.com/FraserGreenroyd/SAMAzure/raw/master/TestFiles/resources/azure_common/lb_hb.tar.gz",
+        "sudo tar xzf lb_hb.tar.gz",
+        "sudo wget --no-check-certificate https://github.com/FraserGreenroyd/SAMAzure/raw/master/TestFiles/resources/azure_common/RunHoneybeeRadiance.py",
+        "sudo python RunHoneybeeRadiance.py -s ./mnt/batch/tasks/workitems/{0:}/job-1/{1:}/wd/surfaces.json -sm ./mnt/batch/tasks/workitems/{0:}/job-1/{1:}/wd/sky_mtx.json -p ./mnt/batch/tasks/workitems/{0:}/job-1/{1:}/wd/{2:}".format(job_id, task_id, analysis_grid_names[0]),
+    ]
+
     task = batchmodels.TaskAddParameter(
-        id=common.helpers.generate_unique_resource_name("task"),
-        command_line='touch "testfile.py"',
+        id=task_id,
+        command_line=common.helpers.wrap_commands_in_shell("linux", task_run_commands),
         resource_files=[
             batchmodels.ResourceFile(file_path=analysis_grid_names[0], blob_source=analysis_grid_sas_urls[0]),
             batchmodels.ResourceFile(file_path="sky_mtx.json", blob_source=sky_mtx_sas_url),
             batchmodels.ResourceFile(file_path="surfaces.json", blob_source=surfaces_sas_url),
         ],
-        output_files=[
-            batchmodels.OutputFile(
-                file_pattern="testfile.py",
-                destination=batchmodels.OutputFileDestination(container=_CONTAINER_NAME),
-                upload_options=batchmodels.OutputFileUploadOptions(upload_condition="taskCompletion"))])
+        # output_files=[
+        #     batchmodels.OutputFile(
+        #         file_pattern="/mnt/batch/tasks/workitems/{0:}/job-1/{1:}/wd/{2:}".format(job_id, task_id, analysis_grid_names[0].replace(".json", "_result.json")),
+        #         destination=batchmodels.OutputFileDestination(container=_CONTAINER_NAME),
+        #         upload_options=batchmodels.OutputFileUploadOptions(upload_condition="taskCompletion"))],
+        user_identity=task_user)
+
+    # print("Results written to ./mnt/batch/tasks/workitems/{0:}/job-1/{1:}/wd/{2:} on the node".format(job_id, task_id, analysis_grid_names[0].replace(".json", "_result.json")))
+
+    batch_client.task.add(job_id=job_id, task=task)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     #batch_client.task.add(job_id=job.id, task=task)
 
@@ -548,7 +589,7 @@ if __name__ == '__main__':
 #     #         batchmodels.ResourceFile(file_path="radiance-5.1.0-Linux.tar.gz", blob_source=_RADIANCE_SAS_URL),
 #     #         batchmodels.ResourceFile(file_path="lb_hb.tar.gz", blob_source=_LB_HB_SAS_URL),
 #     #         batchmodels.ResourceFile(file_path="RunHoneybeeRadiance.py", blob_source=_SCRIPT_SAS_URL),
-#     #         batchmodels.ResourceFile(file_path="copy_to_blob.py", blob_source=_COPYTOBLOB_SAS_URL),
+#     #         batchmodels.ResourceFile(file_path="CopyToBlob.py", blob_source=_COPYTOBLOB_SAS_URL),
 #     #         surfaces_file,
 #     #         sky_mtx_file,
 #     #         grid_file,
@@ -568,14 +609,14 @@ if __name__ == '__main__':
 #     #         "sudo tar xzf lb_hb.tar.gz",
 #     #         # Get the script and files to be run
 #     #         "sudo cp -p RunHoneybeeRadiance.py $AZ_BATCH_NODE_SHARED_DIR",
-#     #         "sudo cp -p copy_to_blob.py $AZ_BATCH_NODE_SHARED_DIR",
+#     #         "sudo cp -p CopyToBlob.py $AZ_BATCH_NODE_SHARED_DIR",
 #     #         "sudo cp -p surfaces.json $AZ_BATCH_NODE_SHARED_DIR",
 #     #         "sudo cp -p sky_mtx.json $AZ_BATCH_NODE_SHARED_DIR",
 #     #         "sudo cp -p {0:} $AZ_BATCH_NODE_SHARED_DIR".format(grid_file.file_path),
 #     #         # Run the simulation
 #     #         "sudo python ./RunHoneybeeRadiance.py -s ./surfaces.json -sm ./sky_mtx.json -p ./{0:}".format(grid_file.file_path),
 #     #         # Copy the results back to the blob
-#     #         "sudo python copy_to_blob.py -fp {0:} -bn {1:} -sa {2:} -sc {0:} -st {3:}".format(
+#     #         "sudo python CopyToBlob.py -fp {0:} -bn {1:} -sa {2:} -sc {0:} -st {3:}".format(
 #     #             grid_file.file_path.replace(".json", "_results.json"),
 #     #             _JOB_ID,
 #     #             _STORAGE_ACCOUNT_NAME,

@@ -8,8 +8,8 @@ import json
 import os
 import sys
 
-sys.path.insert(0, 'ladybug')
-sys.path.insert(0, 'honeybee')
+sys.path.insert(0, '/ladybug')
+sys.path.insert(0, '/honeybee')
 
 from honeybee.radiance.recipe.daylightfactor.gridbased import GridBased as GridBased_DaylightFactor
 from honeybee.radiance.recipe.annual.gridbased import GridBased as GridBased_Annual
