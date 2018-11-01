@@ -5,6 +5,11 @@ VisualStudioVersion = 15.0.27428.2043
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureEngine", "AzureEngine\AzureEngine.csproj", "{B31DFA9C-EE6E-43C1-8E69-572EF765400C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureGrasshopper", "AzureGrasshopper\AzureGrasshopper.csproj", "{668BBA18-8A75-4B5B-815D-EF0836F6C940}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B31DFA9C-EE6E-43C1-8E69-572EF765400C} = {B31DFA9C-EE6E-43C1-8E69-572EF765400C}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +20,10 @@ Global
 		{B31DFA9C-EE6E-43C1-8E69-572EF765400C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B31DFA9C-EE6E-43C1-8E69-572EF765400C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B31DFA9C-EE6E-43C1-8E69-572EF765400C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{668BBA18-8A75-4B5B-815D-EF0836F6C940}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{668BBA18-8A75-4B5B-815D-EF0836F6C940}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{668BBA18-8A75-4B5B-815D-EF0836F6C940}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{668BBA18-8A75-4B5B-815D-EF0836F6C940}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

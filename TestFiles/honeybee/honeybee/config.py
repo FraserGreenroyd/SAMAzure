@@ -168,6 +168,8 @@ class Folders(object):
                 msg = "Warning: Failed to find radiance installation folder.\n" \
                     "You can set it up manually in {}.".format(self.__configFile)
                 print(msg)
+                print(path)
+                print(os.getcwd())
             self._radbin = ""
             self._radlib = ""
         else:
