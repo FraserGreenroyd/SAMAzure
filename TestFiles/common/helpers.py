@@ -439,7 +439,7 @@ def generate_unique_resource_name(resource_prefix):
     :rtype: str
     """
     return resource_prefix + "-" + \
-           datetime.datetime.utcnow().strftime("%Y%m%d-%H%M%S")
+           datetime.datetime.utcnow().strftime("%Y%m%d%H%M%S")
 
 
 def query_yes_no(question, default="yes"):
