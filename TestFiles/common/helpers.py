@@ -213,6 +213,11 @@ def read_compute_node_file_as_string(batch_client, pool_id, node_id, file_name, 
     return _read_stream_as_string(stream, encoding)
 
 
+def chunks(l, n):
+    """Yield successive n-sized chunks from l."""
+    for i in range(0, len(l), n):
+        yield l[i:i + n]
+
 def create_pool_if_not_exist(batch_client, pool):
     """Creates the specified pool if it doesn't already exist
 
@@ -438,7 +443,7 @@ def generate_unique_resource_name(resource_prefix):
     :return: A string with the format "resource_prefix-<time>".
     :rtype: str
     """
-    return resource_prefix + "-" + \
+    return resource_prefix + \
            datetime.datetime.utcnow().strftime("%Y%m%d%H%M%S")
 
 
