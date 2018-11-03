@@ -121,7 +121,7 @@ if __name__ == '__main__':
     block_blob_client.create_container(_CONTAINER_NAME, fail_on_exist=False)
 
     # Generate a SAS token to pass results back to the container
-    container_sas_token = block_blob_client.generate_container_shared_access_signature(_CONTAINER_NAME, permission=azureblob.ContainerPermissions(read=True, write=True))
+    container_sas_token = block_blob_client.generate_container_shared_access_signature(_CONTAINER_NAME, permission=azureblob.ContainerPermissions(read=True, write=True), expiry=datetime.datetime.utcnow() + datetime.timedelta(minutes=30),)
     print(container_sas_token)
 
     # Upload the context surfaces file
@@ -144,6 +144,8 @@ if __name__ == '__main__':
     # A chunked list of grid indices - to create multiple pool instances
     task_chunks = list(common.helpers.chunks(list(range(0, n_tasks)), 100))
 
+    # TODO - Add autoscaling for pools!
+
     # Generate batch client credentials
     credentials = batchauth.SharedKeyCredentials(batch_account_name, batch_account_key)
 
@@ -160,7 +162,7 @@ if __name__ == '__main__':
     for n_chunk, chunk in enumerate(task_chunks):
         # Create the pool
         # TODO: Add the scaling here for multiple pools
-        pool_id = "{0:}pool{1:}".format(_CONTAINER_NAME, n_chunk)
+        pool_id = "{0:}Pool-{1:}".format(_CONTAINER_NAME, n_chunk)
         pool_start_commands = ["cd / ",]
         pool = batchmodels.PoolAddParameter(
             id=pool_id,
@@ -173,9 +175,10 @@ if __name__ == '__main__':
 
         # Create job to assign tasks
 
-        job_id = "{0:}job{1:}".format(_CONTAINER_NAME, n_chunk)
+        job_id = "Job{0:}".format(n_chunk)
         job = batchmodels.JobAddParameter(id=job_id, pool_info=batchmodels.PoolInformation(pool_id=pool_id))
         batch_client.job.add(job)
+        print("{0:} added to [{1:}]".format(job_id, _CONTAINER_NAME))
 
         # Task user credentials
         task_user = batchmodels.UserIdentity(auto_user=batchmodels.AutoUserSpecification(elevation_level=batchmodels.ElevationLevel.admin, scope=batchmodels.AutoUserScope.task))
@@ -183,12 +186,12 @@ if __name__ == '__main__':
         for nt in chunk:
 
             # Create the task
-            task_id = "{0:}".format(analysis_grid_names[nt].replace(".json", ""))
+            task_id = "{0:}".format(analysis_grid_names[nt].replace(".json", "").replace(" ", "").replace("-", "").replace("(", "").replace(")", "").lower())
             node_dir = "./mnt/batch/tasks/workitems/{0:}/job-1/{1:}/wd".format(job_id, task_id)
             task_run_commands = [
                 "cd /",
-                "sudo sudo apt-get -y install python-pip",
-                "sudo pip install azure-storage",
+                # "sudo sudo apt-get -y install python-pip",
+                # "sudo pip install azure-storage",
                 "sudo wget --no-check-certificate https://github.com/FraserGreenroyd/SAMAzure/raw/master/TestFiles/resources/azure_common/CopyToBlob.py",
                 "sudo wget --no-check-certificate https://github.com/FraserGreenroyd/SAMAzure/raw/master/TestFiles/resources/azure_common/radiance-5.1.0-Linux.tar.gz",
                 "sudo tar xzf radiance-5.1.0-Linux.tar.gz",
@@ -198,7 +201,7 @@ if __name__ == '__main__':
                 "sudo tar xzf lb_hb.tar.gz",
                 "sudo wget --no-check-certificate https://github.com/FraserGreenroyd/SAMAzure/raw/master/TestFiles/resources/azure_common/RunHoneybeeRadiance.py",
                 "sudo python RunHoneybeeRadiance.py -s {0:}/surfaces.json -sm {0:}/sky_mtx.json -p {0:}/{1:}".format(node_dir, analysis_grid_names[nt]),
-                "sudo python CopyToBlob.py -fp {0:}/{1:} -bn {1:} -sa {2:} -sc {3:} -st {0:}/{1:}".format(node_dir, analysis_grid_names[nt].replace(".json", "_result.json"), storage_account_name, _CONTAINER_NAME, storage_account_key),
+                # "sudo python CopyToBlob.py -fp {0:}/{1:} -bn {1:} -sa {2:} -sc {3:} -st {0:}/{1:}".format(node_dir, analysis_grid_names[nt].replace(".json", "_result.json"), storage_account_name, _CONTAINER_NAME, storage_account_key),
             ]
             task = batchmodels.TaskAddParameter(
                 id=task_id,
@@ -209,14 +212,15 @@ if __name__ == '__main__':
                     batchmodels.ResourceFile(file_path="surfaces.json", blob_source=surfaces_sas_url),],
                 output_files=[
                     batchmodels.OutputFile(
-                        file_pattern=analysis_grid_sas_urls[nt].replace(".json", "_result.json"),
+                        file_pattern=analysis_grid_names[nt].replace(".json", "_result.json"),
                         destination=batchmodels.OutputFileDestination(
                             container=batchmodels.OutputFileBlobContainerDestination(
-                                container_url="https://{0:}.blob.core.windows.net/{1:}/{2:}?{3:}".format(storage_account_name, _CONTAINER_NAME, analysis_grid_names[nt].replace(".json", ""), container_sas_token))),
+                                container_url="https://{0:}.blob.core.windows.net/{1:}?{3:}".format(storage_account_name, _CONTAINER_NAME, analysis_grid_names[nt].replace(".json", "result.json"), container_sas_token))),
                         upload_options=batchmodels.OutputFileUploadOptions(upload_condition="taskCompletion")
                     )
                 ],
                 user_identity=task_user)
+            print("Job ID: {1:} - Task ID: {0:}".format(task_id, job_id))
             batch_client.task.add(job_id=job_id, task=task)
             print("Task[{0:}] added to {1:}".format(task_id, job_id))
 
