@@ -28,6 +28,7 @@ import io
 import os
 import time
 import json
+import re
 
 import azure.storage.blob as azureblob
 import azure.batch.models as batchmodels
@@ -42,6 +43,9 @@ class TimeoutError(Exception):
     """
     def __init__(self, message):
         self.message = message
+
+def normalise_string(text):
+    return re.sub(r"[\W_]+", "", text).lower()
 
 
 def decode_string(string, encoding=None):
@@ -104,8 +108,7 @@ def wait_for_tasks_to_complete(batch_client, job_id, timeout):
         print("Checking if all tasks are complete...")
         tasks = batch_client.task.list(job_id)
 
-        incomplete_tasks = [task for task in tasks if
-                            task.state != batchmodels.TaskState.completed]
+        incomplete_tasks = [task for task in tasks if task.state != batchmodels.TaskState.completed]
         if not incomplete_tasks:
             return
         time.sleep(5)
@@ -413,7 +416,6 @@ def upload_file_to_container(block_blob_client, container_name, file_path, timeo
 def download_blob_from_container(block_blob_client, container_name, blob_name, directory_path):
     """
     Downloads specified blob from the specified Azure Blob storage container.
-
     :param block_blob_client: A blob service client.
     :type block_blob_client: `azure.storage.blob.BlockBlobService`
     :param container_name: The Azure Blob storage container from which to
@@ -421,30 +423,24 @@ def download_blob_from_container(block_blob_client, container_name, blob_name, d
     :param blob_name: The name of blob to be downloaded
     :param directory_path: The local directory to which to download the file.
     """
-    print('Downloading result file from container [{}]...'.format(
-        container_name))
 
     destination_file_path = os.path.join(directory_path, blob_name)
 
-    block_blob_client.get_blob_to_path(
-        container_name, blob_name, destination_file_path)
+    print('Downloading {0:} from container [{1:}] to {2:}...'.format(blob_name, container_name, destination_file_path))
 
-    print('  Downloaded blob [{}] from container [{}] to {}'.format(
-        blob_name, container_name, destination_file_path))
+    block_blob_client.get_blob_to_path(container_name, blob_name, destination_file_path)
 
-    print('  Download complete!')
+    print('Downloaded blob [{0:}] from container [{1:}] to {2:}'.format(blob_name, container_name, destination_file_path))
 
 
 def generate_unique_resource_name(resource_prefix):
-    """Generates a unique resource name by appending a time
-    string after the specified prefix.
+    """Generates a unique resource name by appending a time string after the specified prefix.
 
     :param str resource_prefix: The resource prefix to use.
     :return: A string with the format "resource_prefix-<time>".
     :rtype: str
     """
-    return resource_prefix + \
-           datetime.datetime.utcnow().strftime("%Y%m%d%H%M%S")
+    return "{0:}-{1:}".format(resource_prefix, datetime.datetime.utcnow().strftime("%Y%m%d%H%M%S"))
 
 
 def query_yes_no(question, default="yes"):
