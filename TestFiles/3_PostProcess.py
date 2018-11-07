@@ -60,7 +60,7 @@ if __name__ == '__main__':
     print("df-range: {} to {}".format(min(df["df"]), max(df["df"])))
     print("da-range: {} to {}".format(min(df["da"]), max(df["da"])))
     print("cda-range: {} to {}".format(min(df["cda"]), max(df["cda"])))
-    print("udi_less-range: {} to {}".format(min(df["udi_less "]), max(df["udi_less "])))
+    print("udi_less-range: {} to {}".format(min(df["udi_less"]), max(df["udi_less"])))
     print("udi-range: {} to {}".format(min(df["udi"]), max(df["udi"])))
     print("udi_more-range: {} to {}".format(min(df["udi_more"]), max(df["udi_more"])))
 
