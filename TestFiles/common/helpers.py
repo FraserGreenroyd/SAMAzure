@@ -44,6 +44,7 @@ class TimeoutError(Exception):
     def __init__(self, message):
         self.message = message
 
+
 def normalise_string(text):
     return re.sub(r"[\W_]+", "", text).lower()
 
@@ -91,6 +92,28 @@ def select_latest_verified_vm_image_with_node_agent_sku(batch_client, publisher,
     # skus are listed in reverse order, pick first for latest
     sku_to_use, image_ref_to_use = skus_to_use[0]
     return (sku_to_use.id, image_ref_to_use)
+
+
+def wait_for_tasks_to_complete2(batch_client, tasks, timeout):
+    """Waits for all the tasks in a particular job to complete.
+
+    :param batch_client: The batch client to use.
+    :type batch_client: `batchserviceclient.BatchServiceClient`
+    :param str job_id: The id of the job to monitor.
+    :param timeout: The maximum amount of time to wait.
+    :type timeout: `datetime.timedelta`
+    """
+    time_to_timeout_at = datetime.datetime.now() + timeout
+    num_tasks = len(tasks)
+    while datetime.datetime.now() < time_to_timeout_at:
+        incomplete_tasks = [task for task in tasks if task.state != batchmodels.TaskState.completed]
+        print("{0:}/{1:} tasks remaining".format(len(incomplete_tasks), num_tasks))
+        if incomplete_tasks == 0:
+            print("All tasks completed!")
+            return
+        time.sleep(5)
+
+    raise TimeoutError("Timed out waiting for tasks to complete")
 
 
 def wait_for_tasks_to_complete(batch_client, job_id, timeout):
@@ -220,6 +243,7 @@ def chunks(l, n):
     """Yield successive n-sized chunks from l."""
     for i in range(0, len(l), n):
         yield l[i:i + n]
+
 
 def create_pool_if_not_exist(batch_client, pool):
     """Creates the specified pool if it doesn't already exist

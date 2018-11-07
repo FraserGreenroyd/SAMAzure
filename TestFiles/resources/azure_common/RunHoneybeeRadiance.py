@@ -121,7 +121,7 @@ if __name__ == "__main__":
 
     # Write the results to a single JSON file
     summary_results = {"name": zone_name, "x": x, "y": y, "z": z, "df": df, "da": da,
-                       "cda": cda, "udi_less ": udi_less,
+                       "cda": cda, "udi_less": udi_less,
                        "udi": udi, "udi_more": udi_more}
 
     # Create a location for the results summary to be saved
