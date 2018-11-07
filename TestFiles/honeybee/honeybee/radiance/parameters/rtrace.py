@@ -6,7 +6,7 @@ from ._frozen import frozen
 
 @frozen
 class RtraceParameters(AdvancedRadianceParameters):
-    """Radiance Parameters for grid_file based analysis.
+    """Radiance Parameters for grid based analysis.
 
     For the full list of attributes try self.keys
 

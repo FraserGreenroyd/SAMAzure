@@ -27,7 +27,7 @@ class DaylightCoeffImageBased(GenericImageBased):
         views: List of views.
         simulation_type: 0: Illuminance(lux), 1: Radiation (kWh), 2: Luminance (Candela)
             (Default: 2)
-        rad_parameters: Radiance parameters for grid_file based analysis (rtrace).
+        rad_parameters: Radiance parameters for grid based analysis (rtrace).
             (Default: imagebased.LowQualityImage)
         hb_objects: An optional list of Honeybee surfaces or zones (Default: None).
         sub_folder: Analysis subfolder for this recipe. (Default: "gridbased")
@@ -42,7 +42,7 @@ class DaylightCoeffImageBased(GenericImageBased):
     def __init__(self, sky_mtx, views, simulation_type=2, daylight_mtx_parameters=None,
                  vwrays_parameters=None, reuse_daylight_mtx=True, hb_objects=None,
                  sub_folder="imagebased_daylightcoeff"):
-        """Create grid_file-based recipe."""
+        """Create grid-based recipe."""
         GenericImageBased.__init__(
             self, views, hb_objects, sub_folder)
 
@@ -566,7 +566,7 @@ class DaylightCoeffImageBased(GenericImageBased):
         return self.__repr__()
 
     def __repr__(self):
-        """Represent grid_file based recipe."""
+        """Represent grid based recipe."""
         _analysisType = {
             0: "Illuminance", 1: "Radiation", 2: "Luminance"
         }

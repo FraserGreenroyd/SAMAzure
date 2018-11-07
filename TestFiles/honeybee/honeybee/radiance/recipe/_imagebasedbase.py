@@ -11,7 +11,7 @@ import os
 
 
 class GenericImageBased(AnalysisRecipe):
-    """Honeybee generic grid_file base analysis base class.
+    """Honeybee generic grid base analysis base class.
 
     This class is base class for common gridbased analysis recipes as well as
     sunlighthours recipe and annual analysis recipe.
@@ -77,5 +77,5 @@ class GenericImageBased(AnalysisRecipe):
         return self.__repr__()
 
     def __repr__(self):
-        """Represent grid_file based recipe."""
+        """Represent grid based recipe."""
         return "%s\n#Views: %d" % (self.__class__.__name__, self.view_count)

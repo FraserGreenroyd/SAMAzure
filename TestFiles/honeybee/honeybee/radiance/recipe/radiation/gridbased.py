@@ -74,7 +74,7 @@ class GridBased(DaylightCoeffGridBased):
         cls, epw_file, point_groups, vector_groups=None, sky_density=1,
             radiance_parameters=None, reuse_daylight_mtx=True, hb_objects=None,
             sub_folder="gridbased_radiation"):
-        """Create grid_file based daylight coefficient from weather file, points and vectors.
+        """Create grid based daylight coefficient from weather file, points and vectors.
 
         Args:
             epw_file: An EnergyPlus weather file.
@@ -103,7 +103,7 @@ class GridBased(DaylightCoeffGridBased):
     def from_points_file(cls, epw_file, points_file, sky_density=1,
                          radiance_parameters=None, reuse_daylight_mtx=True,
                          hb_objects=None, sub_folder="gridbased_radiation"):
-        """Create grid_file based daylight coefficient recipe from points file."""
+        """Create grid based daylight coefficient recipe from points file."""
         try:
             with open(points_file, "rb") as inf:
                 point_groups = tuple(line.split()[:3] for line in inf.readline())

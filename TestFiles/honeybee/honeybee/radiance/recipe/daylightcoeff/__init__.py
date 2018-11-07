@@ -1,4 +1,4 @@
 """Radiance daylight coefficient recipes.
 
-Daylight coefficient recipes support both grid_file-based and image-based analysis.
+Daylight coefficient recipes support both grid-based and image-based analysis.
 """

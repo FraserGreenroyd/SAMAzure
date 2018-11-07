@@ -9,11 +9,11 @@ from ....hbsurface import HBSurface
 
 
 class GridBased(PITGridBased):
-    """Daylight factor grid_file based analysis.
+    """Daylight factor grid based analysis.
 
     Attributes:
         analysis_grids: List of analysis grids.
-        rad_parameters: Radiance parameters for grid_file based analysis (rtrace).
+        rad_parameters: Radiance parameters for grid based analysis (rtrace).
             (Default: gridbased.LowQuality)
         hb_objects: An optional list of Honeybee surfaces or zones (Default: None).
         sub_folder: Analysis subfolder for this recipe. (Default: "daylightfactor")
@@ -23,7 +23,7 @@ class GridBased(PITGridBased):
 
     def __init__(self, analysis_grids, rad_parameters=None, hb_objects=None,
                  sub_folder="daylightfactor"):
-        """Create grid_file-based recipe."""
+        """Create grid-based recipe."""
         # create the sky for daylight factor
         sky = CertainIlluminanceLevel(self.SKYILLUM)
         # simulation type is Illuminance
@@ -61,7 +61,7 @@ class GridBased(PITGridBased):
     def from_points_and_vectors(
         cls, point_groups, vector_groups=None, rad_parameters=None, hb_objects=None,
             sub_folder="gridbased"):
-        """Create grid_file based recipe from points and vectors.
+        """Create grid based recipe from points and vectors.
 
         Args:
             point_groups: A list of (x, y, z) test points or lists of (x, y, z)
@@ -71,7 +71,7 @@ class GridBased(PITGridBased):
             vector_groups: An optional list of (x, y, z) vectors. Each vector
                 represents direction of corresponding point in testPts. If the
                 vector is not provided (0, 0, 1) will be assigned.
-            rad_parameters: Radiance parameters for grid_file based analysis (rtrace).
+            rad_parameters: Radiance parameters for grid based analysis (rtrace).
                 (Default: gridbased.LowQuality)
             hb_objects: An optional list of Honeybee surfaces or zones (Default: None).
             sub_folder: Analysis subfolder for this recipe. (Default: "gridbased")
@@ -136,7 +136,7 @@ class GridBased(PITGridBased):
         return self.analysis_grids
 
     def __repr__(self):
-        """Represent grid_file based recipe."""
+        """Represent grid based recipe."""
         return "%s: Daylight Factor\n#PointGroups: %d #Points: %d" % \
             (self.__class__.__name__,
              self.analysis_grid_count,

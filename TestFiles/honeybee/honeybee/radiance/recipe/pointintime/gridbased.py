@@ -24,7 +24,7 @@ class GridBased(GenericGridBased):
         analysis_grids: List of analysis grids.
         simulation_type: 0: Illuminance(lux), 1: Radiation (kWh), 2: Luminance (Candela)
             (Default: 0)
-        rad_parameters: Radiance parameters for grid_file based analysis (rtrace).
+        rad_parameters: Radiance parameters for grid based analysis (rtrace).
             (Default: gridbased.LowQuality)
         hb_objects: An optional list of Honeybee surfaces or zones (Default: None).
         sub_folder: Analysis subfolder for this recipe. (Default: "gridbased")
@@ -55,7 +55,7 @@ class GridBased(GenericGridBased):
     # if there has been no changes in inputs.
     def __init__(self, sky, analysis_grids, simulation_type=0, rad_parameters=None,
                  hb_objects=None, sub_folder="gridbased"):
-        """Create grid_file-based recipe."""
+        """Create grid-based recipe."""
         GenericGridBased.__init__(
             self, analysis_grids, hb_objects, sub_folder)
 
@@ -63,7 +63,7 @@ class GridBased(GenericGridBased):
         """A honeybee sky for the analysis."""
 
         self.radiance_parameters = rad_parameters
-        """Radiance parameters for grid_file based analysis (rtrace).
+        """Radiance parameters for grid based analysis (rtrace).
             (Default: gridbased.LowQuality)"""
 
         self.simulation_type = simulation_type
@@ -96,7 +96,7 @@ class GridBased(GenericGridBased):
     def from_points_and_vectors(cls, sky, point_groups, vector_groups=None,
                                 simulation_type=0, rad_parameters=None,
                                 hb_objects=None, sub_folder="gridbased"):
-        """Create grid_file based recipe from points and vectors.
+        """Create grid based recipe from points and vectors.
 
         Args:
             sky: A honeybee sky for the analysis
@@ -109,7 +109,7 @@ class GridBased(GenericGridBased):
                 vector is not provided (0, 0, 1) will be assigned.
             simulation_type: 0: Illuminance(lux), 1: Radiation (kWh), 2: Luminance
                 (Candela) (Default: 0).
-            rad_parameters: Radiance parameters for grid_file based analysis (rtrace).
+            rad_parameters: Radiance parameters for grid based analysis (rtrace).
                 (Default: gridbased.LowQuality)
             hb_objects: An optional list of Honeybee surfaces or zones (Default: None).
             sub_folder: Analysis subfolder for this recipe. (Default: "gridbased")
@@ -175,7 +175,7 @@ class GridBased(GenericGridBased):
     def write(self, target_folder, project_name='untitled', header=True):
         """Write analysis files to target folder.
 
-        Files for a grid_file based analysis are:
+        Files for a grid based analysis are:
             test points <project_name.pts>: List of analysis points.
             sky file <*.sky>: Radiance sky for this analysis.
             material file <*.mat>: Radiance materials. Will be empty if hb_objects
@@ -325,7 +325,7 @@ class GridBased(GenericGridBased):
         }
 
     def __repr__(self):
-        """Represent grid_file based recipe."""
+        """Represent grid based recipe."""
         _analysisType = {
             0: "Illuminance", 1: "Radiation", 2: "Luminance"
         }

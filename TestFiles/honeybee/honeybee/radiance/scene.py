@@ -186,8 +186,8 @@ class Scene(object):
 
     @property
     def grid_folder(self):
-        """Folder to write analysis grid_file files."""
-        return 'grid_file'
+        """Folder to write analysis grid files."""
+        return 'grid'
 
     @property
     def view_folder(self):

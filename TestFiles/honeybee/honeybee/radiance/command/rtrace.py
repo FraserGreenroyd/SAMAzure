@@ -5,7 +5,7 @@ from ..datatype import RadiancePath
 
 
 class Rtrace(RadianceCommand):
-    u"""Create a grid_file-based Radiance ray-tracer.
+    u"""Create a grid-based Radiance ray-tracer.
 
     Read more at: http://radsite.lbl.gov/radiance/man_html/rtrace.1.html
 

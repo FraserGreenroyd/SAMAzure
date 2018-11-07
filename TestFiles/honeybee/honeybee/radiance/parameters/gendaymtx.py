@@ -6,7 +6,7 @@ from ._frozen import frozen
 # TODO: Add a check to make sure user can't set both -s and -d to True.
 @frozen
 class GendaymtxParameters(AdvancedRadianceParameters):
-    """Radiance Parameters for grid_file based analysis.
+    """Radiance Parameters for grid based analysis.
 
     Read more:
     https://www.radiance-online.org/learning/documentation/manual-pages/pdfs/gendaymtx.pdf

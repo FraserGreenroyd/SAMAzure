@@ -51,35 +51,35 @@ if __name__ == "__main__":
         "--inputIDF",
         type=str,
         help="Path to the source IDF from which geometry is obtained",
-        default="4_zone_test.idf"  # TODO - Remove post testing
+        default="./resources/idf_processing/4_zone_test.idf"  # TODO - Remove post testing
     )
     parser.add_argument(
         "-w",
         "--weatherFile",
         type=str,
         help="Path to the EPW weather file for the location being simulated",
-        default="GBR_Cardiff_CIBSE_TRY.epw"  # TODO - Remove post testing
+        default="./resources/idf_processing/GBR_Cardiff_CIBSE_TRY.epw"  # TODO - Remove post testing
     )
     parser.add_argument(
         "-t",
         "--internalGainsTemplate",
         type=str,
         help="Path to the JSON internal gains template from which zone conditions can be obtained",
-        default="internal_gains_library.json"  # TODO - Remove post testing
+        default="./resources/idf_processing/internal_gains_library.json"  # TODO - Remove post testing
     )
     parser.add_argument(
         "-c",
         "--configFile",
         type=str,
         help="Path to the config file containing target construction U and g-values, and internal gains profile",
-        default="idf_config.json"  # TODO - Remove post testing
+        default="./resources/idf_processing/idf_config.json"  # TODO - Remove post testing
     )
     parser.add_argument(
         "-o",
         "--outputIDF",
         type=str,
         help="Path to the target output IDF inheriting changes from inputs",
-        default="output.idf"  # TODO - Remove post testing
+        default="./resources/idf_processing/output.idf"  # TODO - Remove post testing
     )
     args = parser.parse_args()
 

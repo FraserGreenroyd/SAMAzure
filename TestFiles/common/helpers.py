@@ -28,6 +28,7 @@ import io
 import os
 import time
 import json
+import re
 
 import azure.storage.blob as azureblob
 import azure.batch.models as batchmodels
@@ -42,6 +43,10 @@ class TimeoutError(Exception):
     """
     def __init__(self, message):
         self.message = message
+
+
+def normalise_string(text):
+    return re.sub(r"[\W_]+", "", text).lower()
 
 
 def decode_string(string, encoding=None):
@@ -89,6 +94,28 @@ def select_latest_verified_vm_image_with_node_agent_sku(batch_client, publisher,
     return (sku_to_use.id, image_ref_to_use)
 
 
+def wait_for_tasks_to_complete2(batch_client, tasks, timeout):
+    """Waits for all the tasks in a particular job to complete.
+
+    :param batch_client: The batch client to use.
+    :type batch_client: `batchserviceclient.BatchServiceClient`
+    :param str job_id: The id of the job to monitor.
+    :param timeout: The maximum amount of time to wait.
+    :type timeout: `datetime.timedelta`
+    """
+    time_to_timeout_at = datetime.datetime.now() + timeout
+    num_tasks = len(tasks)
+    while datetime.datetime.now() < time_to_timeout_at:
+        incomplete_tasks = [task for task in tasks if task.state != batchmodels.TaskState.completed]
+        print("{0:}/{1:} tasks remaining".format(len(incomplete_tasks), num_tasks))
+        if incomplete_tasks == 0:
+            print("All tasks completed!")
+            return
+        time.sleep(5)
+
+    raise TimeoutError("Timed out waiting for tasks to complete")
+
+
 def wait_for_tasks_to_complete(batch_client, job_id, timeout):
     """Waits for all the tasks in a particular job to complete.
 
@@ -104,8 +131,7 @@ def wait_for_tasks_to_complete(batch_client, job_id, timeout):
         print("Checking if all tasks are complete...")
         tasks = batch_client.task.list(job_id)
 
-        incomplete_tasks = [task for task in tasks if
-                            task.state != batchmodels.TaskState.completed]
+        incomplete_tasks = [task for task in tasks if task.state != batchmodels.TaskState.completed]
         if not incomplete_tasks:
             return
         time.sleep(5)
@@ -211,6 +237,12 @@ def read_compute_node_file_as_string(batch_client, pool_id, node_id, file_name, 
     stream = batch_client.file.get_from_compute_node(
         pool_id, node_id, file_name)
     return _read_stream_as_string(stream, encoding)
+
+
+def chunks(l, n):
+    """Yield successive n-sized chunks from l."""
+    for i in range(0, len(l), n):
+        yield l[i:i + n]
 
 
 def create_pool_if_not_exist(batch_client, pool):
@@ -408,7 +440,6 @@ def upload_file_to_container(block_blob_client, container_name, file_path, timeo
 def download_blob_from_container(block_blob_client, container_name, blob_name, directory_path):
     """
     Downloads specified blob from the specified Azure Blob storage container.
-
     :param block_blob_client: A blob service client.
     :type block_blob_client: `azure.storage.blob.BlockBlobService`
     :param container_name: The Azure Blob storage container from which to
@@ -416,30 +447,24 @@ def download_blob_from_container(block_blob_client, container_name, blob_name, d
     :param blob_name: The name of blob to be downloaded
     :param directory_path: The local directory to which to download the file.
     """
-    print('Downloading result file from container [{}]...'.format(
-        container_name))
 
     destination_file_path = os.path.join(directory_path, blob_name)
 
-    block_blob_client.get_blob_to_path(
-        container_name, blob_name, destination_file_path)
+    print('Downloading {0:} from container [{1:}] to {2:}...'.format(blob_name, container_name, destination_file_path))
 
-    print('  Downloaded blob [{}] from container [{}] to {}'.format(
-        blob_name, container_name, destination_file_path))
+    block_blob_client.get_blob_to_path(container_name, blob_name, destination_file_path)
 
-    print('  Download complete!')
+    print('Downloaded blob [{0:}] from container [{1:}] to {2:}'.format(blob_name, container_name, destination_file_path))
 
 
 def generate_unique_resource_name(resource_prefix):
-    """Generates a unique resource name by appending a time
-    string after the specified prefix.
+    """Generates a unique resource name by appending a time string after the specified prefix.
 
     :param str resource_prefix: The resource prefix to use.
     :return: A string with the format "resource_prefix-<time>".
     :rtype: str
     """
-    return resource_prefix + "-" + \
-           datetime.datetime.utcnow().strftime("%Y%m%d-%H%M%S")
+    return "{0:}-{1:}".format(resource_prefix, datetime.datetime.utcnow().strftime("%Y%m%d%H%M%S"))
 
 
 def query_yes_no(question, default="yes"):

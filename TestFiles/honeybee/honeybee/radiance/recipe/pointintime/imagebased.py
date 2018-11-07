@@ -17,7 +17,7 @@ class ImageBased(GenericImageBased):
         views: List of views.
         simulation_type: 0: Illuminance(lux), 1: Radiation (kWh), 2: Luminance (Candela)
             (Default: 0)
-        rad_parameters: Radiance parameters for grid_file based analysis (rtrace).
+        rad_parameters: Radiance parameters for grid based analysis (rtrace).
             (Default: imagebased.LowQualityImage)
         hb_objects: An optional list of Honeybee surfaces or zones (Default: None).
         sub_folder: Analysis subfolder for this recipe. (Default: "gridbased")
@@ -48,7 +48,7 @@ class ImageBased(GenericImageBased):
     # if there has been no changes in inputs.
     def __init__(self, sky, views, simulation_type=2, rad_parameters=None,
                  hb_objects=None, sub_folder="imagebased"):
-        """Create grid_file-based recipe."""
+        """Create grid-based recipe."""
         GenericImageBased.__init__(
             self, views, hb_objects, sub_folder)
 
@@ -56,7 +56,7 @@ class ImageBased(GenericImageBased):
         """A honeybee sky for the analysis."""
 
         self.radiance_parameters = rad_parameters
-        """Radiance parameters for grid_file based analysis (rtrace).
+        """Radiance parameters for grid based analysis (rtrace).
             (Default: imagebased.LowQualityImage)"""
 
         self.simulation_type = simulation_type
@@ -222,7 +222,7 @@ class ImageBased(GenericImageBased):
         return self.__repr__()
 
     def __repr__(self):
-        """Represent grid_file based recipe."""
+        """Represent grid based recipe."""
         _analysisType = {
             0: "Illuminance", 1: "Radiation", 2: "Luminance"
         }

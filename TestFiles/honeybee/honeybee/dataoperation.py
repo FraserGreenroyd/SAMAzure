@@ -39,7 +39,7 @@ def unflatten(guide, falttened_input):
                  else next(falttened_input) for subList in guide)
 
 
-# Match list of points and vectors for Radiance grid_file-based analysis
+# Match list of points and vectors for Radiance grid-based analysis
 def match_points_and_vectors(pts_t, vec_t):
     """Convert list fo data to list.
 

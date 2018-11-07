@@ -1,3 +1,5 @@
+# call "C:\Users\tgerrish\AppData\Local\Continuum\anaconda2\Scripts\activate.bat" && activate base
+
 # TODO - Orient analysis grid_file to longest edge of zone it's being generated for
 # TODO - Create ability to visualise surfaces and analysis grids in context
 # TODO - Add radiance parameters to the config.json to put into the generated recipes
@@ -11,11 +13,13 @@ import argparse
 import json
 import os
 import sys
+import itertools
 
 import matplotlib.patches as patches
 import numpy as np
 from eppy.modeleditor import IDF
 from scipy.spatial import Delaunay
+
 
 sys.path.insert(0, 'ladybug')
 sys.path.insert(0, 'honeybee')
@@ -193,6 +197,21 @@ def rotate(origin, point, angle_rad):
     return q_x, q_y
 
 
+def str2bool(v):
+    if v.lower() in ('yes', 'true', 't', 'y', '1'):
+        return True
+    elif v.lower() in ('no', 'false', 'f', 'n', '0'):
+        return False
+    else:
+        raise TypeError('Boolean value expected. E.g. y/N/0/true,f')
+
+
+def chunks(l, n):
+    """Yield successive n-sized chunks from l."""
+    for i in range(0, len(l), n):
+        yield l[i:i + n]
+
+
 # ************************************************** #
 # ***   Main execution                           *** #
 # ************************************************** #
@@ -204,28 +223,28 @@ if __name__ == "__main__":
         "--inputIDF",
         type=str,
         help="Path to the source IDF from which geometry and constructions are obtained",
-        default="output.idf"  # TODO - remove post testing
+        default="./resources/idf_processing/output.idf"  # TODO - remove post testing
     )
     parser.add_argument(
         "-w",
         "--weatherFile",
         type=str,
         help="Path to the EPW weather file for the location being simulated",
-        default="GBR_Cardiff_CIBSE_TRY.epw"  # TODO - remove post testing
+        default="./resources/idf_processing/GBR_Cardiff_CIBSE_TRY.epw"  # TODO - remove post testing
     )
     parser.add_argument(
         "-c",
         "--configFile",
         type=str,
         help="Path to the config file containing construction reflectances and glazing transmissivities",
-        default="idf_config.json"  # TODO - remove post testing
+        default="./resources/idf_processing/idf_config.json"  # TODO - remove post testing
     )
     parser.add_argument(
         "-o",
         "--outputDir",
         type=str,
         help="Path to the target output directory",
-        default=os.path.join(os.getcwd(), "case")  # TODO - remove post testing
+        default="./radiance_case"  # TODO - remove post testing
     )
     parser.add_argument(
         "-gs",
@@ -248,58 +267,71 @@ if __name__ == "__main__":
         help="Optional analysis grid_file room boundary offset (default is 0.1m)",
         default=0.1
     )
+    parser.add_argument(
+        "-fb",
+        "--fullBuilding",
+        type=str2bool,
+        help="Create a 3D case - THIS WILL PROBABLY BREAK!",
+        default=False
+    )
+    parser.add_argument(
+        "-cs",
+        "--chunkSize",
+        type=int,
+        help="How many points to be included in each 3d grid matrix chunk!",
+        default=1000
+    )
 
     args = parser.parse_args()
 
-    with open(args.configFile, "r") as f:
+    configuration_file_path = args.configFile
+    input_idf_path = args.inputIDF
+    input_weatherfile_path = args.weatherFile
+    output_directory = args.outputDir
+    grid_size = args.gridSize
+    surface_offset = args.surfaceOffset
+    edge_offset = args.edgeOffset
+    full_building = args.fullBuilding
+    chunk_size = args.chunkSize
+
+
+
+    with open(configuration_file_path, "r") as f:
         config = json.load(f)
-    print("\nConfig loaded from {0:}\n".format(os.path.normpath(args.configFile)))
+    print("Config loaded from {0:}".format(os.path.normpath(configuration_file_path)))
 
-    print("\nAnalysis grid_file spacing set to {0:}".format(args.gridSize))
+    print("Analysis grid_file spacing set to {0:}".format(grid_size))
 
-    print("\nAnalysis grid_file offset from surface set to {0:}".format(args.surfaceOffset))
+    print("Analysis grid_file offset from surface set to {0:}".format(surface_offset))
 
-    print("\nAnalysis grid_file boundary offset set to {0:}\n".format(args.edgeOffset))
+    print("Analysis grid_file boundary offset set to {0:}".format(edge_offset))
 
     IDF.setiddname(os_idd())
-    idf = IDF(args.inputIDF)
+    idf = IDF(input_idf_path)
 
-    print("IDF loaded from {0:}\n".format(os.path.normpath(args.inputIDF)))
-    print("EPW loaded from {0:}\n".format(os.path.normpath(args.weatherFile)))
+    print("IDF loaded from {0:}".format(os.path.normpath(input_idf_path)))
+    print("EPW loaded from {0:}".format(os.path.normpath(input_weatherfile_path)))
 
     # Obtain building orientation to ascertain surface direction
     north_angle_deg = idf.idfobjects["BUILDING"][0].North_Axis
     north_angle_rad = np.radians(north_angle_deg)
     north_vector = (np.sin(north_angle_rad), np.cos(north_angle_rad), 0)
-    print("North angle has been read as {0:}\n".format(north_angle_rad))
+    print("North angle has been read as {0:}".format(north_angle_rad))
 
     # Define materials to be applied to surfaces
-    glass_material_exterior = Glass("GlassMaterialInternal", r_transmittance=config["glass_visible_transmittance"],
-                                    g_transmittance=config["glass_visible_transmittance"],
-                                    b_transmittance=config["glass_visible_transmittance"], refraction_index=1.52)
-    glass_material_interior = Glass("GlassMaterialInternal", r_transmittance=0.9, g_transmittance=0.9,
-                                    b_transmittance=0.9, refraction_index=1.52)
-    glass_material_skylight = Glass("GlassMaterialSkylight", r_transmittance=config["glass_visible_transmittance"],
-                                    g_transmittance=config["glass_visible_transmittance"],
-                                    b_transmittance=config["glass_visible_transmittance"], refraction_index=1.52)
-    air_wall_material = Glass("AirWallMaterial", r_transmittance=0, g_transmittance=0, b_transmittance=0,
-                              refraction_index=1)
-    wall_material = Plastic("WallMaterial", r_reflectance=config["wall_reflectivity"],
-                            g_reflectance=config["wall_reflectivity"], b_reflectance=config["wall_reflectivity"],
-                            specularity=0, roughness=0)
-    ceiling_material = Plastic("CeilingMaterial", r_reflectance=config["ceiling_reflectivity"],
-                               g_reflectance=config["ceiling_reflectivity"],
-                               b_reflectance=config["ceiling_reflectivity"], specularity=0, roughness=0)
-    floor_material = Plastic("FloorMaterial", r_reflectance=config["floor_reflectivity"],
-                             g_reflectance=config["floor_reflectivity"], b_reflectance=config["floor_reflectivity"],
-                             specularity=0, roughness=0)
-    print("Materials defined from properties in {0:}\n".format(os.path.normpath(args.configFile)))
+    glass_material_exterior = Glass("GlassMaterialInternal", r_transmittance=config["glass_visible_transmittance"], g_transmittance=config["glass_visible_transmittance"], b_transmittance=config["glass_visible_transmittance"], refraction_index=1.52)
+    glass_material_interior = Glass("GlassMaterialInternal", r_transmittance=0.9, g_transmittance=0.9, b_transmittance=0.9, refraction_index=1.52)
+    glass_material_skylight = Glass("GlassMaterialSkylight", r_transmittance=config["glass_visible_transmittance"], g_transmittance=config["glass_visible_transmittance"], b_transmittance=config["glass_visible_transmittance"], refraction_index=1.52)
+    air_wall_material = Glass("AirWallMaterial", r_transmittance=0, g_transmittance=0, b_transmittance=0, refraction_index=1)
+    wall_material = Plastic("WallMaterial", r_reflectance=config["wall_reflectivity"], g_reflectance=config["wall_reflectivity"], b_reflectance=config["wall_reflectivity"], specularity=0, roughness=0)
+    ceiling_material = Plastic("CeilingMaterial", r_reflectance=config["ceiling_reflectivity"], g_reflectance=config["ceiling_reflectivity"], b_reflectance=config["ceiling_reflectivity"], specularity=0, roughness=0)
+    floor_material = Plastic("FloorMaterial", r_reflectance=config["floor_reflectivity"], g_reflectance=config["floor_reflectivity"], b_reflectance=config["floor_reflectivity"], specularity=0, roughness=0)
+    print("Materials defined from properties in {0:}".format(os.path.normpath(configuration_file_path)))
 
     # Define surfaces for radiation oclusion
     fenestration_surfaces = []
     interior_wall_surfaces = []
-    for wall_n, wall in enumerate(
-            [i for i in idf.idfobjects["BUILDINGSURFACE:DETAILED"] if i.Construction_Name == "Interior Wall"]):
+    for wall_n, wall in enumerate([i for i in idf.idfobjects["BUILDINGSURFACE:DETAILED"] if i.Construction_Name == "Interior Wall"]):
         fen_coords = []
         for fen_n, fen in enumerate(idf.idfobjects["FENESTRATIONSURFACE:DETAILED"]):
             if wall.Name in fen.Name:
@@ -322,8 +354,7 @@ if __name__ == "__main__":
     print("{0:} interior wall surfaces generated".format(len(interior_wall_surfaces)))
 
     exterior_wall_surfaces = []
-    for wall_n, wall in enumerate(
-            [i for i in idf.idfobjects["BUILDINGSURFACE:DETAILED"] if i.Construction_Name == "Exterior Wall"]):
+    for wall_n, wall in enumerate([i for i in idf.idfobjects["BUILDINGSURFACE:DETAILED"] if i.Construction_Name == "Exterior Wall"]):
         fen_coords = []
         for fen_n, fen in enumerate(idf.idfobjects["FENESTRATIONSURFACE:DETAILED"]):
             if wall.Name in fen.Name:
@@ -350,107 +381,124 @@ if __name__ == "__main__":
             (i.Construction_Name == "Interior Floor") or (i.Construction_Name == "Exterior Floor") or (
             i.Construction_Name == "Exposed Floor"))]):
         fen_coords = []
-        fenestration_surfaces.append(
-            HBSurface("fenestration_{0:}".format(fen.Name), fen_coords, surface_type=0, is_name_set_by_user=True,
-                      is_type_set_by_user=True, rad_properties=RadianceProperties(material=glass_material_skylight)))
+        fenestration_surfaces.append(HBSurface("fenestration_{0:}".format(fen.Name), fen_coords, surface_type=0, is_name_set_by_user=True, is_type_set_by_user=True, rad_properties=RadianceProperties(material=glass_material_skylight)))
         for fen_n, fen in enumerate(idf.idfobjects["FENESTRATIONSURFACE:DETAILED"]):
             if wall.Name in fen.Name:
                 fen_coords.append(fen.coords)
         try:
             for i_n, i in enumerate(triangulate_3d_surfaces(wall.coords, fen_coords)):
-                floor_surfaces.append(
-                    HBSurface("floor_{0:}_{1:}_srfP_{2:}".format(wall_n, wall.Name, i_n), i.tolist(), surface_type=2,
-                              is_name_set_by_user=True, is_type_set_by_user=True,
-                              rad_properties=RadianceProperties(material=floor_material)))
+                floor_surfaces.append(HBSurface("floor_{0:}_{1:}_srfP_{2:}".format(wall_n, wall.Name, i_n), i.tolist(), surface_type=2, is_name_set_by_user=True, is_type_set_by_user=True, rad_properties=RadianceProperties(material=floor_material)))
         except:
-            floor_surfaces.append(
-                HBSurface("floor_{0:}_{1:}".format(wall_n, wall.Name), np.array(wall.coords).tolist(), surface_type=2,
-                          is_name_set_by_user=True, is_type_set_by_user=True,
-                          rad_properties=RadianceProperties(material=floor_material)))
+            floor_surfaces.append(HBSurface("floor_{0:}_{1:}".format(wall_n, wall.Name), np.array(wall.coords).tolist(), surface_type=2, is_name_set_by_user=True, is_type_set_by_user=True, rad_properties=RadianceProperties(material=floor_material)))
     print("{0:} floor surfaces generated".format(len(floor_surfaces)))
 
     ceiling_surfaces = []
-    for wall_n, wall in enumerate([i for i in idf.idfobjects["BUILDINGSURFACE:DETAILED"] if (
-            (i.Construction_Name == "Interior Ceiling") or (i.Construction_Name == "Exterior Ceiling") or (
-            i.Construction_Name == "Roof"))]):
+    for wall_n, wall in enumerate([i for i in idf.idfobjects["BUILDINGSURFACE:DETAILED"] if ((i.Construction_Name == "Interior Ceiling") or (i.Construction_Name == "Exterior Ceiling") or (i.Construction_Name == "Roof"))]):
         fen_coords = []
-        fenestration_surfaces.append(
-            HBSurface("fenestration_{0:}".format(fen.Name), fen_coords, surface_type=0, is_name_set_by_user=True,
-                      is_type_set_by_user=True, rad_properties=RadianceProperties(material=glass_material_skylight)))
+        fenestration_surfaces.append(HBSurface("fenestration_{0:}".format(fen.Name), fen_coords, surface_type=0, is_name_set_by_user=True, is_type_set_by_user=True, rad_properties=RadianceProperties(material=glass_material_skylight)))
         for fen_n, fen in enumerate(idf.idfobjects["FENESTRATIONSURFACE:DETAILED"]):
             if wall.Name in fen.Name:
                 fen_coords.append(fen.coords)
         try:
             for i_n, i in enumerate(triangulate_3d_surfaces(wall.coords, fen_coords)):
-                ceiling_surfaces.append(
-                    HBSurface("ceiling_{0:}_{1:}_srfP_{2:}".format(wall_n, wall.Name, i_n), i.tolist(), surface_type=3,
-                              is_name_set_by_user=True, is_type_set_by_user=True,
-                              rad_properties=RadianceProperties(material=ceiling_material)))
+                ceiling_surfaces.append(HBSurface("ceiling_{0:}_{1:}_srfP_{2:}".format(wall_n, wall.Name, i_n), i.tolist(), surface_type=3, is_name_set_by_user=True, is_type_set_by_user=True, rad_properties=RadianceProperties(material=ceiling_material)))
         except:
-            ceiling_surfaces.append(
-                HBSurface("ceiling_{0:}_{1:}".format(wall_n, wall.Name), np.array(wall.coords).tolist(), surface_type=3,
-                          is_name_set_by_user=True, is_type_set_by_user=True,
-                          rad_properties=RadianceProperties(material=ceiling_material)))
+            ceiling_surfaces.append(HBSurface("ceiling_{0:}_{1:}".format(wall_n, wall.Name), np.array(wall.coords).tolist(), surface_type=3, is_name_set_by_user=True, is_type_set_by_user=True, rad_properties=RadianceProperties(material=ceiling_material)))
     print("{0:} ceiling surfaces generated".format(len(ceiling_surfaces)))
 
     context_surfaces = []
     for context_n, context in enumerate([i for i in idf.idfobjects["SHADING:BUILDING:DETAILED"]]):
-        srf = HBSurface("context_{0:}_{1:}".format(context_n, context.Name), context.coords, surface_type=6,
-                        is_name_set_by_user=True, is_type_set_by_user=True,
-                        rad_properties=RadianceProperties(material=wall_material))
+        srf = HBSurface("context_{0:}_{1:}".format(context_n, context.Name), context.coords, surface_type=6, is_name_set_by_user=True, is_type_set_by_user=True, rad_properties=RadianceProperties(material=wall_material))
         context_surfaces.append(srf)
     print("{0:} shading surfaces generated".format(len(context_surfaces)))
 
-    print("{0:} fenestration surfaces generated\n".format(len(fenestration_surfaces)))
-    hb_objects = np.concatenate(
-        [exterior_wall_surfaces, interior_wall_surfaces, floor_surfaces, ceiling_surfaces, context_surfaces,
-         fenestration_surfaces]).tolist()
+    print("{0:} fenestration surfaces generated".format(len(fenestration_surfaces)))
+    hb_objects = np.concatenate([exterior_wall_surfaces, interior_wall_surfaces, floor_surfaces, ceiling_surfaces, context_surfaces, fenestration_surfaces]).tolist()
 
     # Generate an output directory to store the JSON recipe constituent parts
-    if not os.path.exists(args.outputDir):
-        os.makedirs(args.outputDir)
-        os.makedirs("{0:}/AnalysisGrids".format(args.outputDir))
-    print("Output directory set to {0:}\\AnalysisGrids\n".format(os.path.normpath(args.outputDir)))
+    if not os.path.exists(output_directory):
+        os.makedirs(output_directory)
+        os.makedirs("{0:}/AnalysisGrids".format(output_directory))
+    print("Output directory set to {0:}\\AnalysisGrids".format(os.path.normpath(output_directory)))
 
-    # Define analysis grids for each zone for simulation in Radiance
-    hb_analysis_grids = []
-    for floor_srf in [i for i in idf.idfobjects["BUILDINGSURFACE:DETAILED"] if ("Floor" in i.Construction_Name)]:
-        vert_xs, vert_ys, vert_zs = list(zip(*floor_srf.coords))
-        patch = patches.Polygon(list(zip(*[vert_xs, vert_ys])))
-        min_x, max_x, min_y, max_y, max_z = min(vert_xs), max(vert_xs), min(vert_ys), max(vert_ys), max(vert_zs)
-        x_range = max_x - min_x
-        y_range = max_y - min_y
-        g = np.meshgrid(np.arange(min_x - (x_range / 2), max_x + (x_range / 2), args.gridSize),
-                        np.arange(min_y - (y_range / 2), max_y + (y_range / 2), args.gridSize))
-        coords = list(zip(*(c.flat for c in g)))
-        analysis_points = np.vstack([p for p in coords if patch.contains_point(p, radius=args.edgeOffset)])
-        grid_points = list(zip(*[np.array(list(zip(*analysis_points)))[0], np.array(list(zip(*analysis_points)))[1],
-                                 np.repeat(max_z + args.surfaceOffset, len(analysis_points))]))
-        hb_analysis_grids.append(AnalysisGrid.from_points_and_vectors(grid_points, name=floor_srf.Zone_Name))
-        print("Analysis grid_file for {0:} generated ({1:} points)".format(floor_srf.Zone_Name, len(analysis_points)))
+    # TESTING: UNDER CONSTRUCTION
+
+    if full_building:
+        print("Generating a 3D Radiance case")
+
+        # Get objects bounding box extents
+        pts = np.concatenate([np.array([item for sublist in [i.coords for i in idf.idfobjects["BUILDINGSURFACE:DETAILED"]] for item in sublist]), np.array([item for sublist in [i.coords for i in idf.idfobjects["FENESTRATIONSURFACE:DETAILED"]] for item in sublist])])
+        pt1 = [min(point[i] for point in pts) for i in range(3)]
+        pt2 = [max(point[i] for point in pts) for i in range(3)]
+        # print("Bounding box extents at [[{0:}], [{1:}]]".format(pt1, pt2))
+
+        x_vals = np.arange(pt1[0], pt2[0], grid_size).tolist()
+        y_vals = np.arange(pt1[1], pt2[1], grid_size).tolist()
+        z_vals = np.arange(pt1[2], pt2[2], grid_size).tolist()
+
+        points = list(itertools.product(*[x_vals, y_vals, z_vals]))
+        # print("{0:} points generated".format(len(points)))
+
+        chunked_points = list(chunks(points, chunk_size))
+        # print("{0:} seperate grids generated".format(len(chunked_points)))
+
+        print("These settings will produce a case with {0:} points".format(len(points)))
+        print("With a chunk size of {0:}, this means a total number of {1:} tasks (spread over {2:} pools) will be created.".format(chunk_size, len(chunked_points), int(np.ceil(float(len(chunked_points))/100))))
+
+        response = raw_input("Do you want to continue? [y/N]: ")
+        if response == "y":
+            hb_analysis_grids = []
+            for n, c in enumerate(chunked_points):
+                hb_analysis_grids.append(AnalysisGrid.from_points_and_vectors(c, name="gridmatrix{0:04d}".format(n)))
+                print("Analysis grid_file for gridmatrix{0:04d} generated ({1:} points)".format(n, len(c)))
+        elif response != "y":
+            raise RuntimeError("You didn't continue. Good for you.")
+            sys.exit(1)
+
+    else:
+        print("Generating a 2D Radiance case")
+    # TODO: UNDER CONSTRUCTION
+
+        # Define analysis grids for each zone for simulation in Radiance
+        hb_analysis_grids = []
+        for floor_srf in [i for i in idf.idfobjects["BUILDINGSURFACE:DETAILED"] if ("Floor" in i.Construction_Name)]:
+            vert_xs, vert_ys, vert_zs = list(zip(*floor_srf.coords))
+            patch = patches.Polygon(list(zip(*[vert_xs, vert_ys])))
+            min_x, max_x, min_y, max_y, max_z = min(vert_xs), max(vert_xs), min(vert_ys), max(vert_ys), max(vert_zs)
+            x_range = max_x - min_x
+            y_range = max_y - min_y
+            g = np.meshgrid(np.arange(min_x - (x_range / 2), max_x + (x_range / 2), grid_size),
+                            np.arange(min_y - (y_range / 2), max_y + (y_range / 2), grid_size))
+            coords = list(zip(*(c.flat for c in g)))
+            analysis_points = np.vstack([p for p in coords if patch.contains_point(p, radius=edge_offset)])
+            grid_points = list(zip(*[np.array(list(zip(*analysis_points)))[0], np.array(list(zip(*analysis_points)))[1],
+                                     np.repeat(max_z + surface_offset, len(analysis_points))]))
+            hb_analysis_grids.append(AnalysisGrid.from_points_and_vectors(grid_points, name=floor_srf.Zone_Name))
+            print("Analysis grid_file for {0:} generated ({1:} points)".format(floor_srf.Zone_Name, len(analysis_points)))
 
     # Write the analysis grids to a directory for processing
     for hb_analysis_grid in hb_analysis_grids:
-        analysis_grid_path = "{0:}/AnalysisGrids/{1:}.json".format(args.outputDir, hb_analysis_grid.name)
+        analysis_grid_path = "{0:}/AnalysisGrids/{1:}.json".format(output_directory, hb_analysis_grid.name)
+        # print(analysis_grid_path)
         with open(analysis_grid_path, "w") as f:
             json.dump({"analysis_grids": [hb_analysis_grid.to_json()]}, f)
         print("Analysis grid_file for {0:} written to {1:}".format(hb_analysis_grid.name, os.path.normpath(analysis_grid_path)))
 
 
     # Generate sky matrix for annual analysis
-    sky_matrix = SkyMatrix.from_epw_file(args.weatherFile, sky_density=2, north=north_angle_deg, hoys=range(0, 8760),
+    sky_matrix = SkyMatrix.from_epw_file(input_weatherfile_path, sky_density=2, north=north_angle_deg, hoys=range(0, 8760),
                                          mode=0, suffix="")
-    print("Sky matrix ({0:}) generated\n".format(sky_matrix))
+    print("Sky matrix ({0:}) generated".format(sky_matrix))
 
     # Write the sky matrix for annual simulation to file
-    sky_matrix_path = "{0:}/sky_mtx.json".format(args.outputDir)
+    sky_matrix_path = "{0:}/sky_mtx.json".format(output_directory)
     with open(sky_matrix_path, "w") as f:
         json.dump({"sky_mtx": sky_matrix.to_json()}, f)
-    print("Sky matrix written to {0:}\n".format(os.path.normpath(sky_matrix_path)))
+    print("Sky matrix written to {0:}".format(os.path.normpath(sky_matrix_path)))
 
     # Write the context geometry (surfaces) around the analysis grids
-    surfaces_path = "{0:}/surfaces.json".format(os.path.normpath(args.outputDir))
+    surfaces_path = "{0:}/surfaces.json".format(os.path.normpath(output_directory))
     with open(surfaces_path, "w") as f:
         f.write(
             repr({"surfaces": [i.to_json() for i in hb_objects]}).replace("'", '"').replace("(", '[').replace(")", ']'))
-    print("\nSurfaces written to {0:}\n".format(os.path.normpath(surfaces_path)))
+    print("\nSurfaces written to {0:}".format(os.path.normpath(surfaces_path)))
