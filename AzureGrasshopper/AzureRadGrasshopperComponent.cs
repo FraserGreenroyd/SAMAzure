@@ -46,7 +46,7 @@ namespace AzureGrasshopper
 
             pManager.AddBooleanParameter("Run", "Run", "Do you wish to run this component?", GH_ParamAccess.item);
 
-            pManager.AddTextParameter("Command", "CMD", "CMD to run", GH_ParamAccess.item);
+            pManager.AddTextParameter("Account Key", "Account Key", "Account Key for the Batch Account", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -90,6 +90,11 @@ namespace AzureGrasshopper
             if (!File.Exists(surfaceJSON))
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Please provide a valid, existing, Zone folder");
 
+            String key = "";
+            DA.GetData(6, ref key);
+            if (key == "" || key == null)
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Please provide a valid batch account key");
+
             /*List<String> analysisGrid = new List<string>();
             DA.GetDataList(3, folderNames);
 
@@ -111,7 +116,7 @@ namespace AzureGrasshopper
                 return;
 
             //Everything is valid - let's run a simulation!
-            AZEngine aEngine = new AZEngine(pNumber, pName);
+            AZEngine aEngine = new AZEngine(pNumber, pName, key);
             aEngine.CreateBlobStorage();
 
             //aEngine.CreateBatchClients(idfFiles.Count);
@@ -149,10 +154,7 @@ namespace AzureGrasshopper
 
             //aEngine.UploadFile(zoneFolder);
 
-            String cmd = "";
-            DA.GetData(6, ref cmd);
-
-            aEngine.RunRadiance(jsonZoneNames, Path.GetFileName(skyMatrix), Path.GetFileName(surfaceJSON), cmd);
+            aEngine.RunRadiance(jsonZoneNames, Path.GetFileName(skyMatrix), Path.GetFileName(surfaceJSON));
 
             if (aEngine.TrueWhenTasksComplete())
                 DA.SetData(0, true);

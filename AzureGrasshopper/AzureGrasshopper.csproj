@@ -35,9 +35,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AzureEngine">
-      <HintPath>..\AzureEngine\bin\Release\AzureEngine.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -66,6 +63,12 @@
     <Compile Include="AzureEPGrasshopperInfo.cs" />
     <Compile Include="AzureRadGrasshopperComponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AzureEngine\AzureEngine.csproj">
+      <Project>{b31dfa9c-ee6e-43c1-8e69-572ef765400c}</Project>
+      <Name>AzureEngine</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

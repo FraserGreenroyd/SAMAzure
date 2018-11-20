@@ -23,7 +23,7 @@ namespace AzureEngine.Utilities
         private static String batchAccountName = "bhsapcloudbatch3513";
         public static String BatchAccountName { get { return batchAccountName; } set { batchAccountName = value; } }
 
-        private static String batchAccountKey = @"SBG4TDkav6C1ey8VVF/AZpVfQ79gStNYgZyJJeAzIYX83kbKQ7aXANkiZUeR9yyzBz93n/n0Dk3Bbq6ub8IYCg==";
+        private static String batchAccountKey = @"";
         public static String BatchAccountKey { get { return batchAccountKey; } set { batchAccountKey = value; } }
 
         private static String batchAccountURL = "https://bhsapcloudbatch3513.westeurope.batch.azure.com";

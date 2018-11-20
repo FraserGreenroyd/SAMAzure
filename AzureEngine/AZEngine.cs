@@ -22,7 +22,7 @@ namespace AzureEngine
         private BlobStorage masterBlobContainer = null;
         private List<AzureBatchClient> batchContainer = null;
 
-        public AZEngine(String projectNumber, String projectName, String credentialsFile = null, String resourceGroup = null, String region = null, String blobConnectionString = null, String batchAccountName = null, String batchAccountKey = null, String batchAccountURL = null, String poolVMSize = null)
+        public AZEngine(String projectNumber, String projectName, String batchAccountKey = null, String credentialsFile = null, String resourceGroup = null, String region = null, String blobConnectionString = null, String batchAccountName = null, String batchAccountURL = null, String poolVMSize = null)
         {
             if (projectNumber == null || projectNumber == "") throw new NullReferenceException("Please provide a valid project number to create an Azure connection");
             if (projectName == null || projectName == "") throw new NullReferenceException("Please provide a valid project name to create an Azure connection");
@@ -152,7 +152,7 @@ namespace AzureEngine
             }         
         }
 
-        public void RunRadiance(List<String> analysisGridFiles, String skyMatrixFile, String surfaceFileName, String command)
+        public void RunRadiance(List<String> analysisGridFiles, String skyMatrixFile, String surfaceFileName)
         {
             //For each analysis grid - create a task, send the honeybee, ladybug, and python script from master blob, the analysis grid, sky matrix, and surface JSON from this blob, unzip the honeybee/ladybug folders and run the python script...
 
@@ -174,7 +174,7 @@ namespace AzureEngine
                 resourceFiles.Add(pythonScript);
                 resourceFiles.Add(analysisGridFile);
 
-                command = "sudo bash -c 'find / -iname gensky; sudo apt-get install unzip; sudo unzip -o honeybee.zip; sudo unzip -o ladybug.zip; sudo python 02_run_radiance_case.py " + System.IO.Path.GetFileName(analysisGridFiles[x]) + " " + surfaceFileName + " " + skyMatrixFile + " results.json'";
+                String command = "sudo bash -c 'find / -iname gensky; sudo apt-get install unzip; sudo unzip -o honeybee.zip; sudo unzip -o ladybug.zip; sudo python 02_run_radiance_case.py " + System.IO.Path.GetFileName(analysisGridFiles[x]) + " " + surfaceFileName + " " + skyMatrixFile + " results.json'";
                 //command = "sudo bash -c 'find / -iname gensky;'";
 
                 int batchIndex = (int)Math.Floor((double)x / 100);
