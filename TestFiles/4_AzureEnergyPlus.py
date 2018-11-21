@@ -128,11 +128,11 @@ if __name__ == '__main__':
             id=pool_id,
             vm_size=pool_vm_size,
             virtual_machine_configuration=batchmodels.VirtualMachineConfiguration(image_reference=image_ref_to_use, node_agent_sku_id=sku_to_use),
-            target_dedicated_nodes=1,  # for testing with a single file
-            enable_auto_scale=False,  # for testing with a single file
-            # enable_auto_scale=True,
-            # auto_scale_formula="pendingTaskSamplePercent = $PendingTasks.GetSamplePercent(180 * TimeInterval_Second); pendingTaskSamples = pendingTaskSamplePercent < 70 ? 1 : avg($PendingTasks.GetSample(180 * TimeInterval_Second)); $TargetDedicatedNodes = min(100, pendingTaskSamples);",
-            # auto_scale_evaluation_interval=datetime.timedelta(minutes=5),
+            # target_dedicated_nodes=1,  # for testing with a single file
+            # enable_auto_scale=False,  # for testing with a single file
+            enable_auto_scale=True,
+            auto_scale_formula="pendingTaskSamplePercent = $PendingTasks.GetSamplePercent(180 * TimeInterval_Second); pendingTaskSamples = pendingTaskSamplePercent < 70 ? 1 : avg($PendingTasks.GetSample(180 * TimeInterval_Second)); $TargetDedicatedNodes = min(100, pendingTaskSamples);",
+            auto_scale_evaluation_interval=datetime.timedelta(minutes=5),
             max_tasks_per_node=1,
             task_scheduling_policy=batchmodels.TaskSchedulingPolicy(node_fill_type="spread"),
             start_task=batchmodels.StartTask(
@@ -170,12 +170,20 @@ if __name__ == '__main__':
             task_ids.append(task_id)
             node_dir = "/mnt/batch/tasks/workitems/{0:}/job-1/{1:}/wd".format(job_id, task_id)
 
+            ####### TESTING ########
+            print("RUN COMMAND:")
+            print('sudo EnergyPlus -x -r -i "/usr/local/bin/Energy+.idd" -p "{0:}" -w "{2:}/weatherfile.epw" "{2:}/{1:}"'.format(model_names[n].replace(".idf", ""), model_names[n], node_dir))
+            print('sudo cp /{0:} {1:}/{0:}'.format(output_file, node_dir))
+            ####### TESTING ########
+
             task_run_commands = [
                 "cd /",
                 "sudo wget --no-check-certificate https://github.com/NREL/EnergyPlus/releases/download/v8.9.0/EnergyPlus-8.9.0-40101eaafd-Linux-x86_64.sh",
                 "sudo chmod +x ./EnergyPlus-8.9.0-40101eaafd-Linux-x86_64.sh",
                 'echo "y /usr/local /usr/local/bin" | sudo ./EnergyPlus-8.9.0-40101eaafd-Linux-x86_64.sh',
-                'sudo EnergyPlus -x -r -i "/usr/local/bin/Energy+.idd" -d {0:} -p "{1:}" -w "{0:}/weatherfile.epw" "{0:}/{2:}"'.format(node_dir, model_names[n].replace(".idf", ""), model_names[n]),
+                'sudo EnergyPlus -x -r -i "/usr/local/bin/Energy+.idd" -p "{0:}" -w "{2:}/weatherfile.epw" "{2:}/{1:}"'.format(model_names[n].replace(".idf", ""), model_names[n], node_dir),
+                'sudo cp /{0:} {1:}/{0:}'.format(output_file, node_dir),
+                # 'sudo EnergyPlus -x -r -i "/usr/local/bin/Energy+.idd" -d {0:} -p "{1:}" -w "{0:}/weatherfile.epw" "{0:}/{2:}"'.format(node_dir, model_names[n].replace(".idf", ""), model_names[n]),
             ]
             task = batchmodels.TaskAddParameter(
                 id=task_id,

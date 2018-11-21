@@ -124,7 +124,7 @@ if __name__ == '__main__':
     task_ids = []
     for job_n, job_chunk in enumerate(job_chunks):
 
-        print("Job{0:}, containing grids {1:}".format(job_n, job_chunk))
+        print("Job{0:}, containing tasks {1:}".format(job_n, job_chunk))
 
         pool_id = common.helpers.generate_unique_resource_name("{0:}-pool{1:}".format(project_id, job_n))
         pool_ids.append(pool_id)
