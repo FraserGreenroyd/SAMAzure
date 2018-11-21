@@ -723,6 +723,8 @@ if __name__ == "__main__":
     idf.newidfobject("OUTPUT:SQLITE", Option_Type="Simple")
     idf.idfobjects["OUTPUT:DIAGNOSTICS"] = []
     idf.newidfobject("OUTPUT:DIAGNOSTICS", Key_1="DisplayExtraWarnings", Key_2="DisplayUnusedSchedules")
+    idf.idfobjects["OUTPUT:DEBUGGINGDATA"] = []
+    idf.newidfobject("OUTPUT:DEBUGGINGDATA", Report_Debugging_Data=1, Report_During_Warmup=1)
     idf.idfobjects["OUTPUT:SURFACES:LIST"] = []
     idf.newidfobject("OUTPUT:SURFACES:LIST", Report_Type="Details")
     idf.idfobjects["OUTPUTCONTROL:TABLE:STYLE"] = []
