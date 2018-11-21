@@ -479,7 +479,7 @@ if __name__ == "__main__":
     # Write the analysis grids to a directory for processing
     for hb_analysis_grid in hb_analysis_grids:
         analysis_grid_path = "{0:}/AnalysisGrids/{1:}.json".format(output_directory, hb_analysis_grid.name)
-        # print(analysis_grid_path)
+        # print(model_path)
         with open(analysis_grid_path, "w") as f:
             json.dump({"analysis_grids": [hb_analysis_grid.to_json()]}, f)
         print("Analysis grid_file for {0:} written to {1:}".format(hb_analysis_grid.name, os.path.normpath(analysis_grid_path)))

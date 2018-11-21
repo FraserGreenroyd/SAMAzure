@@ -698,7 +698,7 @@ if __name__ == "__main__":
 
     idf.idfobjects["OUTPUT:VARIABLE"] = []
     for i in output_variables:
-        idf.newidfobject("OUTPUT:VARIABLE", Key_Value="*", Variable_Name=i, Reporting_Frequency="Timestep")
+        idf.newidfobject("OUTPUT:VARIABLE", Key_Value="*", Variable_Name=i, Reporting_Frequency="Hourly")  # "Timestep" for more detail
     print("OUTPUT:VARIABLE modified")
 
     idf.idfobjects["OUTPUT:SURFACES:LIST"] = []
@@ -726,7 +726,7 @@ if __name__ == "__main__":
     idf.idfobjects["OUTPUT:SURFACES:LIST"] = []
     idf.newidfobject("OUTPUT:SURFACES:LIST", Report_Type="Details")
     idf.idfobjects["OUTPUTCONTROL:TABLE:STYLE"] = []
-    idf.newidfobject("OUTPUTCONTROL:TABLE:STYLE", Column_Separator="Comma")
+    idf.newidfobject("OUTPUTCONTROL:TABLE:STYLE", Column_Separator="Comma", Unit_Conversion="JtoKWH")
     idf.idfobjects["OUTPUT:TABLE:SUMMARYREPORTS"] = []
     idf.newidfobject("OUTPUT:TABLE:SUMMARYREPORTS", Report_1_Name="AllSummary")
     # idf.idfobjects["SHADING:BUILDING:DETAILED"] = []  # Remove shading elements
