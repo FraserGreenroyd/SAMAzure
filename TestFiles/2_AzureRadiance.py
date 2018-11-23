@@ -39,21 +39,21 @@ if __name__ == '__main__':
     parser.add_argument(
         "-dp",
         "--deletePool",
-        type=str,
+        type=bool,
         help="Delete pool upon completion?",
-        default="no")
+        default=True)
     parser.add_argument(
         "-dj",
         "--deleteJob",
-        type=str,
+        type=bool,
         help="Delete job upon completion?",
-        default="no")
+        default=True)
     parser.add_argument(
         "-dc",
         "--deleteContainer",
-        type=str,
+        type=bool,
         help="Delete container upon completion?",
-        default="no")
+        default=True)
     args = parser.parse_args()
 
     # Obtain locations of global configuration and radiance case

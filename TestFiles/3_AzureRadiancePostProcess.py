@@ -37,11 +37,13 @@ if __name__ == '__main__':
         "--caseDirectory",
         type=str,
         help="Path to the case directory from which simulation results are obtained",
-        default=os.path.join('resources', 'radiance_case'))
+        default="./resources/radiance_case")
     args = parser.parse_args()
 
     # Get the results files
     results_files = find_files(os.path.join(args.caseDirectory, "Results"), ".json")
+    for i in results_files:
+        print("Post-processing (combining) results for {0:}".format(os.path.basename(i)))
 
     # Load results into a Pandas DataFrame
     df = pd.DataFrame()
@@ -51,18 +53,12 @@ if __name__ == '__main__':
         df = pd.concat([df, temp])
     df.reset_index(drop=True, inplace=True)
 
-    print(df.columns)
-
     # Print some metrics
-    print("x-range: {} to {}".format(min(df["x"]), max(df["x"])))
-    print("y-range: {} to {}".format(min(df["y"]), max(df["y"])))
-    print("z-range: {} to {}".format(min(df["z"]), max(df["z"])))
-    print("df-range: {} to {}".format(min(df["df"]), max(df["df"])))
-    print("da-range: {} to {}".format(min(df["da"]), max(df["da"])))
-    print("cda-range: {} to {}".format(min(df["cda"]), max(df["cda"])))
-    print("udi_less-range: {} to {}".format(min(df["udi_less"]), max(df["udi_less"])))
-    print("udi-range: {} to {}".format(min(df["udi"]), max(df["udi"])))
-    print("udi_more-range: {} to {}".format(min(df["udi_more"]), max(df["udi_more"])))
+    print("")
+    print(df.describe().loc[['count', 'min', 'mean', 'max']])
+    print("")
 
     # Write to a massive CSV
-    df.to_csv(os.path.join(args.caseDirectory, "results_joined.csv"), index=False)
+    output_path = os.path.join(args.caseDirectory, "results_joined.csv")
+    df.to_csv(output_path, index=False)
+    print("Combined results written to {0:}".format(output_path))
