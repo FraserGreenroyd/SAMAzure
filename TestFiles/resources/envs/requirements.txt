@@ -1,0 +1,11 @@
+azure-batch==5.1.1
+azure-common==1.1.16
+azure-nspkg==3.0.2
+azure-storage==0.36.0
+config==0.4.0
+eppy==0.5.48
+euclid3==0.1
+matplotlib==2.2.3
+numpy==1.15.1
+pandas==0.23.4
+scipy==1.1.0

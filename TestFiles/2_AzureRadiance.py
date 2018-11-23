@@ -179,7 +179,6 @@ if __name__ == '__main__':
                 "sudo tar xzf radiance-5.1.0-Linux.tar.gz",
                 "sudo rsync -av /radiance-5.1.0-Linux/usr/local/radiance/bin/ /usr/local/bin/",
                 "sudo rsync -av /radiance-5.1.0-Linux/usr/local/radiance/lib/ /usr/local/lib/ray/",
-                # "sudo wget --no-check-certificate https://github.com/FraserGreenroyd/SAMAzure/raw/master/TestFiles/resources/azure_common/lb_hb.tar.gz",
                 "sudo wget --no-check-certificate https://github.com/FraserGreenroyd/SAMAzure/raw/master/TestFiles/resources/azure_common/lb_hb.tar.gz",
                 "sudo tar xzf lb_hb.tar.gz",
                 "sudo wget --no-check-certificate https://github.com/FraserGreenroyd/SAMAzure/raw/master/TestFiles/resources/azure_common/RunHoneybeeRadiance.py",
@@ -217,6 +216,7 @@ if __name__ == '__main__':
     # Download the results to the case directory
     if not os.path.exists(os.path.join(case_directory, "Results")):
         os.makedirs(os.path.join(case_directory, "Results"))
+
     for n in range(len(analysis_grid_names)):
         output_file = analysis_grid_names[n].replace(".json", "_result.json")
         common.helpers.download_blob_from_container(block_blob_client, project_id, output_file, os.path.join(case_directory, "Results"))
@@ -225,6 +225,7 @@ if __name__ == '__main__':
         for i in job_ids:
             print("Deleting job: {0:}".format(i))
             batch_client.job.delete(i)
+
     if args.deletePool:
         for i in pool_ids:
             print("Deleting pool/s: {0:}".format(i))
