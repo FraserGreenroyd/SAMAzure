@@ -6,7 +6,15 @@ from ..schedule import Schedule
 from .analysispoint import AnalysisPoint
 
 import os
-from itertools import izip
+
+# from itertools import izip
+try:
+    # Python 2
+    from itertools import izip
+except ImportError:
+    # Python 3
+    izip = zip
+
 from collections import namedtuple, OrderedDict
 
 

@@ -1,6 +1,6 @@
-from _hbanalysissurface import HBAnalysisSurface
-from surfaceproperties import SurfaceProperties, SurfaceState
-import utilcol as util
+from honeybee._hbanalysissurface import HBAnalysisSurface
+from honeybee.surfaceproperties import SurfaceProperties, SurfaceState
+from honeybee import utilcol as util
 import honeybee
 try:
     import plus

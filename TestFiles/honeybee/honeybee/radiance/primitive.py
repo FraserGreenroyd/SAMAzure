@@ -177,7 +177,7 @@ class Primitive(object):
                 "frac(V)", "-s", "1.1667"]}
         """
         self._values = {}
-        for line_count, value in new_values.iteritems():
+        for line_count, value in new_values.items(): #################################### CHANGED iteritems() TO items() FOR PYTHON3
             assert 0 <= line_count <= 2, ValueError(
                 'Illegal input: {}. Key values must be between 0-2.'.format(line_count)
             )

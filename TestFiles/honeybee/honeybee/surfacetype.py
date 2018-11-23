@@ -1,6 +1,6 @@
 """Honeybee surface types (e.g. wall, roof, etc.)."""
-from radiance.material.plastic import Plastic
-from radiance.material.glass import Glass
+from honeybee.radiance.material.plastic import Plastic
+from honeybee.radiance.material.glass import Glass
 
 
 class SurfaceTypeBase(object):

@@ -1,4 +1,4 @@
-# call "C:\Users\tgerrish\AppData\Local\Continuum\anaconda2\Scripts\activate.bat" && activate azurebatch
+# call "C:\Users\tgerrish\AppData\Local\Continuum\anaconda3\Scripts\activate.bat" && activate azurebatch
 
 # TODO: Add error handling to delete created pools, containers and jobs if a failure happens somewhere
 # TODO - Remove defaults from argParser

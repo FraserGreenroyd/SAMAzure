@@ -5,7 +5,6 @@ from abc import ABCMeta, abstractmethod, abstractproperty
 import os
 import subprocess
 
-
 # TODO: Implement piping as on option
 class RadianceCommand(object):
     """Base class for commands."""

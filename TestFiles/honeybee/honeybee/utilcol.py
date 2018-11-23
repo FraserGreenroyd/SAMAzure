@@ -20,7 +20,7 @@ def check_name(name):
 
     A valid name can only have alphabet, digits, - and _.
     """
-    name = name.encode('utf-8')
+    #name = name.encode('utf-8') ##################################################################### COMMENTED OUT FOR PYTHON3
     if re.match("^[.A-Za-z0-9_-]*$", name):
         return True
     else:

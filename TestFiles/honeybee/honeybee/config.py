@@ -236,7 +236,8 @@ class Folders(object):
         assert os.path.isfile(str(file_path)), \
             ValueError('No such a file as {}'.format(file_path))
 
-        with open(file_path, 'rb') as cfg:
+        with open(file_path, 'r') as cfg: #rb
+            print(cfg.read()) ######################################################################################
             path = cfg.read().replace('\\\\', '/').replace('\\', '/')
             try:
                 paths = json.loads(path)
@@ -249,6 +250,7 @@ class Folders(object):
 
 
 f = Folders(mute=False)
+print(f) ##########################################################################################################
 
 radlib_path = f.radlib_path
 """Path to Radinace libraries folder."""

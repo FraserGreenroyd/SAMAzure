@@ -1,4 +1,4 @@
-# call "C:\Users\tgerrish\AppData\Local\Continuum\anaconda2\Scripts\activate.bat" && activate base
+# call "C:\Users\tgerrish\AppData\Local\Continuum\anaconda3\Scripts\activate.bat" && activate base
 
 # TODO - Orient analysis grid_file to longest edge of zone it's being generated for
 # TODO - Create ability to visualise surfaces and analysis grids in context
@@ -21,16 +21,15 @@ from eppy.modeleditor import IDF
 from scipy.spatial import Delaunay
 
 
-sys.path.insert(0, 'ladybug')
-sys.path.insert(0, 'honeybee')
+sys.path.insert(0, './ladybug')
+sys.path.insert(0, './honeybee')
 
-from honeybee.hbsurface import HBSurface
 from honeybee.radiance.analysisgrid import AnalysisGrid
 from honeybee.radiance.material.glass import Glass
 from honeybee.radiance.material.plastic import Plastic
 from honeybee.radiance.properties import RadianceProperties
 from honeybee.radiance.sky.skymatrix import SkyMatrix
-
+from honeybee.hbsurface import HBSurface
 
 # ************************************************** #
 # ***   Public methods                           *** #
@@ -486,13 +485,14 @@ if __name__ == "__main__":
 
 
     # Generate sky matrix for annual analysis
-    sky_matrix = SkyMatrix.from_epw_file(input_weatherfile_path, sky_density=2, north=north_angle_deg, hoys=range(0, 8760),
+    sky_matrix = SkyMatrix.from_epw_file(input_weatherfile_path, sky_density=2, north=north_angle_deg, hoys=list(range(0, 8760)),
                                          mode=0, suffix="")
     print("Sky matrix ({0:}) generated".format(sky_matrix))
 
     # Write the sky matrix for annual simulation to file
     sky_matrix_path = "{0:}/sky_mtx.json".format(output_directory)
     with open(sky_matrix_path, "w") as f:
+        print(sky_matrix)
         json.dump({"sky_mtx": sky_matrix.to_json()}, f)
     print("Sky matrix written to {0:}".format(os.path.normpath(sky_matrix_path)))
 

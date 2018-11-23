@@ -84,8 +84,8 @@ def match_data(guide, follower, none_value=(0, 0, 1)):
         follower: Short list.
         noneValue: Place holder for alternative values for None values in shortlist.
     """
-    temp_pts = range(len(guide))
-    temp_vectors = range(len(guide))
+    temp_pts = list(range(len(guide))) ############################################# CONVERTED RANGE OBJECT TO LIST FOR PYTHON3
+    temp_vectors = list(range(len(guide))) ############################################# CONVERTED RANGE OBJECT TO LIST FOR PYTHON3
 
     for c, dp in enumerate(guide):
         if dp is not None:

@@ -1,8 +1,8 @@
-from _hbanalysissurface import HBAnalysisSurface
-from hbfensurface import HBFenSurface
-from surfaceproperties import SurfaceProperties, SurfaceState
-from vectormath.euclid import Vector3, Point3
-import utilcol as util
+from honeybee._hbanalysissurface import HBAnalysisSurface
+from honeybee.hbfensurface import HBFenSurface
+from honeybee.surfaceproperties import SurfaceProperties, SurfaceState
+from honeybee.vectormath.euclid import Vector3, Point3
+from honeybee import utilcol as util
 import honeybee
 try:
     import plus

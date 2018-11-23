@@ -1,3 +1,4 @@
+# call "C:\Users\tgerrish\AppData\Local\Continuum\anaconda3\Scripts\activate.bat" && activate azurebatch
 # TODO - Add option for ground temperature inclusion from the weather file if these are available
 # TODO - Remove shading calculation output for final version -  used for exporting shade calculation for passing to TAS
 # TODO - Add different glazing configurations for different orientations (and elevation to account for skylights)

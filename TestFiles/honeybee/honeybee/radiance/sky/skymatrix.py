@@ -22,7 +22,8 @@ class SkyMatrix(RadianceSky):
     """
 
     __slots__ = ('_wea', 'hoys', '_sky_type', '_sky_matrixParameters',
-                 '_mode', 'suffix', 'north')
+                 '_mode', 'suffix', '_north') # CHANGED north to _north
+
 
     def __init__(self, wea, sky_density=1, north=0, hoys=None, mode=0, suffix=None):
         """Create sky."""
