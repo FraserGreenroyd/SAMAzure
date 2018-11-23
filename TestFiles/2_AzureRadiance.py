@@ -1,7 +1,8 @@
-# call "C:\Users\tgerrish\AppData\Local\Continuum\anaconda2\Scripts\activate.bat" && activate azurebatch
+# call "C:\Users\tgerrish\AppData\Local\Continuum\anaconda3\Scripts\activate.bat"
 
 # TODO: Add error handling to delete created pools, containers and jobs if a failure happens somewhere
 # TODO - Remove defaults from argParser
+# TODO: Something's wrong with the CDA output - most likely an interpretation error by Honeybee!!!!
 
 import configparser
 import datetime
@@ -108,7 +109,7 @@ if __name__ == '__main__':
         analysis_grid_names.append(analysis_grid_name)
         print("{0:} uploaded to {1:}/{2:}".format(os.path.basename(analysis_grid_name), project_id, analysis_grid_name))
 
-    # TODO: For some reason with >100 tasks two pools of 100 were created, maybe we just cerate a set of jobs and assign to the same pool?
+    # TODO: For some reason with >100 tasks two pools of 100 were created, maybe we just cerate a set of jobs and assign to the same pool?- don't know if this is still relevant
     # A chunked list of grid indices - to create multiple pool instances
     job_chunks = list(common.helpers.chunks(list(range(0, len(analysis_grid_names))), 100)) # TODO - change new pool amount
 
@@ -153,8 +154,6 @@ if __name__ == '__main__':
         batch_client.job.add(job)
         print("Job created: {0:}".format(job_id))
 
-        # TODO: SOMETHING WRONG WITH THE OUTPUT FILE GENERATION!!!!
-
         # Create a task per analysis grid
         for n in job_chunk:
 
@@ -180,6 +179,7 @@ if __name__ == '__main__':
                 "sudo tar xzf radiance-5.1.0-Linux.tar.gz",
                 "sudo rsync -av /radiance-5.1.0-Linux/usr/local/radiance/bin/ /usr/local/bin/",
                 "sudo rsync -av /radiance-5.1.0-Linux/usr/local/radiance/lib/ /usr/local/lib/ray/",
+                # "sudo wget --no-check-certificate https://github.com/FraserGreenroyd/SAMAzure/raw/master/TestFiles/resources/azure_common/lb_hb.tar.gz",
                 "sudo wget --no-check-certificate https://github.com/FraserGreenroyd/SAMAzure/raw/master/TestFiles/resources/azure_common/lb_hb.tar.gz",
                 "sudo tar xzf lb_hb.tar.gz",
                 "sudo wget --no-check-certificate https://github.com/FraserGreenroyd/SAMAzure/raw/master/TestFiles/resources/azure_common/RunHoneybeeRadiance.py",
@@ -220,8 +220,6 @@ if __name__ == '__main__':
     for n in range(len(analysis_grid_names)):
         output_file = analysis_grid_names[n].replace(".json", "_result.json")
         common.helpers.download_blob_from_container(block_blob_client, project_id, output_file, os.path.join(case_directory, "Results"))
-
-    # TODO: I may need to add a sleep here, possibly not depending on how good the download function is
 
     if args.deleteJob:
         for i in job_ids:

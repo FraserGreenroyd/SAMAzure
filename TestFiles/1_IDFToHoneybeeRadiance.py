@@ -243,7 +243,7 @@ if __name__ == "__main__":
         "--outputDir",
         type=str,
         help="Path to the target output directory",
-        default="./radiance_case"  # TODO - remove post testing
+        default="./resources/radiance_case"  # TODO - remove post testing
     )
     parser.add_argument(
         "-gs",
